@@ -11,10 +11,19 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 qt_standard_project_setup()
 
+
+qt_wrap_ui(UISRCS vlistview.ui)
+
 qt_add_executable(helloworld
-    mainc.c
+    ${UISRCS}
+    # ./uis/vlistview.ui
+
+    myview.cpp
+    vlistview.cpp
     maincxx.cpp
+    mainc.c
 )
+
 
 target_link_libraries(helloworld PRIVATE Qt6::Widgets)
 
