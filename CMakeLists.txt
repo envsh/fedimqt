@@ -6,6 +6,9 @@ project(helloworld VERSION 1.0.1 LANGUAGES CXX C)
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_FLAGS "-g -ggdb -O0")
+set(CMAKE_VERBOSE_MAKEFILE true)
+set(CMAKE_CXX_EXTENSIONS off)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
@@ -18,6 +21,7 @@ qt_add_executable(helloworld
     ${UISRCS}
     # ./uis/vlistview.ui
 
+    myitemdg.cpp
     myview.cpp
     vlistview.cpp
     maincxx.cpp

@@ -69,7 +69,7 @@
      </layout>
     </item>
     <item>
-     <widget class="QListView" name="listView"/>
+     <widget class="QListView" name="listView" native="true"/>
     </item>
    </layout>
   </widget>
@@ -85,6 +85,13 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Myview</class>
+   <extends>QWidget</extends>
+   <header>myview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
