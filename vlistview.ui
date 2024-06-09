@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>474</width>
-    <height>597</height>
+    <width>739</width>
+    <height>577</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -69,7 +69,14 @@
      </layout>
     </item>
     <item>
-     <widget class="QListView" name="listView" native="true"/>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QListView" name="listView"/>
+      </item>
+      <item>
+       <widget class="QGraphicsView" name="graphicsView"/>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
@@ -78,20 +85,13 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>474</width>
+     <width>739</width>
      <height>24</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>Myview</class>
-   <extends>QWidget</extends>
-   <header>myview.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

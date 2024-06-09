@@ -11,6 +11,7 @@ public:
     vlistview(QWidget*parent);
 
     void filldata();
+    void setscene();
 
 public slots:
 
