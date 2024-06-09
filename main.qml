@@ -9,13 +9,28 @@ import QtQuick.Controls.Material
 import QtQuick.Layouts
 import QtQuick.Window
 
+
+
 ApplicationWindow {
     id: window
     width: 400
     height: 500
     visible: true
 
+    ListView {
+        id: listView
+        anchors.fill: parent
+
+        model: HelloModel{}
+        
+        delegate: Text {
+            text: name + ": " + number
+        }
+
+    }
+
     Button {
+        anchors.centerIn: parent
         text: "Hello world!!!你好，世界！！！"
     }
 
