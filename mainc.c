@@ -1,5 +1,9 @@
 
-extern int maincxx(int, char**);
+extern int maincxxwgt(int, char**);
+extern int maincxxqml(int, char**);
 int main(int argc, char**argv) {
-    return maincxx(argc, argv);
+    if (0) {
+    return maincxxwgt(argc, argv);
+    }
+    return maincxxqml(argc, argv);
 }

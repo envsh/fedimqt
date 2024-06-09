@@ -12,6 +12,11 @@ set(CMAKE_CXX_EXTENSIONS off)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
+# declaretive
+find_package(Qt6 REQUIRED COMPONENTS Qml)
+find_package(Qt6 REQUIRED COMPONENTS QmlIntegration)
+find_package(Qt6 REQUIRED COMPONENTS Quick)
+find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
 qt_standard_project_setup()
 
 
@@ -29,9 +34,11 @@ qt_add_executable(helloworld
 )
 
 
-target_link_libraries(helloworld PRIVATE Qt6::Widgets)
+target_link_libraries(helloworld PRIVATE Qt6::Widgets Qt6::Qml Qt6::QmlIntegration Qt6::Quick Qt6::QuickControls2)
 
 set_target_properties(helloworld PROPERTIES
     WIN32_EXECUTABLE ON
     MACOSX_BUNDLE ON
+    # QT_QML_ROOT_PATH ""
+    # QT_QML_IMPORT_PATH "~/.nix-profile/lib/qt-6/qml/"
 )
