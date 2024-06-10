@@ -42,4 +42,10 @@ ApplicationWindow {
         // "Cannot override FINAL property"
         // property int currentValue: 0
     }
+
+    ///
+    Component.onCompleted: {
+        listView.model.dummy()
+        listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
+    }
 }
