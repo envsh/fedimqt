@@ -12,8 +12,31 @@ import QtQuick.Window
 /////
 import QmlCppBridge 1.0 //
 
+// import js now
+import "main.js" as Jlib;
+
 
 ApplicationWindow {
+    ///
+    QmlCppBridge {    id : qcffi }
+
+    // all functions are qt slots   
+    function oncallqml(str) {
+        console.log("oncallqml", str);
+        console.log("oncallqml", listView.count); // print ui object property
+    }
+
+    Component.onCompleted: {
+        qcffi.invoke("thisqml")
+        listView.model.dummy()
+        listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
+
+        Jlib.dummy('wt')
+        Jlib.util.dummy();
+        // Jlib.default.dummy(); // TypeError: Cannot call method 'dummy' of undefined
+    }
+
+    ////////////
     id: window
     width: 400
     height: 500
@@ -45,18 +68,5 @@ ApplicationWindow {
         // property int currentValue: 0
     }
 
-    ///
-    QmlCppBridge {    id : qcffi }
 
-    // all functions are qt slots
-    function oncallqml(str) {
-        console.log("oncallqml", str);
-    }
-
-    Component.onCompleted: {
-        qcffi.invoke("thisqml")
-        listView.model.dummy()
-        listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
-
-    }
 }

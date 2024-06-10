@@ -7,7 +7,7 @@ set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "-g -ggdb -O0")
-set(CMAKE_VERBOSE_MAKEFILE true)
+# set(CMAKE_VERBOSE_MAKEFILE true)
 set(CMAKE_CXX_EXTENSIONS off)
 
 find_package(Qt6 REQUIRED COMPONENTS Core)
@@ -34,7 +34,6 @@ qt_add_executable(helloworld
     mainc.c
 )
 
-
 target_link_libraries(helloworld PRIVATE Qt6::Widgets Qt6::Qml Qt6::QmlIntegration Qt6::Quick Qt6::QuickControls2)
 
 set_target_properties(helloworld PROPERTIES
@@ -43,3 +42,13 @@ set_target_properties(helloworld PROPERTIES
     # QT_QML_ROOT_PATH ""
     # QT_QML_IMPORT_PATH "~/.nix-profile/lib/qt-6/qml/"
 )
+
+# add_custom_command(OUTPUT out1 COMMAND "tsc -v")
+# message("${out1}")
+add_custom_target(tscit 
+    # COMMAND "tsc" "-v"
+    COMMAND "tsc" "--pretty" "--sourceMap" "--declaration" "--module" "commonjs" "--esModuleInterop" "main.ts"
+    # fix https://stackoverflow.com/questions/43042889/typescript-referenceerror-exports-is-not-defined
+    COMMAND "sed" "-i" ".bak" "'s/\"use strict\";/var exports = {};\\n\\n\"use strict\";/g'" "main.js"
+    SOURCES main.ts)
+add_dependencies(helloworld tscit)
