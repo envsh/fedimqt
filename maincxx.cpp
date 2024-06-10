@@ -3,6 +3,7 @@
 // #include <QtGui>
 #include <QtWidgets>
 #include <QtQml>
+#include <QtQuick>
 
 #include "vlistview.h"
 
@@ -46,3 +47,17 @@ int maincxxqml(int argc, char**argv) {
     return app.exec();
 }
 
+// QT_DEBUG_PLUGINS=1 DYLD_PRINT_LIBRARIES=1 ./exe
+
+extern "C"
+int maincxxqml2(int argc, char**argv) {
+    QGuiApplication app (argc, argv, 0);
+
+    // QQuickView does not support using a window as a root item.
+    auto mw = new QWindow();
+    QQuickView view(mw);
+    view.setSource(QUrl("./main.qml"));
+    view.show();
+
+    return app.exec();
+}
