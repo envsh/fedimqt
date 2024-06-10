@@ -12,8 +12,8 @@ import QtQuick.Window
 /////
 import QmlCppBridge 1.0 //
 
-// import js now
-import "main.js" as Jlib;
+// import js now, from tspp/main.js
+import "main.js" as Lib;
 
 
 ApplicationWindow {
@@ -22,17 +22,18 @@ ApplicationWindow {
 
     // all functions are qt slots   
     function oncallqml(str) {
-        console.log("oncallqml", str);
-        console.log("oncallqml", listView.count); // print ui object property
+        Lib.debug(str);
+        Lib.info("lstcnt", listView.count);  // print ui object property
     }
 
     Component.onCompleted: {
-        qcffi.invoke("thisqml")
+        let rv = qcffi.invoke("thisqml");
+        Lib.debug(rv);
         listView.model.dummy()
         listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
 
-        Jlib.dummy('wt')
-        Jlib.util.dummy();
+        Lib.dummy('wt')
+        Lib.util.dummy();
         // Jlib.default.dummy(); // TypeError: Cannot call method 'dummy' of undefined
     }
 

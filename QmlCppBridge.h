@@ -6,11 +6,14 @@
 #include <QtQml>
 
 
+// qml 调用cxx/go，有返回值，但都是string
+// cxx/go 调用 qml，没有返回
 class QmlCppBridge : public QObject {
     Q_OBJECT;
 public:
-    Q_INVOKABLE static void invoke(QString jstr) {
-        qDebug()<<"hello invoke from qml"<<jstr;
+    Q_INVOKABLE static QString invoke(QString jstr) {
+        qDebug()<<"hello invoked"<<jstr;
+        return "'"+jstr+"'" + QString(" brg added");
     }
 
     static void regist() {
