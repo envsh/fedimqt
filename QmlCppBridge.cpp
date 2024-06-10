@@ -29,12 +29,9 @@ QString QmlCppBridge::invoke(QString jstr) {
 }
 
 // call qml slot/function
-extern "C"
-void qtemitcallqml2(QString str) {
+void qtemitcallqmlcxx(QString str) {
     emit qcbrg->callqml(str);
 }
-extern "C"
-void qtemitcallqml(char* str) { qtemitcallqml2(QString(str)); }
 
-extern "C" int qmlsetcallbackfn(void*);
-auto setval = qmlsetcallbackfn((void*)&qtemitcallqml);
+extern "C"
+void qtemitcallqml(char* str) { qtemitcallqmlcxx(QString(str)); }

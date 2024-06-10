@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/ebitengine/purego"
+	_ "github.com/ebitengine/purego"
 	"github.com/kitech/gopp"
 	"github.com/kitech/gopp/cgopp"
 	_ "github.com/kitech/gopp/cgopp"
+	// _ "github.com/jupiterrider/ffi"
 )
 
 /*
@@ -31,14 +34,17 @@ func init() {
 func mainorinit() {
 	log.SetFlags(log.Flags() | log.Lshortfile ^ log.Ldate)
 	log.Println("mainorinit")
+	interopinit()
 	go bgproc()
 }
 
 func bgproc() {
+
 	for i := 0; ; i++ {
 		gopp.SleepSec(3)
 		log.Println(i)
 		callqml(fmt.Sprintf("thisgo,callqml %d", i))
+
 	}
 }
 
@@ -53,12 +59,6 @@ func qmlinvokenative(jstr *C.char) *C.char {
 	return C.CString(res)
 }
 
-//export qmlsetcallbackfn
-func qmlsetcallbackfn(fnptr voidptr) {
-	qtemitcallqmlfnptr = fnptr
-	gopp.NilPrint(fnptr, "set nil fnptr???")
-}
-
 var qtemitcallqmlfnptr = voidptr(nil)
 
 func callqml(jstr string) {
@@ -66,4 +66,21 @@ func callqml(jstr string) {
 	// C.qtemitcallqml(C.CString(jstr))
 	var jstr4c = cgopp.StrtoCharpRef(&jstr)
 	cgopp.Litfficallg(qtemitcallqmlfnptr, jstr4c)
+}
+
+func interopinit() {
+	fnname := "qtemitcallqml"
+	sym, err := purego.Dlsym(purego.RTLD_DEFAULT, fnname)
+	gopp.ErrPrint(err)
+	log.Println(fnname, sym)
+	qtemitcallqmlfnptr = voidptr(sym)
+
+	{ // 找go自己定义的sym
+		fnname := "qmlinvokenative"
+		sym, err := purego.Dlsym(purego.RTLD_DEFAULT, fnname)
+		gopp.ErrPrint(err)
+		log.Println(fnname, sym)
+		qtemitcallqmlfnptr = voidptr(sym)
+
+	}
 }

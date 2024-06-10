@@ -22,5 +22,6 @@ signals:
     void callqml(QVariant str); // 必须 QVariant，否则connect找到
 };
 
+void qtemitcallqmlcxx(QString str);
 
 #endif
