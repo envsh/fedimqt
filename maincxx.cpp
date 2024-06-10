@@ -31,6 +31,7 @@ int maincxxqml(int argc, char**argv) {
 
     // QT_DEBUG_PLUGINS=1 DYLD_PRINT_LIBRARIES=1 ./exe
     QQmlApplicationEngine engine;
+
     // engine.loadFromModule("QtQuick", "Rectangle"); //  No module named "QtQuick" found???
     // const QUrl url(u"qrc:/alarms/main.qml"_s);
     // const QUrl url("qrc:/alarms/main.qml");
@@ -38,6 +39,7 @@ int maincxxqml(int argc, char**argv) {
     qDebug()<<url;
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
                      [url](QObject *obj, const QUrl &objUrl) {
+                        qDebug()<<"QmlAppEngine created";
                          if (!obj && url == objUrl) {
                             qDebug()<<"load error exit"<<objUrl;
                             QCoreApplication::exit(-1);
@@ -45,6 +47,14 @@ int maincxxqml(int argc, char**argv) {
                      },
                      Qt::QueuedConnection);
     engine.load(url);
+
+     // should be ApplicationWindow in main.qml
+    auto rootobj = engine.rootObjects().value(0);
+    // qDebug()<<rootobj;
+    QmlCppBridge::setrootwin(rootobj);
+    extern void qtemitcallqml(QVariant);
+    qtemitcallqml(QString("hello this c++"));
+
 
     return app.exec();
 }

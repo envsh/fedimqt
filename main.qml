@@ -48,6 +48,11 @@ ApplicationWindow {
     ///
     QmlCppBridge {    id : qcffi }
 
+    // all functions are qt slots
+    function oncallqml(str) {
+        console.log("oncallqml", str);
+    }
+
     Component.onCompleted: {
         qcffi.invoke("thisqml")
         listView.model.dummy()

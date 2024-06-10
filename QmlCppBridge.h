@@ -16,6 +16,10 @@ public:
     static void regist() {
         qmlRegisterType<QmlCppBridge>("QmlCppBridge", 1, 0, "QmlCppBridge");
     }
+    static QmlCppBridge* inst();
+    static void setrootwin(QObject*);
+signals:
+    void callqml(QVariant str); // 必须 QVariant，否则connect找到
 };
 
 
