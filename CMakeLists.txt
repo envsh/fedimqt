@@ -26,6 +26,7 @@ qt_add_executable(helloworld
     ${UISRCS}
     # ./uis/vlistview.ui
 
+    QmlCppBridge.cpp
     myitemdg.cpp
     myview.cpp
     vlistview.cpp

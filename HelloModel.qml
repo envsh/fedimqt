@@ -24,7 +24,7 @@ ListModel {
     ///////
     function dummy() { console.log("hahhehe") }
     function addtstitems() {
-        for (let i=0;i < 123456; i++) {
+        for (let i=0;i < 12345; i++) {
         this.append({name:"nam"+i, number: "num 444 555 "+i})
         }
     }

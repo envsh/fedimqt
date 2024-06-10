@@ -22,9 +22,11 @@ int maincxxwgt(int argc, char**argv) {
 }
 
 
+#include "QmlCppBridge.h"
 
 extern "C"
 int maincxxqml(int argc, char**argv) {
+    // QmlCppBridge::regist();
     QGuiApplication app (argc, argv, 0);
 
     // QT_DEBUG_PLUGINS=1 DYLD_PRINT_LIBRARIES=1 ./exe

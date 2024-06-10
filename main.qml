@@ -9,6 +9,8 @@ import QtQuick.Controls.Material
 import QtQuick.Layouts
 import QtQuick.Window
 
+/////
+import QmlCppBridge 1.0 //
 
 
 ApplicationWindow {
@@ -44,8 +46,12 @@ ApplicationWindow {
     }
 
     ///
+    QmlCppBridge {    id : qcffi }
+
     Component.onCompleted: {
+        qcffi.invoke("thisqml")
         listView.model.dummy()
         listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
+
     }
 }
