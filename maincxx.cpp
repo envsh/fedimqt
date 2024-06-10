@@ -52,8 +52,8 @@ int maincxxqml(int argc, char**argv) {
     auto rootobj = engine.rootObjects().value(0);
     // qDebug()<<rootobj;
     QmlCppBridge::setrootwin(rootobj);
-    extern void qtemitcallqml(QVariant);
-    qtemitcallqml(QString("hello this c++"));
+    extern void qtemitcallqml2(QString);
+    qtemitcallqml2(QString("hello this c++"));
 
 
     return app.exec();

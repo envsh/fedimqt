@@ -11,10 +11,7 @@
 class QmlCppBridge : public QObject {
     Q_OBJECT;
 public:
-    Q_INVOKABLE static QString invoke(QString jstr) {
-        qDebug()<<"hello invoked"<<jstr;
-        return "'"+jstr+"'" + QString(" brg added");
-    }
+    Q_INVOKABLE static QString invoke(QString jstr);
 
     static void regist() {
         qmlRegisterType<QmlCppBridge>("QmlCppBridge", 1, 0, "QmlCppBridge");

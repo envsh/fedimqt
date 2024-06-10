@@ -34,7 +34,8 @@ qt_add_executable(helloworld
     mainc.c
 )
 
-target_link_libraries(helloworld PRIVATE Qt6::Widgets Qt6::Qml Qt6::QmlIntegration Qt6::Quick Qt6::QuickControls2)
+target_link_libraries(helloworld PRIVATE Qt6::Widgets Qt6::Qml Qt6::QmlIntegration Qt6::Quick Qt6::QuickControls2 hellogo)
+target_link_directories(helloworld PUBLIC ".")
 
 set_target_properties(helloworld PROPERTIES
     WIN32_EXECUTABLE ON
@@ -56,8 +57,9 @@ add_dependencies(helloworld tscit)
 add_custom_target(gocit
     WORKING_DIRECTORY "./srcgo"
     COMMAND pwd && go version
-    COMMAND go build  -buildmode=c-shared ./
-    COMMAND ls -lh main && file main
+    COMMAND go build  -buildmode=c-shared -o ../libhellogo.dylib ./
+    COMMAND ls -lh ../libhellogo.dylib && file ../libhellogo.dylib
+    # COMMAND cp main ../libhellogo.so
     # SOURCES ./srcgo/*.go ./srcgo/go.*
     # COMMAND_EXPAND_LISTS
 )
