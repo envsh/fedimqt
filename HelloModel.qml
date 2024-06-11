@@ -10,6 +10,11 @@ ListModel {
     ListElement {
         name: "Bill Smith"
         number: "555 3264"
+        Content: ""
+        Roomid: ""
+        Roomname: ""
+        Feditype: ""
+        Eventid: ""
     }
     ListElement {
         name: "John Brown"
@@ -24,7 +29,7 @@ ListModel {
     ///////
     function dummy() { console.log("dummy: this ListModel") }
     function addtstitems() {
-        for (let i=0;i < 12345; i++) {
+        for (let i=0;i < 12; i++) {
         this.append({name:"nam"+i, number: "num 444 555 "+i})
         }
     }

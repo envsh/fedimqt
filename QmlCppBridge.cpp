@@ -23,10 +23,9 @@ extern "C" { void qmlinvokenative(char*, uintptr_t, char**, uintptr_t*); }
 
 QString QmlCppBridge::invoke(QString jstr) {
         qDebug()<<"hello invoked"<<jstr;
-        auto str2 = "'"+jstr+"'" + QString(" brg added");
         char* retstr = nullptr;
         uintptr_t retlen = 0;
-        qmlinvokenative(str2.toUtf8().data(), str2.length(), &retstr, &retlen);
+        qmlinvokenative(jstr.toUtf8().data(), jstr.length(), &retstr, &retlen);
         // qDebug()<<"res"<<retlen;
         auto rv = QString(retstr);
         delete(retstr);
