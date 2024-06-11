@@ -20,6 +20,9 @@ export DYLD_LIBRARY_PATH=$PWD/
     # DYLD_LIBRARY_PATH=$PWD/ \
 export QML_IMPORT_PATH=~/.nix-profile/lib/qt-6/qml/
 
+export QT_QUICK_CONTROLS_STYLE=Material
+export QT_QUICK_CONTROLS_MATERIAL_THEME=Dark
+
 ./helloworld.app/Contents/MacOS/helloworld
 
 # the QML_IMPORT_PATH line works

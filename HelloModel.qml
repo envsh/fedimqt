@@ -15,6 +15,8 @@ ListModel {
         Roomname: ""
         Feditype: ""
         Eventid: ""
+        Sender: ""
+        Mtimems: 0
     }
     ListElement {
         name: "John Brown"
