@@ -6,6 +6,7 @@ import (
 
 	"github.com/ebitengine/purego"
 	_ "github.com/ebitengine/purego"
+	"github.com/envsh/fedind/guiclish"
 	"github.com/kitech/gopp"
 	"github.com/kitech/gopp/cgopp"
 	_ "github.com/kitech/gopp/cgopp"
@@ -36,6 +37,7 @@ func mainorinit() {
 	log.Println("mainorinit")
 	interopinit()
 	go bgproc()
+	// go fedimac.Appclientmain()
 }
 
 func bgproc() {
@@ -43,20 +45,19 @@ func bgproc() {
 	for i := 0; ; i++ {
 		gopp.SleepSec(3)
 		log.Println(i)
-		callqml(fmt.Sprintf("thisgo,callqml %d", i))
-
+		// callqml(fmt.Sprintf("thisgo,callqml %d", i))
+		guiclish.EmitEventFront("notice", fmt.Sprintf("thisgo,callqml %d", i))
 	}
 }
 
 // /// ffi section
 //
 //export qmlinvokenative
-func qmlinvokenative(jstr *C.char) *C.char {
-	log.Println("qmlinvokenative", jstr)
-	var str = C.GoString(jstr)
-
-	var res = str + " [goadded]"
-	return C.CString(res)
+func qmlinvokenative(jstr *C.char, n usize, retstr *voidptr, retlen *usize) *C.char {
+	retstr2 := guiclish.InvokeProcessor(voidptr(jstr), n)
+	*retlen = usize(len(retstr2))
+	*retstr = voidptr(C.CString(retstr2))
+	return nil
 }
 
 var qtemitcallqmlfnptr = voidptr(nil)
@@ -70,6 +71,7 @@ func callqml(jstr string) {
 
 func interopinit() {
 	fnname := "qtemitcallqml"
+	guiclish.EmitEventFrontFuncName = fnname
 	sym, err := purego.Dlsym(purego.RTLD_DEFAULT, fnname)
 	gopp.ErrPrint(err)
 	log.Println(fnname, sym)
@@ -80,7 +82,5 @@ func interopinit() {
 		sym, err := purego.Dlsym(purego.RTLD_DEFAULT, fnname)
 		gopp.ErrPrint(err)
 		log.Println(fnname, sym)
-		qtemitcallqmlfnptr = voidptr(sym)
-
 	}
 }

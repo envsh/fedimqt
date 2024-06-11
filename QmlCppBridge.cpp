@@ -19,13 +19,18 @@ void QmlCppBridge::setrootwin(QObject*rw) {
     QObject::connect(QmlCppBridge::inst(), SIGNAL(callqml(QVariant)), rw, SLOT(oncallqml(QVariant)));
 }
 
-extern "C" { char* qmlinvokenative(char*); }
+extern "C" { void qmlinvokenative(char*, uintptr_t, char**, uintptr_t*); }
 
 QString QmlCppBridge::invoke(QString jstr) {
         qDebug()<<"hello invoked"<<jstr;
         auto str2 = "'"+jstr+"'" + QString(" brg added");
-        auto res = qmlinvokenative(str2.toUtf8().data());
-        return QString(res);
+        char* retstr = nullptr;
+        uintptr_t retlen = 0;
+        qmlinvokenative(str2.toUtf8().data(), str2.length(), &retstr, &retlen);
+        // qDebug()<<"res"<<retlen;
+        auto rv = QString(retstr);
+        delete(retstr);
+        return rv;
 }
 
 // call qml slot/function
