@@ -31,6 +31,10 @@ int maincxxqml(int argc, char**argv) {
 
     // QT_DEBUG_PLUGINS=1 DYLD_PRINT_LIBRARIES=1 ./exe
     QQmlApplicationEngine engine;
+    // QQmlEngine::addImportPath();
+    // QQmlEngine::importPathList();
+    auto qmldirs = engine.importPathList();
+    qDebug()<<qmldirs;
 
     // engine.loadFromModule("QtQuick", "Rectangle"); //  No module named "QtQuick" found???
     // const QUrl url(u"qrc:/alarms/main.qml"_s);

@@ -12,6 +12,8 @@ import QtQuick.Window
 /////
 import QmlCppBridge 1.0 //
 
+import "srcui"
+
 // import js now, from tspp/main.js
 import "main.js" as Lib;
 
@@ -91,6 +93,8 @@ ApplicationWindow {
     //     }
     // }
 
+
+
     //////
     ScrollView {
         // anchors.fill: parent
@@ -162,15 +166,15 @@ ApplicationWindow {
                 Rectangle{
                     width: 120
                     opacity: 0.65
-                Text {
+                MyText {
                     id: lbroomid
                     text: Roomid
                     // text: "hhhh"
-                    color: Material.foreground
-                    elide: Text.ElideRight
-                    maximumLineCount: 1
+                    // color: Material.foreground
+                    // elide: Text.ElideRight
+                    // maximumLineCount: 1
                     width: 120
-                    wrapMode: Text.WrapAnywhere
+                    // wrapMode: Text.WrapAnywhere
                 }}  
                 // Button {
                 //     id: inbtn2
