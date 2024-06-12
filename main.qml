@@ -49,6 +49,8 @@ ApplicationWindow {
         }
         Menu {
             title: qsTr("&Window")
+            Action { text: qsTr("&Next Page >") ; onTriggered: switchpage(false)}
+            Action { text: qsTr("&Prev Page >") ; onTriggered: switchpage(true) }
             Action { text: qsTr("Cu&t") }
             Action { text: qsTr("&Copy") }
             Action { text: qsTr("&Paste") }
@@ -99,7 +101,24 @@ ApplicationWindow {
         // anchors.fill: parent
         width : parent.width
         height : parent.height-30
-        initialItem: MsgListView{id: msglstwin}
+
+        initialItem: msglstwin
+        property list<Item> childs: [msglstwin, romlstwin, loginui, logui, aboutui]
+        property int curidx : 0
+        
+
+        Aboutui{ id: aboutui }
+        Logui {id: logui}
+        Loginui { id: loginui }
+        RoomListView { id: romlstwin }
+        MsgListView{id: msglstwin}
+        // Rectangle { anchors.fill : parent;  color: "red" } // clear
+
+        Component.onCompleted: {
+            Lib.debug("stkwin done");
+            // stackwin.push(aboutui);
+            // stackwin.push(msglstwin);
+        }
     }
 
     Rectangle {
@@ -130,6 +149,34 @@ ApplicationWindow {
         // Jlib.default.dummy(); // TypeError: Cannot call method 'dummy' of undefined
     }
     //////
+    // var pageitems = [aboutui,msglstwin];
+    function switchpage(prev : bool) {
+        let stkwin = stackwin;
+        Lib.debug("prev", prev, stkwin.depth, stkwin.curidx, stkwin.childs.length);
+        // stackwin.index = -1; // non-exist???
+        let nxtidx = stkwin.curidx + ( prev ? -1: 1);
+        if (nxtidx < 0) nxtidx = stkwin.childs.length;
+        if (nxtidx >= stkwin.childs.length) nxtidx = 0;
+        Lib.debug("switpage", stkwin.curidx, "=>", nxtidx);
+        stkwin.curidx = nxtidx;
+
+        let curitem = stkwin.currentItem;
+        stkwin.replace(curitem, stkwin.childs[nxtidx]);
+        
+        stkwin.find(function(item, index) {
+            Lib.debug('idx', index);
+            // return item.isTheOne
+            return false;
+        }, StackView.DontLoad);
+    }
+    function switchpageidx(idx : int) {
+        let curitem = stkwin.currentItem;
+        let nxtidx = idx;
+        let nxtitem = stkwin.childs[nxtidx];
+        stkwin.curidx = nxtidx;
+        stkwin.replace(curitem, nxtitem);
+    }
+
     function  onloadmsg () {
         msglstwin.onloadmsg();
     }
