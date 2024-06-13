@@ -131,6 +131,8 @@ ApplicationWindow {
 
     ///////// script
     QmlCppBridge {    id : qcffi }
+    ShareState { id: sss}
+
 
     // all functions are qt slots   
     function oncallqml(str) {

@@ -18,16 +18,25 @@ import QtQuick.Window
 import "../main.js" as Lib;
 
 // ApplicationWindow {
-// Rectangle {
+Rectangle {
+    id: topwin
+    // width: 500
+    width: parent.width
+    height: 580
+    color: Material.background
+
+
+
 ScrollView {
     ////////////
-    id: topwin
-    width: 500
-    height: 500
     visible: true
+    width: parent.width
+    height: parent.height-msgsndbar.height
+    id: scroll1
+
     // color: "#010101"
 
-    Material.theme: Material.Dark
+    // Material.theme: Material.Dark
     // Material.accent: Material.Purple
     // Material.foreground : "red"
 
@@ -266,7 +275,39 @@ ScrollView {
     //     text: "test dark color"
     // }
 
-    
+
+}
+    Rectangle {
+        id: msgsndbar
+        width: parent.width
+        height: 60
+        color: "blue"
+        anchors.top : scroll1.bottom
+
+        RowLayout {
+            anchors.left : parent.left
+            anchors.right : parent.right
+
+            MyButton{ text:"SIMG"}
+            MyButton{ text:"SEMJ"}
+            TextArea {
+                placeholderText: qsTr("Enter message")
+                id: usriptmsg
+                topPadding: 8
+                bottomPadding: 5
+                wrapMode: TextEdit.WrapAnywhere
+                Layout.horizontalStretchFactor: 99
+                Layout.fillWidth: true
+                implicitWidth: 120
+            }
+            MyButton{ text:"Sendit!!!"; onClicked: sendmsg()}
+            MyComboBox {       
+                id: msgsndmode 
+                model: ["dftim", "gptcf", "cmd", "misskey", "gptoa", "nostr"]
+            }
+            MyButton{ text:"SBTM"}
+        }
+    }
 
     ///////// script
     // QmlCppBridge {    id : qcffi }
@@ -309,5 +350,24 @@ ScrollView {
                 // Lib.debug('typeof', typeof rv.Sender)
             }
             Lib.debug('itemcnt', listView.model.count);
-        }
+    }
+
+    function sendmsg() {
+        // Lib.debug("sss", sss.foo, sss.getsndmsgpfx("dftim"), JSON.stringify(sss.barz));
+        // return;
+
+        let sndmode = msgsndmode.currentValue;
+        let msgpfx = sss.getsndmsgpfx(sndmode);
+        let msg = usriptmsg.text;
+        msg = msgpfx + msg;
+        Lib.debug("usriptmsg", msg.length, sndmode, msg);
+
+        let req = Lib.tojson({Cmd: "sendmsg", Argv:[sndmode, msg]});
+        let resp = qcffi.invoke(req); // todo: will freeze ui
+        Lib.debug("resp", resp);
+        let jso = JSON.parse(resp);
+        let item = {Content: jso.Retv[0]};
+        listView.model.insert(0, item);
+    }
+
 }

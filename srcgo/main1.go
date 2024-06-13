@@ -43,8 +43,8 @@ func mainorinit() {
 func bgproc() {
 
 	for i := 0; ; i++ {
-		gopp.SleepSec(3)
-		log.Println(i)
+		gopp.SleepSec(13)
+		log.Println("loopcnt", i)
 		// callqml(fmt.Sprintf("thisgo,callqml %d", i))
 		guiclish.EmitEventFront("notice", fmt.Sprintf("thisgo,callqml %d", i))
 	}
