@@ -22,6 +22,8 @@ qt_standard_project_setup()
 set(shextsfx ${CMAKE_SHARED_LIBRARY_SUFFIX})
 set(projdir ${PROJECT_SOURCE_DIR})
 # set(projsrcdir ${CMAKE_HOME_DIRECTORY})
+message("Building target: ${CMAKE_SYSTEM_NAME}")
+set(tgos ${CMAKE_SYSTEM_NAME})
 
 qt_wrap_ui(UISRCS vlistview.ui)
 
@@ -48,25 +50,53 @@ set_target_properties(helloworld PROPERTIES
 )
 
 
-
 # add_custom_command(OUTPUT out1 COMMAND "tsc -v")
 # message("${out1}")
-add_custom_target(tscc
+add_custom_command(OUTPUT ${projdir}/main.js COMMENT "tscc111"
     # COMMAND "tsc" "-v"
     COMMAND "tsc" "--pretty" "--sourceMap" "--declaration" "--module" "commonjs" "--lib" "es2020,dom" "--esModuleInterop" "${CMAKE_HOME_DIRECTORY}/main.ts"
     # fix https://stackoverflow.com/questions/43042889/typescript-referenceerror-exports-is-not-defined
     COMMAND "sed" "-i" ".bak" "'s/\"use strict\";/var exports = {};\\n\\n\"use strict\";/g'" "${CMAKE_HOME_DIRECTORY}/main.js"
-    SOURCES main.ts)
+    DEPENDS ${projdir}/main.ts)
+add_custom_target(tscc COMMENT "tscc222"
+    DEPENDS ${projdir}/main.js
+)
 add_dependencies(helloworld tscc)
 
-add_custom_target(gocc
+if(${tgos} STREQUAL "Android")
+# message(${ANDROID_NDK_ROOT})
+set(NDKSYSROOT "${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/darwin-x86_64/sysroot")
+set(CGO_CFLAGSx "-g -O0 -arch arm64 ")
+set(CGO_CCx "${NDKSYSROOT}/../bin/aarch64-linux-android21-clang")
+message("CGO_CFLAGS=${CGO_CFLAGSx}")
+add_custom_command(OUTPUT ../jniLibs/libhellogo.h
+    WORKING_DIRECTORY "${CMAKE_HOME_DIRECTORY}/srcgo"
+    COMMAND pwd && go version
+    COMMAND GOOS=android GOARCH=arm64 CC="${CGO_CCx}" CGO_CFLAGS="\"${CGO_CFLAGSx}\"" CGO_LDFLAGS="\"-arch arm64\"" CGO_ENABLED=1 go build -buildmode=c-shared -o ../jniLIbs/libhellogo${shextsfx} ./
+    COMMAND ls -lh ../jniLibs/libhellogo${shextsfx} && file ../jniLibs/libhellogo${shextsfx}
+    COMMAND cp ../jniLibs/libhellogo${shextsfx} ../build/
+    # SOURCES ./srcgo/*.go ./srcgo/go.*
+    # COMMAND_EXPAND_LISTS
+    DEPENDS ${projdir}/srcgo/*.go ${projdir}/srcgo/go.mod
+)
+add_custom_target(gocc COMMENT "gocc222 for android" DEPENDS ../jniLibs/libhellogo.h)
+else() #############
+add_custom_command(OUTPUT libhellogo.h COMMENT "gocc111"
     WORKING_DIRECTORY "${CMAKE_HOME_DIRECTORY}/srcgo"
     COMMAND pwd && go version
     COMMAND go build -buildmode=c-shared -o ../libhellogo${shextsfx} ./
     COMMAND ls -lh ../libhellogo${shextsfx} && file ../libhellogo${shextsfx}
-    # COMMAND cp main ../libhellogo.so
-    # SOURCES ./srcgo/*.go ./srcgo/go.*
+    DEPENDS ${projdir}/srcgo/*.go
     # COMMAND_EXPAND_LISTS
 )
+add_custom_target(gocc COMMENT "gocc222" DEPENDS libhellogo.h )
+endif()
 add_dependencies(helloworld gocc)
+
+add_custom_target(showapk
+    COMMAND pwd
+    COMMAND ls -lh ${projdir}/build/android-build/build/outputs/apk/debug/android-build-debug.apk
+    COMMAND ls -lh ${projdir}/build/android-build/helloworld.apk
+)
+add_dependencies(showapk helloworld)
 

@@ -18,6 +18,7 @@ import (
 */
 import "C"
 
+// //
 var mainrun = false
 
 func main() {
