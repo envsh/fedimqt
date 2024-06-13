@@ -58,8 +58,25 @@ ScrollView {
         width : parent.width
         anchors.leftMargin: 5
 
-        model: HelloModel{}
+        MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton | Qt.RightButton
+            Menu {
+                id: contextMenu
+                MenuItem { text: "Cut" }
+                MenuItem { text: "Copy" }
+                MenuItem { text: "Paste" }
+            }
+            onClicked:  function (mouse) {
+                // Lib.debug("maclick", mouse, JSON.stringify(mouse));
+                // console.log(mouse); // QQuickMouseEvent
+                if (mouse.button === Qt.RightButton) {
+                    contextMenu.popup();
+                }
+            }
+        }
 
+        model: HelloModel{}
         delegate: Rectangle {
             id: grid
             // anchors.fill: parent

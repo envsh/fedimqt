@@ -18,7 +18,10 @@ find_package(Qt6 REQUIRED COMPONENTS QmlIntegration)
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
 qt_standard_project_setup()
-
+# set(QT_DEBUG_FIND_PACKAGE ON)
+set(shextsfx ${CMAKE_SHARED_LIBRARY_SUFFIX})
+set(projdir ${PROJECT_SOURCE_DIR})
+# set(projsrcdir ${CMAKE_HOME_DIRECTORY})
 
 qt_wrap_ui(UISRCS vlistview.ui)
 
@@ -44,21 +47,23 @@ set_target_properties(helloworld PROPERTIES
     # QT_QML_IMPORT_PATH "~/.nix-profile/lib/qt-6/qml/"
 )
 
+
+
 # add_custom_command(OUTPUT out1 COMMAND "tsc -v")
 # message("${out1}")
 add_custom_target(tscc
     # COMMAND "tsc" "-v"
-    COMMAND "tsc" "--pretty" "--sourceMap" "--declaration" "--module" "commonjs" "--lib" "es2020,dom" "--esModuleInterop" "main.ts"
+    COMMAND "tsc" "--pretty" "--sourceMap" "--declaration" "--module" "commonjs" "--lib" "es2020,dom" "--esModuleInterop" "${CMAKE_HOME_DIRECTORY}/main.ts"
     # fix https://stackoverflow.com/questions/43042889/typescript-referenceerror-exports-is-not-defined
-    COMMAND "sed" "-i" ".bak" "'s/\"use strict\";/var exports = {};\\n\\n\"use strict\";/g'" "main.js"
+    COMMAND "sed" "-i" ".bak" "'s/\"use strict\";/var exports = {};\\n\\n\"use strict\";/g'" "${CMAKE_HOME_DIRECTORY}/main.js"
     SOURCES main.ts)
 add_dependencies(helloworld tscc)
 
 add_custom_target(gocc
-    WORKING_DIRECTORY "./srcgo"
+    WORKING_DIRECTORY "${CMAKE_HOME_DIRECTORY}/srcgo"
     COMMAND pwd && go version
-    COMMAND go build  -buildmode=c-shared -o ../libhellogo.dylib ./
-    COMMAND ls -lh ../libhellogo.dylib && file ../libhellogo.dylib
+    COMMAND go build -buildmode=c-shared -o ../libhellogo${shextsfx} ./
+    COMMAND ls -lh ../libhellogo${shextsfx} && file ../libhellogo${shextsfx}
     # COMMAND cp main ../libhellogo.so
     # SOURCES ./srcgo/*.go ./srcgo/go.*
     # COMMAND_EXPAND_LISTS

@@ -12,3 +12,4 @@ import QtQuick.Layouts
 // Button
 // QtObject { }
 
+Rectangle{}
