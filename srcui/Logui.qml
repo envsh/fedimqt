@@ -37,6 +37,7 @@ ScrollView {
         anchors.leftMargin: 5
         anchors.top : ptitle.bottom
         height: parent.height-30
+        id: scroll1
 
     ListView {
         id: listView
@@ -47,7 +48,7 @@ ScrollView {
         model: ListModel{
             ListElement {
         name: "Bill Smith"
-        number: "555 3264"
+        number: "555 3264loggg"
         Content: ""
         Roomid: ""
         Roomname: ""
@@ -69,6 +70,16 @@ ScrollView {
 
     }
 
+    }
+
+    // script
+    Component.onCompleted:{}
+    function addlog(logstr) {
+        let item = {};
+        item.number = item.Content = logstr;
+        listView.model.append(item);
+
+        scroll1.ScrollBar.vertical.position = 1.0 - scroll1.ScrollBar.vertical.size;
     }
 
 }

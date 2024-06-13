@@ -51,19 +51,24 @@ ApplicationWindow {
             title: qsTr("&Window")
             Action { text: qsTr("&Next Page >") ; onTriggered: switchpage(false)}
             Action { text: qsTr("&Prev Page >") ; onTriggered: switchpage(true) }
-            Action { text: qsTr("Cu&t") }
-            Action { text: qsTr("&Copy") }
-            Action { text: qsTr("&Paste") }
+            Action { text: qsTr("Logui"); onTriggered: switchpageidx(3) }
+            Action { text: qsTr("&Aboutui"); onTriggered: switchpageidx(4) }
+            Action { text: qsTr("&Romm List"); onTriggered: switchpageidx(1) }
+            Action { text: qsTr("&Loginui"); onTriggered: switchpageidx(2) }
+            Action { text: qsTr("&Message List"); onTriggered: switchpageidx(0) }
         }
         Menu {
             title: qsTr("&Dev")
             Action { text: qsTr("&Load Message") ; onTriggered: onloadmsg() }
-            Action { text: qsTr("&Copy") }
+            Action { text: qsTr("&Load More Older") }
             Action { text: qsTr("&Paste") }
         }
         Menu {
             title: qsTr("&Misc")
-            Action { text: qsTr("Cu&t") }
+            Action { text: qsTr("Scroll Bottom"); 
+                onTriggered: msglstwin.scrollvto(false) }
+            Action { text: qsTr("Scroll Top");
+                onTriggered: msglstwin.scrollvto(true) }
             Action { text: qsTr("&Copy") }
             Action { text: qsTr("&Paste") }
         }
@@ -107,11 +112,11 @@ ApplicationWindow {
         property int curidx : 0
         
 
-        Aboutui{ id: aboutui }
-        Logui {id: logui}
-        Loginui { id: loginui }
-        RoomListView { id: romlstwin }
-        MsgListView{id: msglstwin}
+        Aboutui{ id: aboutui ; visible: false }
+        Logui {id: logui; visible: false}
+        Loginui { id: loginui; visible: false }
+        RoomListView { id: romlstwin ; visible: false}
+        MsgListView{id: msglstwin; visible: false}
         // Rectangle { anchors.fill : parent;  color: "red" } // clear
 
         Component.onCompleted: {
@@ -138,8 +143,13 @@ ApplicationWindow {
     function oncallqml(jstr) {
         Lib.debug(jstr);
         // Lib.info("lstcnt", listView.count);  // print ui object property
+        try {
         let jso = JSON.parse(jstr);
         dispatchEvent(jso);
+        }catch(err) {
+            // console.error(err, ":", jstr);
+            Lib.error(err, ":", jstr);
+        }
     }
     function dispatchEvent(jso) {
         switch (jso.Cmd) {
@@ -167,10 +177,10 @@ ApplicationWindow {
     // var pageitems = [aboutui,msglstwin];
     function switchpage(prev : bool) {
         let stkwin = stackwin;
-        Lib.debug("prev", prev, stkwin.depth, stkwin.curidx, stkwin.childs.length);
+        // Lib.debug("prev", prev, stkwin.depth, stkwin.curidx, stkwin.childs.length);
         // stackwin.index = -1; // non-exist???
         let nxtidx = stkwin.curidx + ( prev ? -1: 1);
-        if (nxtidx < 0) nxtidx = stkwin.childs.length;
+        if (nxtidx < 0) nxtidx = stkwin.childs.length-1;
         if (nxtidx >= stkwin.childs.length) nxtidx = 0;
         Lib.debug("switpage", stkwin.curidx, "=>", nxtidx);
         stkwin.curidx = nxtidx;
@@ -185,36 +195,16 @@ ApplicationWindow {
         }, StackView.DontLoad);
     }
     function switchpageidx(idx : int) {
+        let stkwin = stackwin;
         let curitem = stkwin.currentItem;
         let nxtidx = idx;
         let nxtitem = stkwin.childs[nxtidx];
         stkwin.curidx = nxtidx;
+        Lib.debug(idx, "curitem", curitem, "nxtitem", nxtitem);
         stkwin.replace(curitem, nxtitem);
     }
 
     function  onloadmsg () {
         msglstwin.onloadmsg();
     }
-    // function  onloadmsg () {
-    //         Lib.debug('clicked');
-    //         let req = Lib.tojson({Cmd: "loadmsg", Argv:["1=1 limit 300"]});
-    //         let resp = qcffi.invoke(req);
-    //         Lib.debug('resplen', resp.length);
-    //         let jso = JSON.parse(resp);
-    //         Lib.debug("rowcnt", jso.Retc, jso.Retv.length);
-    //         for (let i=0; i < jso.Retc; i++) {
-    //             let rv = jso.Retv[i];
-    //             // let item = {name:"", number: ""};
-    //             let item = rv;
-    //             item.name = rv.Sender;
-    //             item.number = rv.Roomid;
-    //             listView.model.insert(0, item);
-    //             for (let j=0;j < 30; j++) {
-    //                 // listView.model.insert(0, item);
-    //             }
-    //             // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
-    //             // Lib.debug('typeof', typeof rv.Sender)
-    //         }
-    //         Lib.debug('itemcnt', listView.model.count);
-    //     }
 }

@@ -230,87 +230,45 @@ ScrollView {
                 }}       
             }
             
-            // Row{
-            //     Layout.fillWidth: true
-            //     width: parent.width
-
-            //     Text {text: "name111";}
-            //     Text {text: "chan111";}
-            //     // Text {        color: Material.foreground;
-            //     //  text: '<span style="loat: right;">titme111</span>' // "time111"; 
-            //     //  horizontalAlignment:Text.AlignRight}
-            //     Button {
-            //     text:"tstpos"
-            //     // anchors.right: parent.right
-            //     // Layout.alignment: Qt.AlignRight
-            //     }
-            // }
-            // Row {
-            //     Layout.fillWidth: true
-            //     width: parent.width
-                
-            // Text { text: "row1"; font.strikeout: true }
-            // Rectangle {
-            //     // width:350
-            //     width: parent.width-40
-            //     height: txtcc.contentHeight
-            //     // color: "#505050"
-            //     color: window.color
-            //     border.width: 3
-            //     // border.color: "#999"
-            // Text {
-            //     color: Material.foreground;
-            
-            //     id : txtcc
-            //     width: parent.width
-            //     // width: 350
-            //     text: Content
-            //     // text: "If this property is set to true, the layout will force all cells to have an uniform Height. The layout aims to respect";
-            //      wrapMode: Text.WrapAnywhere; 
-            //      }
-            // }
-            // }
-            // Row {
-            // Text { text: "row1"; color: Material.foreground; font.strikeout: true }
-            // Text { text: "row2"; font.strikeout: true }
-            // Text { text: "row3"; font.strikeout: true }
-            // }
-            // // Text { text: "row"; font.strikeout: true }
-            // // Text { text: "row"; font.strikeout: true }
-
-            // // Text { width: 66; text: Eventid; font.strikeout: true }
-            // // Text { text: "row"; font.strikeout: true }
-            // // Text { text: "row"; font.strikeout: true }
         }
-
-        // delegate: TextArea {
-        //     readOnly : true
-        //     text: name + ": " + number
-        // }
-        // delegate: Text {
-        //     text: name + ": " + number
-        // }
-
     
+        onContentYChanged: {
+            // Lib.debug(contentY, height, contentHeight)
+            if (contentY + height >= contentHeight) {
+                // if (model.canFetchMore()) {
+                    // model.fetchMore();
+                // }
+            }
+        }
+        // boundsBehavior: Flickable.DragAndOvershootBounds
+        onDragStarted:  {
+            let sbv = scroll1.ScrollBar.vertical;
+            // Lib.debug("drag start", listView.verticalOvershoot, listView.draggingVertically);
+        }
+        onDragEnded: {
+            let sbv = scroll1.ScrollBar.vertical;
+            // Lib.debug("drag end", listView.verticalOvershoot, listView.draggingVertically);
+            if (listView.verticalOvershoot < -6.0) {
+                Lib.info("fetch more triggered", listView.verticalOvershoot);
+                logui.addlog("fetch more triggered " + listView.verticalOvershoot);
+            } else if (listView.verticalOvershoot > 6.0) {
+                Lib.info("refresh latest triggered", listView.verticalOvershoot);
+            }
+
+        }
+        onMovementEnded: {
+            let sbv = scroll1.ScrollBar.vertical;
+            // Lib.debug("drag end", sbv.position, sbv.size);
+        }
+        onMovementStarted: {
+            let sbv = scroll1.ScrollBar.vertical;
+            // Lib.debug("drag end", sbv.position, sbv.size);
+        }
     }
-
-    // ComboBox {
-    //     anchors.centerIn: parent
-
-    //     // As currentValue was added in 2.14, the versioned import above
-    //     // should cause this property to be used, but instead an error is produced:
-    //     // "Cannot override FINAL property"
-    //     // property int currentValue: 0
-    // }
-
-    // Text {
-    //     anchors.centerIn: parent
-    //     // anchors.fill: parent
-    //     text: "test dark color"
-    // }
 
 
 }
+    // msgsendbar
     Rectangle {
         id: msgsndbar
         width: parent.width
@@ -323,7 +281,6 @@ ScrollView {
             anchors.right : parent.right
 
             MyButton{ text:"SIMG"}
-            MyButton{ text:"SEMJ"}
             TextArea {
                 placeholderText: qsTr("Enter message")
                 id: usriptmsg
@@ -339,18 +296,12 @@ ScrollView {
                 id: msgsndmode 
                 model: ["dftim", "gptcf", "cmd", "misskey", "gptoa", "nostr"]
             }
-            MyButton{ text:"SBTM"}
         }
     }
 
     ///////// script
-    // QmlCppBridge {    id : qcffi }
 
     // all functions are qt slots   
-    function oncallqml(str) {
-        Lib.debug(str);
-        Lib.info("lstcnt", listView.count);  // print ui object property
-    }
 
     Component.onCompleted: {
         // let rv = qcffi.invoke("thisqml");
@@ -417,4 +368,17 @@ ScrollView {
         listView.model.insert(0, item);
     }
 
+    function scrollvto(top : bool) {
+        // 0.0 - 1.0
+        let sbv = scroll1.ScrollBar.vertical;
+        if (top) {
+            sbv.position = 0.0;
+        }else{
+            // Lib.debug("nowpos", sbv.position);
+            sbv.position = 1.0 - sbv.size // scroll1.contentHeight - scroll1.height;
+            // Lib.debug("cch", scroll1.contentHeight, "winh", scroll1.height);
+        }
+    }
+
+    // async function dummy() {} // not work syntax error
 }
