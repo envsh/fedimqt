@@ -38,6 +38,23 @@ qt_add_executable(helloworld
     maincxx.cpp
     mainc.c
 )
+# message("and... ${ANDROID}")
+if(${ANDROID})
+qt_add_qml_module(helloworld
+    URI mainqml
+    VERSION 1.0
+    # RESOURCE_PREFIX /my.company.com/imports
+    RESOURCE_PREFIX /
+)
+qt_target_qml_sources(helloworld
+    QML_FILES main.qml main.js
+    srcui/MyText.qml srcui/MyComboBox.qml srcui/MyButton.qml
+    srcui/HelloModel.qml srcui/Logui.qml
+    srcui/Loginui.qml srcui/Aboutui.qml srcui/ShareState.qml
+    srcui/RoomListView.qml srcui/MsgListView.qml
+    # RESOURCES icons/logo.png
+)
+endif()
 
 target_link_libraries(helloworld PRIVATE Qt6::Widgets Qt6::Qml Qt6::QmlIntegration Qt6::Quick Qt6::QuickControls2 hellogo)
 target_link_directories(helloworld PUBLIC ".")
@@ -63,7 +80,7 @@ add_custom_target(tscc COMMENT "tscc222"
 )
 add_dependencies(helloworld tscc)
 
-if(${tgos} STREQUAL "Android")
+if(${ANDROID})
 # message(${ANDROID_NDK_ROOT})
 set(NDKSYSROOT "${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/darwin-x86_64/sysroot")
 set(CGO_CFLAGSx "-g -O0 -arch arm64 ")

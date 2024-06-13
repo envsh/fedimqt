@@ -39,7 +39,11 @@ int maincxxqml(int argc, char**argv) {
     // engine.loadFromModule("QtQuick", "Rectangle"); //  No module named "QtQuick" found???
     // const QUrl url(u"qrc:/alarms/main.qml"_s);
     // const QUrl url("qrc:/alarms/main.qml");
+    #ifdef Q_OS_ANDROID
+    const QUrl url("qrc:///mainqml/main.qml");
+    #else
     const QUrl url("./main.qml");
+    #endif
     qDebug()<<url;
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
                      [url](QObject *obj, const QUrl &objUrl) {

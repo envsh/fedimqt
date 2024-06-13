@@ -15,3 +15,5 @@ export QT_HOST_PATH=/opt/qt/6.6.3/macos
 
 
 # /usr/local/Caskroom/android-ndk/26d/AndroidNDK11579264.app/Contents/NDK//toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/32/libGLESv3.so
+
+# /opt/qt/6.6.3/macos/bin/androiddeployqt --input /Users/gzleo/aprog/fedimqt/build/android-helloworld-deployment-settings.json --output /Users/gzleo/aprog/fedimqt/build/android-build --apk /Users/gzleo/aprog/fedimqt/build/android-build/helloworld.apk --depfile /Users/gzleo/aprog/fedimqt/build/android-build/helloworld.d --builddir /Users/gzleo/aprog/fedimqt/build "" --verbose
