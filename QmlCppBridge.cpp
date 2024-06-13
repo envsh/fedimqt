@@ -22,12 +22,16 @@ void QmlCppBridge::setrootwin(QObject*rw) {
 extern "C" { void qmlinvokenative(char*, uintptr_t, char**, uintptr_t*); }
 
 QString QmlCppBridge::invoke(QString jstr) {
-        qDebug()<<"hello invoked"<<jstr;
+        // qDebug()<<"hello invoked"<<jstr<<jstr.length();
+        // note: jstr.length() != jstr.toUtf8().length() when have cjk chars
+        auto bcc = jstr.toUtf8();
+        qDebug()<<"hello invoked"<<jstr<<bcc.length()<<jstr.length();
+
         char* retstr = nullptr;
         uintptr_t retlen = 0;
-        qmlinvokenative(jstr.toUtf8().data(), jstr.length(), &retstr, &retlen);
+        qmlinvokenative(bcc.data(), bcc.length(), &retstr, &retlen);
         // qDebug()<<"res"<<retlen;
-        auto rv = QString(retstr);
+        auto rv = QString(retstr); // todo get the ownership of retstr
         delete(retstr);
         return rv;
 }
@@ -38,4 +42,9 @@ void qtemitcallqmlcxx(QString str) {
 }
 
 extern "C"
-void qtemitcallqml(char* str) { qtemitcallqmlcxx(QString(str)); }
+void qtemitcallqml(char* jstr) { 
+    // qDebug()<<"emitqml"<<strlen(jstr)<<jstr;
+    auto s = QString(jstr); // todo get the ownership of retstr
+    delete(jstr);
+    qtemitcallqmlcxx(s);
+}

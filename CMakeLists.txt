@@ -46,15 +46,15 @@ set_target_properties(helloworld PROPERTIES
 
 # add_custom_command(OUTPUT out1 COMMAND "tsc -v")
 # message("${out1}")
-add_custom_target(tscit 
+add_custom_target(tscc
     # COMMAND "tsc" "-v"
     COMMAND "tsc" "--pretty" "--sourceMap" "--declaration" "--module" "commonjs" "--lib" "es2020,dom" "--esModuleInterop" "main.ts"
     # fix https://stackoverflow.com/questions/43042889/typescript-referenceerror-exports-is-not-defined
     COMMAND "sed" "-i" ".bak" "'s/\"use strict\";/var exports = {};\\n\\n\"use strict\";/g'" "main.js"
     SOURCES main.ts)
-add_dependencies(helloworld tscit)
+add_dependencies(helloworld tscc)
 
-add_custom_target(gocit
+add_custom_target(gocc
     WORKING_DIRECTORY "./srcgo"
     COMMAND pwd && go version
     COMMAND go build  -buildmode=c-shared -o ../libhellogo.dylib ./
@@ -63,5 +63,5 @@ add_custom_target(gocit
     # SOURCES ./srcgo/*.go ./srcgo/go.*
     # COMMAND_EXPAND_LISTS
 )
-add_dependencies(helloworld gocit)
+add_dependencies(helloworld gocc)
 

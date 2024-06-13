@@ -6,7 +6,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 
-
+// 单行，限长截断的Text
 Text {
     text: "mytextcp"
                     color: Material.foreground

@@ -111,16 +111,24 @@ ScrollView {
                 Rectangle{
                     width: 120
                     opacity: 0.65
+
+                MyText {
+                    id: lbroomname
+                    text: Roomname==''?'Roomname':Roomname
+                    width: 120
+                    
+                }} 
+                Rectangle{
+                    Layout.fillWidth: true
+                    opacity: 0.65
+
                 MyText {
                     id: lbroomid
-                    text: Roomid
-                    // text: "hhhh"
-                    // color: Material.foreground
-                    // elide: Text.ElideRight
-                    // maximumLineCount: 1
+                    text: Roomid==''?'Roomid':Roomid
                     width: 120
-                    // wrapMode: Text.WrapAnywhere
-                }}  
+                    
+                }}
+
                 // Button {
                 //     id: inbtn2
                 //     text:"tbn2"
@@ -129,14 +137,13 @@ ScrollView {
                 // }
                 Rectangle{
                     width: 120
-                    color: "red"
                     opacity: 0.5
-                Text {
+
+                MyText {
                     id: inbtn3
                     text: Mtimems
                     // flat: true
                     width: 120
-                    color: Material.foreground
                 }
                 }
                 }
@@ -170,30 +177,40 @@ ScrollView {
 
                 RowLayout {
                     anchors.top : txtcc2.bottom
-                    Layout.fillWidth:false
+                    width: parent.width
                     height: 30
                     Rectangle{
                         width:120
                         opacity: 0.5
-                    Text {
-                        text: "jaefiaewjfowf"
-                        color: Material.foreground
-                        
+                    // height: 30
+                    // color: "red"
+
+                    MyText {
+                        text: "fedisite link"
                     }  }
                 Rectangle{
                     width:120
                     opacity: 0.5
-                Text {
+                    Layout.fillWidth: true
+                    // height: 30
+                    // color: "red"
+                MyText {
                     id: labevtid
-                    text: Eventid
-                    // text: "hhhh"
-                    color: Material.foreground
-                    elide: Text.ElideRight
-                    maximumLineCount: 1
-                    width: 120
-                    wrapMode: Text.WrapAnywhere
+                    text: Eventid==''?"Eventid":Eventid;
+                    // width: 120
                     
-                }}              
+                }}
+                // Dtime
+                Rectangle{
+                    width:120
+                    opacity: 0.5
+                    // height: 30
+                    // color: "red"
+                MyText {
+                    id: labdtime
+                    text: Dtime==''?"Dtime":Dtime
+                    width: 120                    
+                }}       
             }
             
             // Row{
@@ -365,8 +382,21 @@ ScrollView {
         let req = Lib.tojson({Cmd: "sendmsg", Argv:[sndmode, msg]});
         let resp = qcffi.invoke(req); // todo: will freeze ui
         Lib.debug("resp", resp);
-        let jso = JSON.parse(resp);
-        let item = {Content: jso.Retv[0]};
+        if (false) { // async mode, no result data here
+            let jso = JSON.parse(resp);
+            let item = {Content: jso.Retv[0]};
+            listView.model.insert(0, item);
+        }
+    }
+    function sendmsgret(rv) {
+        let item = {Content: rv.content};
+        item.Dtime = rv.Dtime == '' ? rv.dtime : rv.Dtime;
+        item.name = item.Sender = "gptcfai"
+        item.Feditype = "gptcf"
+        item.Roomid = "mainline@cf"
+        item.Roomname = "mainline"
+        item.Eventid = "$ifsf"
+        
         listView.model.insert(0, item);
     }
 

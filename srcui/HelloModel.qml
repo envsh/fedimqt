@@ -17,15 +17,16 @@ ListModel {
         Eventid: ""
         Sender: ""
         Mtimems: 0
+        Dtime: "0s0ms"
     }
-    ListElement {
-        name: "John Brown"
-        number: "555 8426"
-    }
-    ListElement {
-        name: "Sam Wise"
-        number: "555 0473"
-    }
+    // ListElement {
+    //     name: "John Brown"
+    //     number: "555 8426"
+    // }
+    // ListElement {
+    //     name: "Sam Wise"
+    //     number: "555 0473"
+    // }
 
 
     ///////
@@ -35,6 +36,7 @@ ListModel {
         this.append({name:"nam"+i, number: "num 444 555 "+i})
         }
     }
+    
     Component.onCompleted: {
         addtstitems();
     }

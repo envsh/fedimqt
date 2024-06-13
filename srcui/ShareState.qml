@@ -24,10 +24,11 @@ Item {
     height:0
 
     id: vss
-    property string foo: "fooprop"
+    readonly property string foo: "fooprop"
+    readonly property string bkdretpromis: "Promis<String>"
     // property list<string> sndmsgpfxkeys : ["dftim", "gptcf", "cmd"] // {"dftim": "", "gptcf": "", "cmd": "!", }
     // why no length/count methods???
-    property var sndmsgpfxs: {"dftim":"dftimpfx", "gptcf":"gptcfpfx", "cmd":"!"}
+    readonly property var sndmsgpfxs: {"dftim":"dftimpfx", "gptcf":"gptcfpfx", "cmd":"!"}
 
     function getsndmsgpfx(name) {
         Lib.debug("vss", vss.sndmsgpfxs, Lib.tojson(vss.sndmsgpfxs));

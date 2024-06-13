@@ -135,9 +135,22 @@ ApplicationWindow {
 
 
     // all functions are qt slots   
-    function oncallqml(str) {
-        Lib.debug(str);
+    function oncallqml(jstr) {
+        Lib.debug(jstr);
         // Lib.info("lstcnt", listView.count);  // print ui object property
+        let jso = JSON.parse(jstr);
+        dispatchEvent(jso);
+    }
+    function dispatchEvent(jso) {
+        switch (jso.Cmd) {
+            case "notice":
+                break;
+            case "sendmsg":
+                msglstwin.sendmsgret(jso.Retv[0]);
+                break;
+            default:
+                break;
+        }
     }
 
     Component.onCompleted: {
