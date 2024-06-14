@@ -39,6 +39,10 @@ qt_add_executable(helloworld
     mainc.c
 )
 # message("and... ${ANDROID}")
+# todo this is absolute path, maybe not work, need relative path
+file(GLOB qmlfiles CONFIGURE_DEPENDS srcui/*.qml)
+file(GLOB iconfiles CONFIGURE_DEPENDS ./icons/*.png)
+# message("icons ${iconfiles}")
 if(${ANDROID})
 qt_add_qml_module(helloworld
     URI mainqml
@@ -49,10 +53,11 @@ qt_add_qml_module(helloworld
 qt_target_qml_sources(helloworld
     QML_FILES main.qml main.js
     srcui/MyText.qml srcui/MyComboBox.qml srcui/MyButton.qml
-    srcui/HelloModel.qml srcui/Logui.qml
+    srcui/MyImage.qml srcui/HelloModel.qml srcui/Logui.qml
     srcui/Loginui.qml srcui/Aboutui.qml srcui/ShareState.qml
-    srcui/RoomListView.qml srcui/MsgListView.qml
+    srcui/RoomListView.qml srcui/MsgListView.qml srcui/Settingui.qml
     # RESOURCES icons/logo.png
+    RESOURCES ${iconfiles}
 )
 endif()
 

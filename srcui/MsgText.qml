@@ -34,9 +34,10 @@ Text {
     }
 
     ///
+    // todo check scrolling not show
     onLinkHovered: (link)=> {
-        console.log(link + " link hovered");
-        tiptext = link;
+        // console.log(link + " link hovered");
+        if (tiptext != link) tiptext = link;
     }
     onLinkActivated: (link)=> {
         console.log(link + " link activated");

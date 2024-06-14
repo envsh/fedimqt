@@ -14,6 +14,7 @@ import QtQuick.Window
 
 // import "srcui"
 
+// how singleton main.js???
 // import js now, from tspp/main.js
 import "../main.js" as Lib;
 
@@ -105,9 +106,13 @@ ScrollView {
                 //     flat: true
                 //     // anchors.right: parent.right
                 // }
+                MyImage {source:"../icons/icon_avatar.png"; 
+                    width:22; height:22;
+                    }
                 Rectangle{
                     width: 120
                     opacity: 0.8
+                    
                 MyText {
                     width: parent.width
                     id: inbtn
@@ -162,10 +167,11 @@ ScrollView {
 
                 MyText {
                     id: inbtn3
-                    text: Mtimems
+                    text: Mtimemsui
                     tiptext: 'mtimems:'+Mtimems
                     // flat: true
                     width: 120
+                    horizontalAlignment: Text.Right
                 }
                 }
                 }
@@ -189,6 +195,8 @@ ScrollView {
                         textFormat: txtccfmt
                         text: Content!=''?Content:'Content here'
                     }
+                    MyImage{source:"../icons/MessageListSending@2x.png"; width:15
+                        anchors.right: txtcc.right}
                     }
 
                 RowLayout {
@@ -284,7 +292,10 @@ ScrollView {
             anchors.left : parent.left
             anchors.right : parent.right
 
-            MyButton{ text:"SIMG"}
+            MyButton{ text:"SIMG"; implicitWidth: 32;
+                display: AbstractButton.IconOnly
+                icon.source: "../icons/add.png"}
+
             TextArea {
                 placeholderText: qsTr("Enter message")
                 id: usriptmsg
@@ -295,7 +306,15 @@ ScrollView {
                 Layout.fillWidth: true
                 implicitWidth: 120
             }
-            MyButton{ text:"Sendit!!!"; onClicked: sendmsg()}
+            MyButton{ text:"Emoji"; onClicked: dummy();
+                implicitWidth: 32;
+                display: AbstractButton.IconOnly
+                icon.source: "../icons/smile_gray64.png"}
+            MyButton{ text:"Sendit!!!"; onClicked: sendmsg();
+                implicitWidth: 52;
+                display: AbstractButton.IconOnly
+                icon.source: "../icons/cursor_gray64.png"}
+            // MyImage {source:"../icons/cursor_gray64.png"; height:26; width:26}
             MyComboBox {       
                 id: msgsndmode 
                 model: ["dftim", "gptcf", "cmd", "misskey", "gptoa", "nostr"]
@@ -306,8 +325,10 @@ ScrollView {
     ///////// script
 
     // all functions are qt slots   
-
+    // 子组件比main组件onCompleted更迟一些，要做初始化加载就在子组件中
     Component.onCompleted: {
+        Lib.settimeoutfuncs(qmlSetTimeout, qmlClearTimeout);
+
         // let rv = qcffi.invoke("thisqml");
         // Lib.debug(rv);
         listView.model.dummy()
@@ -339,21 +360,21 @@ ScrollView {
             let req = Lib.tojson({Cmd: "loadmsg", Argv:["1=1 limit 300"]});
             let resp = qcffi.invoke(req);
             Lib.debug('resplen', resp.length);
-            let jso = JSON.parse(resp);
-            Lib.debug("rowcnt", jso.Retc, jso.Retv.length);
-            for (let i=0; i < jso.Retc; i++) {
-                let rv = jso.Retv[i];
-                // let item = {name:"", number: ""};
-                let item = rv;
-                item.name = rv.Sender;
-                item.number = rv.Roomid;
-                listView.model.insert(0, item);
-                for (let j=0;j < 30; j++) {
-                    // listView.model.insert(0, item);
-                }
-                // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
-                // Lib.debug('typeof', typeof rv.Sender)
-            }
+            // let jso = JSON.parse(resp);
+            // Lib.debug("rowcnt", jso.Retc, jso.Retv.length);
+            // for (let i=0; i < jso.Retc; i++) {
+            //     let rv = jso.Retv[i];
+            //     // let item = {name:"", number: ""};
+            //     let item = rv;
+            //     item.name = rv.Sender;
+            //     item.number = rv.Roomid;
+            //     listView.model.insert(0, item);
+            //     for (let j=0;j < 30; j++) {
+            //         // listView.model.insert(0, item);
+            //     }
+            //     // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
+            //     // Lib.debug('typeof', typeof rv.Sender)
+            // }
             Lib.debug('itemcnt', listView.model.count);
     }
     function fetchmore() {
@@ -384,7 +405,7 @@ ScrollView {
     function loadmsgret(retv) {
         Lib.debug("...rowcnt", retv.length);
         let oldcnt = listView.model.count;
-        for (let i=retv.length-1; i >= 0; i--) {
+        for (let i=0; i < retv.length; i++) {
             let rv = retv[i];
             // let item = {name:"", number: ""};
             let item = sss.newFediRecord();
@@ -399,6 +420,7 @@ ScrollView {
             item.Eventid = rv.Eventid;
             item = rv;
             item.Dtime = '0s0ms';
+            item.Mtimemsui = Lib.objtmstrmin(new Date(item.Mtimems))
             // listView.model.insert(0, item);
             msgaddnodup(item, true);
             for (let j=0;j < 30; j++) {
@@ -414,7 +436,8 @@ ScrollView {
         }
         let addcnt = listView.model.count - oldcnt;
         if (addcnt>0) {
-            scrollvto(true);
+            // scrollvto(true);
+             Lib.runonce(286, scrollvto, true);
         }
         Lib.debug('itemcnt',  addcnt, listView.model.count);
     }
@@ -438,21 +461,28 @@ ScrollView {
             listView.model.insert(0, item);
         }
     }
-    function sendmsgret(rv) {
-        let item = {Content: rv.content};
-        item.Dtime = rv.Dtime == '' ? rv.dtime : rv.Dtime;
+    function sendmsgret(cmdo) {
+        let item = sss.newFediRecord();
+        item.Content = cmdo.Retv[0];
+        item.Dtime = cmdo.Dtime// rv.Dtime == '' ? rv.dtime : rv.Dtime;
         item.name = item.Sender = "gptcfai";
         item.Feditype = "gptcf";
         item.Roomid = "mainline@cf";
         item.Roomname = "mainline";
-        item.Eventid = rv.Eventid!=''? rv.Eventid : "$ifsf";
-        
+        item.Eventid = '' //rv.Eventid!=''? rv.Eventid : "$ifsf";
+        // item.Mtimems = (new Date()).tohhmm();
+        item.Mtimemsui = Lib.objtmstrmin(new Date());
+        // item = rv;
+
         // listView.model.insert(0, item);
         msgaddnodup(item, false);
+        // scrollvto(false);
+        Lib.runonce(286, scrollvto, false);
     }
 
 
     function scrollvto(top : bool) {
+        // Lib.debug("top=", top);
         // 0.0 - 1.0
         let sbv = scroll1.ScrollBar.vertical;
         if (top) {

@@ -163,7 +163,7 @@ ApplicationWindow {
             case "notice":
                 break;
             case "sendmsg":
-                msglstwin.sendmsgret(jso.Retv[0]);
+                msglstwin.sendmsgret(jso);
                 break;
             case "loadmsg":
                 msglstwin.loadmsgret(jso.Retv);
@@ -175,6 +175,8 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
+        Lib.settimeoutfuncs(qmlSetTimeout, qmlClearTimeout);
+
         let rv = qcffi.invoke("thisqml");
         Lib.debug(rv);
         // listView.model.dummy()
@@ -217,5 +219,27 @@ ApplicationWindow {
 
     function  onloadmsg () {
         msglstwin.onloadmsg();
+    }
+
+    function qmlTimer() {
+        // return Qt.createComponent("import QtQuick; Timer{}", appwin);
+        return Qt.createQmlObject("import QtQuick; Timer{}", appwin);
+    }
+    function qmlSetTimeout(cbfn, delay, ...args) {
+        // console.log(cbfn, delay, ...args);
+        let tmer = qmlTimer();
+        tmer.interval = delay;
+        tmer.repeat = true; // like origin setTimeout
+        let cb = () => { cbfn(...args); };
+        tmer.triggered.connect(cb);
+        // tmer.running = true;
+        tmer.start();
+        return tmer
+    }
+    function qmlClearTimeout(tmer) {
+        // console.log("clrtmer", tmer);
+        // tmer.running = false;
+        tmer.stop();
+        // tmer.disconnect(); // not work
     }
 }
