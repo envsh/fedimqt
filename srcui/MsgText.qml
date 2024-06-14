@@ -8,11 +8,39 @@ import QtQuick.Layouts
 
 
 Text {
-    text: "msgtextcp"
-                    color: Material.foreground
-                    // elide: Text.ElideMiddle
-                    // maximumLineCount: 1
-                    // width: 30
-                    // implicitWidth: 30
-                    wrapMode: Text.WrapAnywhere
+                        color: Material.foreground;
+                    
+                        // id : txtcc
+                        width: parent.width
+                        // width: 350
+                        textFormat: Text.MarkdownText
+                        // textFormat: Text.RichText
+                        font.pixelSize: 14
+                        // font.pixelSize: normalSize+3
+
+                        // text: "If this property is set to true, the layout will force all cells to have an uniform Height. The layout aims to respect";
+                        wrapMode: Text.WrapAnywhere; 
+
+
+
+    focus: true
+    // focusPolicy: Qt.StrongFocus
+    property string tiptext//: qsTr("Save the active project")
+    ToolTip{ 
+        // Text 没有 Hovered 属性吧
+        visible: tiptext.length>0
+        // visible: down
+        text: tiptext
+    }
+
+    ///
+    onLinkHovered: (link)=> {
+        console.log(link + " link hovered");
+        tiptext = link;
+    }
+    onLinkActivated: (link)=> {
+        console.log(link + " link activated");
+        if (link == '') return;
+        let ok = Qt.openUrlExternally(link);
+    }
 }

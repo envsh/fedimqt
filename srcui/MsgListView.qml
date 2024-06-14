@@ -25,8 +25,6 @@ Rectangle {
     height: 580
     color: Material.background
 
-
-
 ScrollView {
     ////////////
     visible: true
@@ -57,24 +55,26 @@ ScrollView {
         anchors.fill: parent
         width : parent.width
         anchors.leftMargin: 5
+        
 
-        MouseArea {
-            anchors.fill: parent
-            acceptedButtons: Qt.LeftButton | Qt.RightButton
-            Menu {
-                id: contextMenu
-                MenuItem { text: "Cut" }
-                MenuItem { text: "Copy" }
-                MenuItem { text: "Paste" }
-            }
-            onClicked:  function (mouse) {
-                // Lib.debug("maclick", mouse, JSON.stringify(mouse));
-                // console.log(mouse); // QQuickMouseEvent
-                if (mouse.button === Qt.RightButton) {
-                    contextMenu.popup();
-                }
-            }
-        }
+        // todo 这个会覆盖Text的 linkActived 信号
+        // MouseArea {
+        //     anchors.fill: parent
+        //     acceptedButtons: Qt.LeftButton | Qt.RightButton
+        //     Menu {
+        //         id: contextMenu
+        //         MenuItem { text: "Cut" }
+        //         MenuItem { text: "Copy" }
+        //         MenuItem { text: "Paste" }
+        //     }
+        //     onClicked:  function (mouse) {
+        //         // Lib.debug("maclick", mouse, JSON.stringify(mouse));
+        //         // console.log(mouse); // QQuickMouseEvent
+        //         if (mouse.button === Qt.RightButton) {
+        //             contextMenu.popup();
+        //         }
+        //     }
+        // }
 
         model: HelloModel{}
         delegate: Rectangle {
@@ -108,15 +108,17 @@ ScrollView {
                 Rectangle{
                     width: 120
                     opacity: 0.8
-                Text {
+                MyText {
+                    width: parent.width
                     id: inbtn
-                    text: name
+                    text: Sender
+                    tiptext: 'sender:'+Sender
                     // text: "hhhh"
-                    color: Material.foreground
-                    elide: Text.ElideMiddle
-                    maximumLineCount: 1
-                    width: 120
-                    wrapMode: Text.WrapAnywhere
+                    // color: Material.foreground
+                    // elide: Text.ElideMiddle
+                    // maximumLineCount: 1
+                    // width: 120
+                    // wrapMode: Text.WrapAnywhere
                 }}
                 // Rectangle {
                 //     Layout.fillWidth:true
@@ -132,6 +134,7 @@ ScrollView {
                 MyText {
                     id: lbroomname
                     text: Roomname==''?'Roomname':Roomname
+                    tiptext: 'roomname:'+Roomname
                     width: 120
                     
                 }} 
@@ -142,6 +145,7 @@ ScrollView {
                 MyText {
                     id: lbroomid
                     text: Roomid==''?'Roomid':Roomid
+                    tiptext: 'roomid:'+Roomid
                     width: 120
                     
                 }}
@@ -159,6 +163,7 @@ ScrollView {
                 MyText {
                     id: inbtn3
                     text: Mtimems
+                    tiptext: 'mtimems:'+Mtimems
                     // flat: true
                     width: 120
                 }
@@ -179,17 +184,11 @@ ScrollView {
                         id: txtcc2
                         
 
-                    Text {
-                        color: Material.foreground;
-                    
-                        id : txtcc
-                        width: parent.width
-                        // width: 350
-
-                        text: Content
-                        // text: "If this property is set to true, the layout will force all cells to have an uniform Height. The layout aims to respect";
-                        wrapMode: Text.WrapAnywhere; 
-                        }
+                    MsgText {
+                        id: txtcc
+                        textFormat: txtccfmt
+                        text: Content!=''?Content:'Content here'
+                    }
                     }
 
                 RowLayout {
@@ -204,18 +203,22 @@ ScrollView {
 
                     MyText {
                         text: "fedisite link"
+                        tiptext: "full fedisite link"
                     }  }
                 Rectangle{
-                    width:120
+                    width:90
                     opacity: 0.5
                     Layout.fillWidth: true
                     // height: 30
                     // color: "red"
                 MyText {
                     id: labevtid
-                    text: Eventid==''?"Eventid":Eventid;
-                    // width: 120
-                    
+                    text: Eventid==''?"Eventid here":Eventid;
+                    tiptext: Eventid
+                    // width: 120 
+                    // color: "red"
+                    anchors.right : parent.right
+                    anchors.left : parent.left
                 }}
                 // Dtime
                 Rectangle{
@@ -226,6 +229,7 @@ ScrollView {
                 MyText {
                     id: labdtime
                     text: Dtime==''?"Dtime":Dtime
+                    tiptext: 'dtime:'+Dtime
                     width: 120                    
                 }}       
             }
@@ -251,7 +255,7 @@ ScrollView {
             if (listView.verticalOvershoot < -6.0) {
                 Lib.info("fetch more triggered", listView.verticalOvershoot);
                 logui.addlog("fetch more triggered " + listView.verticalOvershoot);
-            } else if (listView.verticalOvershoot > 6.0) {
+            } else if (listView.verticalOvershoot > 16.0) {
                 Lib.info("refresh latest triggered", listView.verticalOvershoot);
             }
 
@@ -312,8 +316,24 @@ ScrollView {
         Lib.dummy('wt')
         Lib.util.dummy();
         // Jlib.default.dummy(); // TypeError: Cannot call method 'dummy' of undefined
+        let m1 = new Map();
+        Lib.debug("m1", m1);
     }
     //////
+    function msgaddnodup(item, prepend) {
+        let has = sss.msgs.has(item.Eventid);
+        if (!has) {
+            sss.msgs.set(item.Eventid, item);
+            if (prepend) {
+                listView.model.insert(0, item);
+            }else{
+                listView.model.append(item);
+            }
+            return true;
+        }
+        // Lib.debug('item', !has, item.Eventid, sss.msgs.size, listView.model.count);
+        return false;
+    }
     function  onloadmsg () {
             Lib.debug('clicked');
             let req = Lib.tojson({Cmd: "loadmsg", Argv:["1=1 limit 300"]});
@@ -335,6 +355,68 @@ ScrollView {
                 // Lib.debug('typeof', typeof rv.Sender)
             }
             Lib.debug('itemcnt', listView.model.count);
+    }
+    function fetchmore() {
+        let fmcond = sss.fetchmore_condstr();
+            Lib.debug('...', sss.fmnext_batch, fmcond);
+            let req = Lib.tojson({Cmd: "loadmsg", Argv:[fmcond]});
+            // if (true) return;
+            let resp = qcffi.invoke(req);
+            assert(resp == sss.bkdretpromis, 'error invoke', req);
+            // Lib.debug('resplen', resp.length);
+            // let jso = JSON.parse(resp);
+            // Lib.debug("rowcnt", jso.Retc, jso.Retv.length);
+            // for (let i=0; i < jso.Retc; i++) {
+            //     let rv = jso.Retv[i];
+            //     // let item = {name:"", number: ""};
+            //     let item = rv;
+            //     item.name = rv.Sender;
+            //     item.number = rv.Roomid;
+            //     listView.model.insert(0, item);
+            //     for (let j=0;j < 30; j++) {
+            //         // listView.model.insert(0, item);
+            //     }
+            //     // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
+            //     // Lib.debug('typeof', typeof rv.Sender)
+            // }
+            // Lib.debug('itemcnt', listView.model.count);
+    }
+    function loadmsgret(retv) {
+        Lib.debug("...rowcnt", retv.length);
+        let oldcnt = listView.model.count;
+        for (let i=retv.length-1; i >= 0; i--) {
+            let rv = retv[i];
+            // let item = {name:"", number: ""};
+            let item = sss.newFediRecord();
+            item.Dtime = rv.Dtime == '' ? rv.dtime : rv.Dtime;
+            item.name = item.Sender = "gptcfai"
+            item.Feditype = "gptcf"
+            item.Roomid = "mainline@cf"
+            item.Roomname = "mainline"
+            item.Eventid = "$ifsf"
+            item.name = rv.Sender;
+            item.number = rv.Roomid;
+            item.Eventid = rv.Eventid;
+            item = rv;
+            item.Dtime = '0s0ms';
+            // listView.model.insert(0, item);
+            msgaddnodup(item, true);
+            for (let j=0;j < 30; j++) {
+                    // listView.model.insert(0, item);
+            }
+            // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
+            // Lib.debug('typeof', typeof rv.Sender)
+
+            // listView.model.insert(0, item);
+            let ok = msgaddnodup(item, true);
+            sss.setnextbatch(item.Mtimems);
+            // Lib.debug(i, ok, item.Eventid);
+        }
+        let addcnt = listView.model.count - oldcnt;
+        if (addcnt>0) {
+            scrollvto(true);
+        }
+        Lib.debug('itemcnt',  addcnt, listView.model.count);
     }
 
     function sendmsg() {
@@ -359,14 +441,16 @@ ScrollView {
     function sendmsgret(rv) {
         let item = {Content: rv.content};
         item.Dtime = rv.Dtime == '' ? rv.dtime : rv.Dtime;
-        item.name = item.Sender = "gptcfai"
-        item.Feditype = "gptcf"
-        item.Roomid = "mainline@cf"
-        item.Roomname = "mainline"
-        item.Eventid = "$ifsf"
+        item.name = item.Sender = "gptcfai";
+        item.Feditype = "gptcf";
+        item.Roomid = "mainline@cf";
+        item.Roomname = "mainline";
+        item.Eventid = rv.Eventid!=''? rv.Eventid : "$ifsf";
         
-        listView.model.insert(0, item);
+        // listView.model.insert(0, item);
+        msgaddnodup(item, false);
     }
+
 
     function scrollvto(top : bool) {
         // 0.0 - 1.0
@@ -379,6 +463,9 @@ ScrollView {
             // Lib.debug("cch", scroll1.contentHeight, "winh", scroll1.height);
         }
     }
+
+    property int txtccfmt: Text.MarkdownText
+    function setccfmt(f) { txtccfmt  = f }
 
     // async function dummy() {} // not work syntax error
 }

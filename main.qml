@@ -60,8 +60,15 @@ ApplicationWindow {
         Menu {
             title: qsTr("&Dev")
             Action { text: qsTr("&Load Message") ; onTriggered: onloadmsg() }
-            Action { text: qsTr("&Load More Older") }
-            Action { text: qsTr("&Paste") }
+            Action { text: qsTr("&Load More Older"); onTriggered: msglstwin.fetchmore() }
+            Action { text: qsTr("&AutoText"); 
+                onTriggered: msglstwin.setccfmt(Text.AutoText) }
+            Action { text: qsTr("&MarkdownText");
+                onTriggered: msglstwin.setccfmt(Text.MarkdownText) }
+            Action { text: qsTr("&RichText"); 
+                onTriggered: msglstwin.setccfmt(Text.RichText) }
+            Action { text: qsTr("&PlainText"); 
+                onTriggered: msglstwin.setccfmt(Text.PlainText) }
         }
         Menu {
             title: qsTr("&Misc")
@@ -143,13 +150,13 @@ ApplicationWindow {
     function oncallqml(jstr) {
         Lib.debug(jstr);
         // Lib.info("lstcnt", listView.count);  // print ui object property
-        try {
+        // try {
         let jso = JSON.parse(jstr);
         dispatchEvent(jso);
-        }catch(err) {
+        // }catch(err) {
             // console.error(err, ":", jstr);
-            Lib.error(err, ":", jstr);
-        }
+            // Lib.error(err, ":", jstr.length, jstr.substring(0, 56));
+        // }
     }
     function dispatchEvent(jso) {
         switch (jso.Cmd) {
@@ -158,6 +165,10 @@ ApplicationWindow {
             case "sendmsg":
                 msglstwin.sendmsgret(jso.Retv[0]);
                 break;
+            case "loadmsg":
+                msglstwin.loadmsgret(jso.Retv);
+                break;
+
             default:
                 break;
         }

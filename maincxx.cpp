@@ -47,9 +47,9 @@ int maincxxqml(int argc, char**argv) {
     qDebug()<<url;
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
                      [url](QObject *obj, const QUrl &objUrl) {
-                        qDebug()<<"QmlAppEngine created";
+                        qDebug()<<__FUNCTION__<<"QmlAppEngine created";
                          if (!obj && url == objUrl) {
-                            qDebug()<<"load error exit"<<objUrl;
+                            qDebug()<<__FUNCTION__<<"load error exit"<<objUrl;
                             QCoreApplication::exit(-1);
                          }
                      },

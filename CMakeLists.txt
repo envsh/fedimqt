@@ -71,7 +71,7 @@ set_target_properties(helloworld PROPERTIES
 # message("${out1}")
 add_custom_command(OUTPUT ${projdir}/main.js COMMENT "tscc111"
     # COMMAND "tsc" "-v"
-    COMMAND "tsc" "--pretty" "--sourceMap" "--declaration" "--module" "commonjs" "--lib" "es2020,dom" "--esModuleInterop" "${CMAKE_HOME_DIRECTORY}/main.ts"
+    COMMAND tsc --pretty --sourceMap --declaration --module commonjs --lib es2020,dom --esModuleInterop "${CMAKE_HOME_DIRECTORY}/main.ts"
     # fix https://stackoverflow.com/questions/43042889/typescript-referenceerror-exports-is-not-defined
     COMMAND "sed" "-i" ".bak" "'s/\"use strict\";/var exports = {};\\n\\n\"use strict\";/g'" "${CMAKE_HOME_DIRECTORY}/main.js"
     DEPENDS ${projdir}/main.ts)
@@ -117,3 +117,9 @@ add_custom_target(showapk
 )
 add_dependencies(showapk helloworld)
 
+### clean some
+add_custom_target(clngo rm -fv libhellogo.h)
+add_custom_target(clnts rm -fv main.js main.js.map main.d.ts)
+
+add_custom_target(clnapk WORKING_DIRECTORY "${projdir}/build"
+    COMMAND rm -fv build/android-build/helloworld.apk build/android-build/build/outputs/apk/debug/android-build-debug.apk)

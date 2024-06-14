@@ -25,12 +25,12 @@ QString QmlCppBridge::invoke(QString jstr) {
         // qDebug()<<"hello invoked"<<jstr<<jstr.length();
         // note: jstr.length() != jstr.toUtf8().length() when have cjk chars
         auto bcc = jstr.toUtf8();
-        qDebug()<<"hello invoked"<<jstr<<bcc.length()<<jstr.length();
+        qDebug()<<__FUNCTION__<<"hello invoked"<<jstr<<bcc.length()<<jstr.length();
 
         char* retstr = nullptr;
         uintptr_t retlen = 0;
         qmlinvokenative(bcc.data(), bcc.length(), &retstr, &retlen);
-        // qDebug()<<"res"<<retlen;
+        // qDebug()<<__FUNCTION__<<"res"<<retlen;
         auto rv = QString(retstr); // todo get the ownership of retstr
         delete(retstr);
         return rv;
@@ -43,7 +43,7 @@ void qtemitcallqmlcxx(QString str) {
 
 extern "C"
 void qtemitcallqml(char* jstr) { 
-    // qDebug()<<"emitqml"<<strlen(jstr)<<jstr;
+    // qDebug()<<__FUNCTION__<<"emitqml"<<strlen(jstr)<<jstr;
     auto s = QString(jstr); // todo get the ownership of retstr
     delete(jstr);
     qtemitcallqmlcxx(s);

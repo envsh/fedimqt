@@ -25,4 +25,12 @@ Button{
 
     implicitHeight: 45
     // implicitWidth: 90
+
+    property string tiptext//: qsTr("Save the active project")
+    ToolTip{ 
+        visible: hovered && tiptext.length>0
+        // visible: down
+        text: tiptext
+    }
+
 }
