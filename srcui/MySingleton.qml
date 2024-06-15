@@ -17,11 +17,15 @@ import "../main.js" as Lib;
 QtObject {
     property string pt1 : "pt1val"
     property int pt2  : 12345
-    property var sndmsgpfxs : {"dftim": "", "gptcf": "", "cmd": "!", }
+    readonly property var sndmsgpfxs: {"dftim":"dftimpfx： ", "gptcf":"请使用中文完成对话：", "cmd":"!"}
 
     // release
     readonly property var starttime: new Date()
     readonly property string bkdretpromis: "Promis<String>"
+    readonly property bool isapk : Qt.platform.os == "android"
+    readonly property bool isosx : Qt.platform.os == "osx"
+    readonly property bool islinux : Qt.platform.os == "linux"
+    readonly property bool isunix : Qt.platform.os == "unix"
 
     function dummy() {
         Lib.debug(pt1, pt2);

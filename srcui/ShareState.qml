@@ -38,7 +38,7 @@ Item {
     readonly property string bkdretpromis: "Promis<String>"
     // property list<string> sndmsgpfxkeys : ["dftim", "gptcf", "cmd"] // {"dftim": "", "gptcf": "", "cmd": "!", }
     // why no length/count methods???
-    readonly property var sndmsgpfxs: {"dftim":"dftimpfx", "gptcf":"gptcfpfx", "cmd":"!"}
+    readonly property var sndmsgpfxs: {"dftim":"dftimpfx： ", "gptcf":"请使用中文完成对话：", "cmd":"!"}
     property var m1tst : new Map()
     property var msgs : new Map() // msgid=>msgobj
     property var grps : new Map() // grpid=>grpobj

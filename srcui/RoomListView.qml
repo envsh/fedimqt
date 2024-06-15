@@ -18,7 +18,8 @@ Rectangle {
 
     ////////////
     id: topwin
-    width: 500
+    // width: 500
+    width: parent.width
     height: 500
     visible: true
     color: Material.background
@@ -61,11 +62,12 @@ ScrollView {
         }
 
         delegate: Rectangle {
-            // color: Material.background
+            color: Material.background
+            // color: tranparent
             width: topwin.width
             // height: topwin.height
-            height: 52
-            color: "red"
+            height: 66
+            // color: "red"
 
             RowLayout{
                 anchors.right : parent.right
@@ -74,34 +76,62 @@ ScrollView {
                 id: grpico
                 source: "../icons/group_40.png"
                 width:52
+                height: 52
             }
             ColumnLayout{
                 Layout.fillWidth: true
                 RowLayout{
+                    // feditype icon
+                    MyImage {
+                        source: "../icons/favicon.png"
+                        width:15
+                    }
+                    Rectangle {
+                        width: 120
+                        height: 32
+                        color: Material.background
                     MyText {
                         id: grpitem
                         text: Roomname
                         font.pixelSize: sss.dftft.pixelSize+9
                     }
+                    }
+                    Rectangle {
+                        Layout.fillWidth:true
+                        color: Material.background
+                        height: 32
                     MyText {
                         id: wtttt
                         text: Roomid
+                        // width: 120
+                        verticalAlignment: Text.Center
+                    anchors.right : parent.right
+                    anchors.left : parent.left
+                    }
+                    }
+                    // 时间，右对齐，hh:mm
+                    Rectangle{
+                        // color: "blue"
+                        color: Material.background
+                        width: 90
+                        height: 26
+                    MyText {
+                        // id: wtttt
+                        text: Mtimemsui
                         width: 120
+                        font.pixelSize: sss.dftft.pixelSize-1
+                        horizontalAlignment: Text.Right
                     }
-                    MyImage {
-                        source: "../icons/favicon.png"
-                        width:15
-                    }
-                    MyImage {
-                        source: "../icons/telepathy_kde.png"
-                        width:15
                     }
                 }
                 RowLayout{
+                    
                     Layout.fillWidth:true
                     Rectangle {
                         // width: listView.width-152
-                        color: "blue"
+                        // color: "blue"
+                        // color: tranparent
+                        color: Material.background
                         // width: 120
                         Layout.fillWidth: true
                         height: 26
@@ -113,18 +143,13 @@ ScrollView {
                     anchors.left : parent.left
                     }
                     }
-                    Rectangle{
-                        color: "blue"
-                        width: 120
-                        height: 26
-                    MyText {
-                        // id: wtttt
-                        text: Mtimemsui
-                        width: 120
-                        font.pixelSize: sss.dftft.pixelSize-1
-                        horizontalAlignment: Text.Right
+
+                    // 未阅读消息数
+                    MyImage {
+                        source: "../icons/telepathy_kde.png"
+                        width:15
                     }
-                    }
+
                 }
 
             }
@@ -188,6 +213,7 @@ ScrollView {
         if (addcnt>0) {
             // scrollvto(true);
             //  Lib.runonce(286, scrollvto, true);
+            upstatusrc(grplstmdl.count);
         }
         Lib.debug('grpcnt',  addcnt, listView.model.count);
     }

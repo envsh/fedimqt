@@ -195,7 +195,8 @@ ScrollView {
                         text: Content!=''?Content:'Content here'
                     }
                     MyImage{source:"../icons/MessageListSending@2x.png"; width:15
-                        anchors.right: txtcc.right}
+                        anchors.right: txtcc.right;
+                        anchors.bottom: txtcc.bottom;}
                     }
 
                 RowLayout {
@@ -299,7 +300,8 @@ ScrollView {
 
             TextArea {
                 // TODO 不要在编辑的时候在上边显示提示
-                placeholderText: qsTr("Enter message")
+                placeholderText: (!focus && text=='') ? qsTr("Enter message") : ''
+                // preeditText: qsTr("Enter message")
                 id: usriptmsg
                 topPadding: 8
                 bottomPadding: 5
@@ -307,6 +309,26 @@ ScrollView {
                 Layout.horizontalStretchFactor: 99
                 Layout.fillWidth: true
                 implicitWidth: 120
+                // background: Rectangle {
+                //     color: Material.background
+                //     // implicitWidth: 200
+                //     // implicitHeight: 40
+                //     // border.color: control.enabled ? "#21be2b" : "transparent"
+                //     // border.color: "transparent"
+                // }
+
+                onEditingFinished: ()=>{ Lib.debug("iptedfin") }
+                // Keys.onEnterPressed: ()=>{ Lib.debug("iptetpr") }
+                Keys.onReturnPressed: (ke)=>{
+                    Lib.debug("iptetpr2", ke, ke.modifiers, Qt.Key_Control, Qt.Key_);
+                    if (ke.modifiers == Qt.ControlModifier) {
+                        // Ctrl+Enter=Send
+                        
+                    }else if (ke.modifiers == Qt.MetaModifier) {
+                        sendmsg();
+                    }
+
+                }
             }
             MyButton{ text:"Emoji"; onClicked: dummy();
                 implicitWidth: 32;
@@ -468,13 +490,14 @@ ScrollView {
     }
     function sendmsgret(cmdo) {
         let item = sss.newFediRecord();
-        item.Content = cmdo.Retv[0];
+        item.Content = cmdo.Retv[0].content;
         item.Dtime = cmdo.Dtime// rv.Dtime == '' ? rv.dtime : rv.Dtime;
         item.name = item.Sender = "gptcfai";
         item.Feditype = "gptcf";
         item.Roomid = "mainline@cf";
         item.Roomname = "mainline";
         item.Eventid = '' //rv.Eventid!=''? rv.Eventid : "$ifsf";
+        item.Eventid = '$'+(new Date()).valueOf();
         // item.Mtimems = (new Date()).tohhmm();
         item.Mtimemsui = Lib.objtmstrmin(new Date());
         // item = rv;
