@@ -39,6 +39,8 @@ func mainorinit() {
 	interopinit()
 	go bgproc()
 	// go fedimac.Appclientmain()
+	// guiclish.Locdb()
+	// startthinmtxproc()
 }
 
 func bgproc() {
@@ -49,6 +51,15 @@ func bgproc() {
 		// callqml(fmt.Sprintf("thisgo,callqml %d", i))
 		guiclish.EmitEventFront("notice", fmt.Sprintf("thisgo,callqml %d", i))
 	}
+}
+func startthinmtxproc() {
+	mtxsrv := ""
+	mtxusr := ""
+	mtxacctk := ""
+	go func() {
+		guiclish.NonhttpThinmtxproc(mtxsrv, mtxusr, mtxacctk)
+		log.Println("main.thinmtxproc done", mtxsrv, mtxusr, mtxacctk)
+	}()
 }
 
 // /// ffi section

@@ -173,17 +173,28 @@ ApplicationWindow {
     // SingletonDemo { id: oneinst } // not work
 
 
+    function invokebkd(cmd, ...args) {
+        let req = {Cmd: cmd, Argv: args};
+        return qcffi.invoke(Lib.tojson(req));
+    }
     // all functions are qt slots   
     function oncallqml(jstr) {
         Lib.debug(jstr);
+        if (jstr.startsWith('QmlAppEngineOK')) {
+            onQmlAppEngineCreated(jstr);
+        } else if (jstr == 'hello this c++'){
+            // just a debug msg
+        }else{
         // Lib.info("lstcnt", listView.count);  // print ui object property
         // try {
         let jso = JSON.parse(jstr);
+        // Lib.debug('Cmd:', jso.Cmd, jso.Argv);
         dispatchEvent(jso);
         // }catch(err) {
             // console.error(err, ":", jstr);
             // Lib.error(err, ":", jstr.length, jstr.substring(0, 56));
         // }
+        }
     }
     function dispatchEvent(jso) {
         switch (jso.Cmd) {
@@ -196,7 +207,22 @@ ApplicationWindow {
                 msglstwin.loadmsgret(jso.Retv);
                 romlstwin.loadmsgret(jso.Retv);
                 break;
-
+            case "listcfg":
+                if (jso.Argv[0] == "accountline") {
+                    loginui.onGotAccounts(jso.Retv);
+                    switchpageidx(2);
+                }
+            case "getcfg":
+                if (jso.Argv[1] == 'lastaccountline') {
+                    if (jso.Retc == 2) {
+                        invokebkd('loginaccountline', jso.Retv[0]);
+                    }else {
+                        invokebkd('listcfg', 'accountline');
+                    }
+                }
+            case "loginaccountline":
+                // todo check result
+                switchpageidx(0);
             default:
                 break;
         }
@@ -219,6 +245,14 @@ ApplicationWindow {
         // dummymix.dummymix();
         Lib.debug(Dmymix, Dmymix.exports.dummymix);
         Lib.debug(Dmymix.dmymixfn, Dmymix.dummymix);
+    }
+    function onQmlAppEngineCreated(msg) {
+        // init some here
+        Lib.debug("wtodo", msg);
+        // check account exists, and login default one
+        // if no account, switch to login page
+        // let rv = invokebkd("listcfg", "accountline");
+        let rv = invokebkd("getcfg", "", "lastaccountline");
     }
     //////
     // var pageitems = [aboutui,msglstwin];

@@ -48,10 +48,13 @@ int maincxxqml(int argc, char**argv) {
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
                      [url](QObject *obj, const QUrl &objUrl) {
                         qDebug()<<__FUNCTION__<<"QmlAppEngine created";
-                         if (!obj && url == objUrl) {
+                        QString resmsg = QString("QmlAppEngineOK %1").arg(objUrl.toString());
+                        if (!obj && url == objUrl) {
+                            resmsg = QString("load error exit %1").arg(objUrl.toString());
                             qDebug()<<__FUNCTION__<<"load error exit"<<objUrl;
                             QCoreApplication::exit(-1);
-                         }
+                        }
+                        qtemitcallqmlcxx(resmsg);
                      },
                      Qt::QueuedConnection);
     engine.load(url);
