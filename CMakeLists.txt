@@ -40,9 +40,10 @@ qt_add_executable(helloworld
 )
 # message("and... ${ANDROID}")
 # must relative path
-file(GLOB qmlfiles CONFIGURE_DEPENDS RELATIVE ${projdir} srcui/*.qml)
+file(GLOB qmlfiles CONFIGURE_DEPENDS RELATIVE ${projdir} srcui/*.qml
+    qmlpp/*.qml qmlpp/*.js)
 file(GLOB iconfiles CONFIGURE_DEPENDS RELATIVE ${projdir} icons/*.png)
-# message("icons ${iconfiles}")
+message("icons ${qmlfiles}")
 if(${ANDROID})
 qt_add_qml_module(helloworld
     URI mainqml
@@ -52,11 +53,13 @@ qt_add_qml_module(helloworld
 )
 qt_target_qml_sources(helloworld
     QML_FILES main.qml main.js
-    srcui/MyText.qml srcui/MyComboBox.qml srcui/MyButton.qml
-    srcui/MyImage.qml srcui/HelloModel.qml srcui/Logui.qml
-    srcui/Loginui.qml srcui/Aboutui.qml srcui/ShareState.qml
-    srcui/RoomListView.qml srcui/MsgListView.qml srcui/Settingui.qml
-    srcui/MsgText.qml srcui/MySingleton.qml srcui/MySingletonui.qml
+    # srcui/MyText.qml srcui/MyComboBox.qml srcui/MyButton.qml
+    # srcui/MyImage.qml srcui/HelloModel.qml srcui/Logui.qml
+    # srcui/Loginui.qml srcui/Aboutui.qml srcui/ShareState.qml
+    # srcui/RoomListView.qml srcui/MsgListView.qml srcui/Settingui.qml
+    # srcui/MsgText.qml srcui/MySingleton.qml srcui/MySingletonui.qml
+
+    ${qmlfiles}
     
     # RESOURCES icons/logo.png
     RESOURCES ${iconfiles}
@@ -132,4 +135,4 @@ add_custom_target(clngo rm -fv libhellogo.h)
 add_custom_target(clnts rm -fv main.js main.js.map main.d.ts)
 
 add_custom_target(clnapk WORKING_DIRECTORY "${projdir}/build"
-    COMMAND rm -fv build/android-build/helloworld.apk build/android-build/build/outputs/apk/debug/android-build-debug.apk)
+    COMMAND rm -fv build/android-build/helloworld.apk build/android-build/build/outputs/apk/debug/android-build-debug.apk android-build/helloworld.apk android-build/build/outputs/apk/debug/android-build-debug.apk)

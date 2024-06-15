@@ -216,6 +216,9 @@ ApplicationWindow {
         Lib.dummy('wt')
         Lib.util.dummy();
         // Jlib.default.dummy(); // TypeError: Cannot call method 'dummy' of undefined
+        // dummymix.dummymix();
+        Lib.debug(Dmymix, Dmymix.exports.dummymix);
+        Lib.debug(Dmymix.dmymixfn, Dmymix.dummymix);
     }
     //////
     // var pageitems = [aboutui,msglstwin];
@@ -274,6 +277,7 @@ ApplicationWindow {
         uptimest.text = 'UT:'+uptm;
     }
 
+    // 这个Timer 好像在 android 上没有执行
     Timer {
         interval: 3456
         repeat: true
