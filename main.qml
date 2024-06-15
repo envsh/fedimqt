@@ -13,6 +13,7 @@ import QtQuick.Window
 import QmlCppBridge 1.0 //
 
 import "srcui"
+import "qmlpp"
 
 // import js now, from tspp/main.js
 import "main.js" as Lib;
@@ -302,5 +303,6 @@ ApplicationWindow {
         // tmer.running = false;
         tmer.stop();
         // tmer.disconnect(); // not work
+        tmer.destroy();
     }
 }
