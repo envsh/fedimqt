@@ -45,6 +45,7 @@ ScrollView {
         anchors.fill: parent
 
         model: ListModel{
+            id: grplstmdl
             ListElement {
         name: "Bill Smith"
         number: "555 3264romlst"
@@ -55,6 +56,7 @@ ScrollView {
         Eventid: ""
         Sender: ""
         Mtimems: 0
+        Mtimemsui: ''
             }
         }
 
@@ -79,6 +81,7 @@ ScrollView {
                     MyText {
                         id: grpitem
                         text: Roomname
+                        font.pixelSize: sss.dftft.pixelSize+9
                     }
                     MyText {
                         id: wtttt
@@ -118,6 +121,8 @@ ScrollView {
                         // id: wtttt
                         text: Mtimemsui
                         width: 120
+                        font.pixelSize: sss.dftft.pixelSize-1
+                        horizontalAlignment: Text.Right
                     }
                     }
                 }
@@ -131,6 +136,11 @@ ScrollView {
     }
 
     ///// script
+    Component.onCompleted : {
+        Lib.debug("hehhe",grplstmdl.count);
+        upstatusrc(grplstmdl.count);
+    }
+
     function grpaddnodup(item, prepend) {
         let has = sss.grps.has(item.Roomid);
         if (!has) {

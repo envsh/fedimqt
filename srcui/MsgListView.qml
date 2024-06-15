@@ -77,7 +77,7 @@ ScrollView {
         //     }
         // }
 
-        model: HelloModel{}
+        model: HelloModel{id: msglstmdl}
         delegate: Rectangle {
             id: grid
             // anchors.fill: parent
@@ -341,6 +341,9 @@ ScrollView {
         // Jlib.default.dummy(); // TypeError: Cannot call method 'dummy' of undefined
         let m1 = new Map();
         Lib.debug("m1", m1);
+
+        // upstatusbar();
+        upstatusmc(msglstmdl.count);
     }
     //////
     function msgaddnodup(item, prepend) {
@@ -385,7 +388,7 @@ ScrollView {
             let req = Lib.tojson({Cmd: "loadmsg", Argv:[fmcond]});
             // if (true) return;
             let resp = qcffi.invoke(req);
-            assert(resp == sss.bkdretpromis, 'error invoke', req);
+            // assert(resp == sss.bkdretpromis, 'error invoke', req);
             // Lib.debug('resplen', resp.length);
             // let jso = JSON.parse(resp);
             // Lib.debug("rowcnt", jso.Retc, jso.Retv.length);
@@ -438,6 +441,8 @@ ScrollView {
         if (addcnt>0) {
             // scrollvto(true);
              Lib.runonce(286, scrollvto, true);
+            //  upstatusbar();
+            upstatusmc(msglstmdl.count);
         }
         Lib.debug('itemcnt',  addcnt, listView.model.count);
     }

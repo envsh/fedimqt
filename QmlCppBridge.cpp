@@ -25,7 +25,7 @@ QString QmlCppBridge::invoke(QString jstr) {
         // qDebug()<<"hello invoked"<<jstr<<jstr.length();
         // note: jstr.length() != jstr.toUtf8().length() when have cjk chars
         auto bcc = jstr.toUtf8();
-        qDebug()<<__FUNCTION__<<"hello invoked"<<jstr<<bcc.length()<<jstr.length();
+        qDebug()<<__FUNCTION__<<"(): hello invoked"<<jstr<<bcc.length()<<jstr.length();
 
         char* retstr = nullptr;
         uintptr_t retlen = 0;

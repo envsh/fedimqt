@@ -1,4 +1,5 @@
 // pragma singleton
+// pragma Singleton;
 // qml的singleton很难用啊.
 
 import QtQml
@@ -33,7 +34,6 @@ Item {
     property var fmprev_batch : Number.MAX_SAFE_INTEGER // history, unixts currently
 
     //
-    // readonly var starttime : (new Date()) // not work
     readonly property string foo: "fooprop"
     readonly property string bkdretpromis: "Promis<String>"
     // property list<string> sndmsgpfxkeys : ["dftim", "gptcf", "cmd"] // {"dftim": "", "gptcf": "", "cmd": "!", }
@@ -42,6 +42,7 @@ Item {
     property var m1tst : new Map()
     property var msgs : new Map() // msgid=>msgobj
     property var grps : new Map() // grpid=>grpobj
+    property var dftft: null // should be font object
 
     // script section
     function getsndmsgpfx(name) {
@@ -59,6 +60,10 @@ Item {
 
     Component.onCompleted: {
         // Lib.debug("chkmappp", JSON.stringify(vss.sndmsgpfxs));
+        let txtobj = Qt.createQmlObject('import QtQuick; Text{}', vss);
+        Lib.debug("fly txtobj", txtobj, txtobj.font);
+        vss.dftft = txtobj.font;
+
         // assert check
         if (vss.getsndmsgpfx("dftim") != vss.sndmsgpfxs.dftim) {
             Lib.warn("maybe some error", JSON.stringify(vss.sndmsgpfxs));

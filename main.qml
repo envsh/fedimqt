@@ -144,10 +144,10 @@ ApplicationWindow {
             anchors.left : parent.left
             anchors.right : parent.right
 
-        MyText{text: 'MC:'+999}
-        MyText{text: 'RC:'+99}
-        MyText{text: 'CP:'+'MSGWIN'}
-        MyText{text: 'LL:'+'wwwweeeeeeeeeeee';
+        MyText{ id: msgcntst; text: 'MC:'+999}
+        MyText{ id: grpcntst; text: 'RC:'+99}
+        MyText{id: curwinst; text: 'CP:'+'MSGWIN'}
+        MyText{id: lastlogst; text: 'LL:'+'wwwweeeeeeeeeeee';
             Layout.fillWidth: true}
         MyButton{icon.source:"icons/online_2x.png";
             tiptext: "ffff"
@@ -162,13 +162,14 @@ ApplicationWindow {
             flat: true
             display: AbstractButton.IconOnly
             }
-        MyText{text: 'UT:'+999}
+        MyText{id:uptimest; text: 'UT:'+999}
         }
     }
 
     ///////// script
     QmlCppBridge {    id : qcffi }
     ShareState { id: sss}
+    // SingletonDemo { id: oneinst } // not work
 
 
     // all functions are qt slots   
@@ -202,6 +203,9 @@ ApplicationWindow {
 
     Component.onCompleted: {
         Lib.settimeoutfuncs(qmlSetTimeout, qmlClearTimeout);
+        Lib.debug("oneinst", MySingleton, MySingleton.pt1, MySingleton.dummy);
+        Lib.debug("oneinstui", MySingletonui, MySingletonui.objs);
+        
 
         let rv = qcffi.invoke("thisqml");
         Lib.debug(rv);
@@ -247,6 +251,37 @@ ApplicationWindow {
         msglstwin.onloadmsg();
     }
 
+    function upstatusbar() {
+        msgcntst.text = 'MC:'+sss.msgs.size;
+    }
+    function upstatusmc(cnt) {
+        msgcntst.text = 'MC:'+cnt;
+    }
+    function upstatusrc(cnt) {
+        grpcntst.text = 'RC:'+cnt;
+    }
+    function upstatuscp(pagename) {
+        curwinst.text = 'CP:'+pagename;
+    }
+    function upstatusll(lastlog) {
+        lastlogst.text = 'LL:'+lastlog;
+    }
+    function upstatusuptime() {
+        // Lib.debug('tm', sss.starttime);
+        let nowtm = new Date();
+        let uptm = Lib.datesubmsui(nowtm, MySingleton.starttime);
+        uptimest.text = 'UT:'+uptm;
+    }
+
+    Timer {
+        interval: 3456
+        repeat: true
+        running: true
+        triggeredOnStart: true
+        onTriggered: { upstatusuptime() }
+    }
+
+    /////
     function qmlTimer() {
         // return Qt.createComponent("import QtQuick; Timer{}", appwin);
         return Qt.createQmlObject("import QtQuick; Timer{}", appwin);

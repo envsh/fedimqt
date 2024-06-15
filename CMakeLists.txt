@@ -56,12 +56,15 @@ qt_target_qml_sources(helloworld
     srcui/MyImage.qml srcui/HelloModel.qml srcui/Logui.qml
     srcui/Loginui.qml srcui/Aboutui.qml srcui/ShareState.qml
     srcui/RoomListView.qml srcui/MsgListView.qml srcui/Settingui.qml
-    srcui/MsgText.qml
+    srcui/MsgText.qml srcui/MySingleton.qml srcui/MySingletonui.qml
     
     # RESOURCES icons/logo.png
     RESOURCES ${iconfiles}
 )
 endif()
+set_source_files_properties(srcui/ShareState.qml
+    srcui/MySingleton.qml srcui/MySingletonui.qml
+    PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 target_link_libraries(helloworld PRIVATE Qt6::Widgets Qt6::Qml Qt6::QmlIntegration Qt6::Quick Qt6::QuickControls2 hellogo)
 target_link_directories(helloworld PUBLIC ".")

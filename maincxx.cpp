@@ -34,7 +34,7 @@ int maincxxqml(int argc, char**argv) {
     // QQmlEngine::addImportPath();
     // QQmlEngine::importPathList();
     auto qmldirs = engine.importPathList();
-    qDebug()<<qmldirs;
+    qDebug()<<__FUNCTION__<<"():"<<"qmldirs:"<<qmldirs;
 
     // engine.loadFromModule("QtQuick", "Rectangle"); //  No module named "QtQuick" found???
     // const QUrl url(u"qrc:/alarms/main.qml"_s);
@@ -44,7 +44,7 @@ int maincxxqml(int argc, char**argv) {
     #else
     const QUrl url("./main.qml");
     #endif
-    qDebug()<<url;
+    qDebug()<<__FUNCTION__<<"():"<<"main.qml:"<<url;
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
                      [url](QObject *obj, const QUrl &objUrl) {
                         qDebug()<<__FUNCTION__<<"QmlAppEngine created";
