@@ -33,6 +33,7 @@ Item {
     property var fmprev_batch : Number.MAX_SAFE_INTEGER // history, unixts currently
 
     //
+    // readonly var starttime : (new Date()) // not work
     readonly property string foo: "fooprop"
     readonly property string bkdretpromis: "Promis<String>"
     // property list<string> sndmsgpfxkeys : ["dftim", "gptcf", "cmd"] // {"dftim": "", "gptcf": "", "cmd": "!", }
@@ -40,6 +41,7 @@ Item {
     readonly property var sndmsgpfxs: {"dftim":"dftimpfx", "gptcf":"gptcfpfx", "cmd":"!"}
     property var m1tst : new Map()
     property var msgs : new Map() // msgid=>msgobj
+    property var grps : new Map() // grpid=>grpobj
 
     // script section
     function getsndmsgpfx(name) {

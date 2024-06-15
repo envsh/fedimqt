@@ -48,12 +48,12 @@ ApplicationWindow {
             Action { text: qsTr("&Paste") }
         }
         Menu {
-            title: qsTr("&Window")
+            title: qsTr("&Wndo")
             Action { text: qsTr("&Next Page >") ; onTriggered: switchpage(false)}
             Action { text: qsTr("&Prev Page >") ; onTriggered: switchpage(true) }
             Action { text: qsTr("Logui"); onTriggered: switchpageidx(3) }
             Action { text: qsTr("&Aboutui"); onTriggered: switchpageidx(4) }
-            Action { text: qsTr("&Romm List"); onTriggered: switchpageidx(1) }
+            Action { text: qsTr("&Room List"); onTriggered: switchpageidx(1) }
             Action { text: qsTr("&Loginui"); onTriggered: switchpageidx(2) }
             Action { text: qsTr("&Message List"); onTriggered: switchpageidx(0) }
         }
@@ -81,7 +81,7 @@ ApplicationWindow {
         }
         Menu {
             title: qsTr("&Help")
-            Action { text: qsTr("&About") }
+            Action { text: qsTr("&About"); onTriggered: switchpageidx(4)  }
         }
     }
 
@@ -139,6 +139,31 @@ ApplicationWindow {
         height: 38
         width: parent.width
         anchors.top: stackwin.bottom// + 3
+        RowLayout{
+            // verticalAlignment: Text.Center
+            anchors.left : parent.left
+            anchors.right : parent.right
+
+        MyText{text: 'MC:'+999}
+        MyText{text: 'RC:'+99}
+        MyText{text: 'CP:'+'MSGWIN'}
+        MyText{text: 'LL:'+'wwwweeeeeeeeeeee';
+            Layout.fillWidth: true}
+        MyButton{icon.source:"icons/online_2x.png";
+            tiptext: "ffff"
+            implicitWidth: 22;
+            implicitHeight:24;
+            flat: true
+            display: AbstractButton.IconOnly}
+        MyButton{icon.source:"icons/transfer.png";
+            tiptext: "ffff"
+            implicitWidth: 22;
+            implicitHeight:24;
+            flat: true
+            display: AbstractButton.IconOnly
+            }
+        MyText{text: 'UT:'+999}
+        }
     }
 
     ///////// script
@@ -167,6 +192,7 @@ ApplicationWindow {
                 break;
             case "loadmsg":
                 msglstwin.loadmsgret(jso.Retv);
+                romlstwin.loadmsgret(jso.Retv);
                 break;
 
             default:

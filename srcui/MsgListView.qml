@@ -107,8 +107,7 @@ ScrollView {
                 //     // anchors.right: parent.right
                 // }
                 MyImage {source:"../icons/icon_avatar.png"; 
-                    width:22; height:22;
-                    }
+                    width:22; height:22; }
                 Rectangle{
                     width: 120
                     opacity: 0.8
@@ -167,7 +166,7 @@ ScrollView {
 
                 MyText {
                     id: inbtn3
-                    text: Mtimemsui
+                    text: Mtimemsui==''?'Mtimems':Mtimemsui
                     tiptext: 'mtimems:'+Mtimems
                     // flat: true
                     width: 120
@@ -238,7 +237,8 @@ ScrollView {
                     id: labdtime
                     text: Dtime==''?"Dtime":Dtime
                     tiptext: 'dtime:'+Dtime
-                    width: 120                    
+                    width: 120
+                    horizontalAlignment: Text.Right
                 }}       
             }
             
@@ -285,7 +285,8 @@ ScrollView {
         id: msgsndbar
         width: parent.width
         height: 60
-        color: "blue"
+        // color: "blue"
+        color: Material.background
         anchors.top : scroll1.bottom
 
         RowLayout {
@@ -297,6 +298,7 @@ ScrollView {
                 icon.source: "../icons/add.png"}
 
             TextArea {
+                // TODO 不要在编辑的时候在上边显示提示
                 placeholderText: qsTr("Enter message")
                 id: usriptmsg
                 topPadding: 8
@@ -421,10 +423,8 @@ ScrollView {
             item = rv;
             item.Dtime = '0s0ms';
             item.Mtimemsui = Lib.objtmstrmin(new Date(item.Mtimems))
-            // listView.model.insert(0, item);
-            msgaddnodup(item, true);
             for (let j=0;j < 30; j++) {
-                    // listView.model.insert(0, item);
+                // listView.model.insert(0, item);
             }
             // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
             // Lib.debug('typeof', typeof rv.Sender)
