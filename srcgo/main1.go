@@ -37,6 +37,8 @@ func mainorinit() {
 	log.SetFlags(log.Flags() | log.Lshortfile ^ log.Ldate)
 	log.Println("mainorinit")
 	interopinit()
+	guiclish.MatrixEventSetcb(onmtxevtcb)
+	guiclish.SetNetreqNotecb(onnetreqnotice)
 	go bgproc()
 	// go fedimac.Appclientmain()
 	// guiclish.Locdb()
@@ -60,6 +62,12 @@ func startthinmtxproc() {
 		guiclish.NonhttpThinmtxproc(mtxsrv, mtxusr, mtxacctk)
 		log.Println("main.thinmtxproc done", mtxsrv, mtxusr, mtxacctk)
 	}()
+}
+func onmtxevtcb(hkt *guiclish.Hooktaskqst) {
+	guiclish.EmitEventFront("loadmsgrt", hkt.Hki)
+}
+func onnetreqnotice(begin bool) {
+	guiclish.EmitEventFront("netreqnote", begin)
 }
 
 // /// ffi section

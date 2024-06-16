@@ -468,6 +468,9 @@ ScrollView {
         }
         Lib.debug('itemcnt',  addcnt, listView.model.count);
     }
+    function fetchmorert(roomid) {
+        invokebkd("loadmorert", roomid);
+    }
 
     function sendmsg() {
         // Lib.debug("sss", sss.foo, sss.getsndmsgpfx("dftim"), JSON.stringify(sss.barz));

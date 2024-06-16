@@ -62,6 +62,7 @@ ApplicationWindow {
             title: qsTr("&Dev")
             Action { text: qsTr("&Load Message") ; onTriggered: onloadmsg() }
             Action { text: qsTr("&Load More Older"); onTriggered: msglstwin.fetchmore() }
+            Action { text: qsTr("&Load More Older Rt"); onTriggered: msglstwin.fetchmorert("") }
             Action { text: qsTr("&AutoText"); 
                 onTriggered: msglstwin.setccfmt(Text.AutoText) }
             Action { text: qsTr("&MarkdownText");
@@ -156,7 +157,9 @@ ApplicationWindow {
             implicitHeight:24;
             flat: true
             display: AbstractButton.IconOnly}
-        MyButton{icon.source:"icons/transfer.png";
+        MyButton{
+            icon.source: netreqbegin?"icons/loadingsp.gif" : "icons/transfer.png";
+            id: netreqst
             tiptext: "ffff"
             implicitWidth: 22;
             implicitHeight:24;
@@ -168,10 +171,11 @@ ApplicationWindow {
     }
 
     ///////// script
+    property bool netreqbegin: fasle;
+
     QmlCppBridge {    id : qcffi }
     ShareState { id: sss}
     // SingletonDemo { id: oneinst } // not work
-
 
     function invokebkd(cmd, ...args) {
         let req = {Cmd: cmd, Argv: args};
@@ -207,11 +211,22 @@ ApplicationWindow {
                 msglstwin.loadmsgret(jso.Retv);
                 romlstwin.loadmsgret(jso.Retv);
                 break;
+            case "loadmsgrt":
+                msglstwin.loadmsgret(jso.Argv);
+                romlstwin.loadmsgret(jso.Argv);
+                break;
+            case "loadroom":
+                romlstwin.onGotRooms(jso.Retv);
+                break;
+            case "loadroomrt":
+                romlstwin.onGotRooms(jso.Argv);
+                break;
             case "listcfg":
                 if (jso.Argv[0] == "accountline") {
                     loginui.onGotAccounts(jso.Retv);
                     switchpageidx(2);
                 }
+                break;
             case "getcfg":
                 if (jso.Argv[1] == 'lastaccountline') {
                     if (jso.Retc == 2) {
@@ -220,9 +235,15 @@ ApplicationWindow {
                         invokebkd('listcfg', 'accountline');
                     }
                 }
+                break;
             case "loginaccountline":
                 // todo check result
                 switchpageidx(0);
+                break;
+            case "netreqnote":
+                let isbegin = jso.Argv[0];
+                netreqbegin = isbegin;
+                break;
             default:
                 break;
         }
@@ -253,6 +274,7 @@ ApplicationWindow {
         // if no account, switch to login page
         // let rv = invokebkd("listcfg", "accountline");
         let rv = invokebkd("getcfg", "", "lastaccountline");
+        let rv2 = invokebkd("loadroom", "1=1 limit 99", );
     }
     //////
     // var pageitems = [aboutui,msglstwin];

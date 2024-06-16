@@ -217,4 +217,18 @@ ScrollView {
         }
         Lib.debug('grpcnt',  addcnt, listView.model.count);
     }
+
+    function onGotRooms(retv) {
+        let oldcnt = listView.model.count;
+        for (let i=0;i < retv.length; i++) {
+            let item = retv[i];
+            item.Mtimemsui = Lib.objtmstrmin(new Date(item.Mtimems));
+            let ok = grpaddnodup(item, true);
+        }
+        let addcnt = listView.model.count-oldcnt;
+        if (addcnt>0) {
+            upstatusrc(grplstmdl.count);
+        }
+        Lib.debug('grpcnt',  addcnt, listView.model.count);
+    }
 }
