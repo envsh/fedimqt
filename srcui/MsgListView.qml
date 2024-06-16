@@ -56,26 +56,16 @@ ScrollView {
         anchors.fill: parent
         width : parent.width
         anchors.leftMargin: 5
-        
+        currentIndex: -1
 
-        // todo 这个会覆盖Text的 linkActived 信号
-        // MouseArea {
-        //     anchors.fill: parent
-        //     acceptedButtons: Qt.LeftButton | Qt.RightButton
-        //     Menu {
-        //         id: contextMenu
-        //         MenuItem { text: "Cut" }
-        //         MenuItem { text: "Copy" }
-        //         MenuItem { text: "Paste" }
-        //     }
-        //     onClicked:  function (mouse) {
-        //         // Lib.debug("maclick", mouse, JSON.stringify(mouse));
-        //         // console.log(mouse); // QQuickMouseEvent
-        //         if (mouse.button === Qt.RightButton) {
-        //             contextMenu.popup();
-        //         }
-        //     }
-        // }
+        // context menu
+        // 如果放在 delegate中，这种用法会生成很多 Menu 实例？？？
+        Menu {
+            id: contextMenu
+            MenuItem { text: "Cut" }
+            MenuItem { text: "Copy" }
+            MenuItem { text: "Paste" }
+        }
 
         model: HelloModel{id: msglstmdl}
         delegate: Rectangle {
@@ -84,11 +74,27 @@ ScrollView {
             // width: 350
             // width: parent.width
             width: listView.width
-            border.width: 1
+            // border.width: 1
             // border.color: "#5a5a5a"
-            color: Material.background
+            // color: Material.background
+            property string bgcolor: index == listView.currentIndex ? "#4a4a4a" : Material.background
+            color: bgcolor
 
-        
+            // todo 这个会覆盖Text的 linkActived 信号？？？
+                MouseArea {
+                    anchors.fill: parent
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+                    onClicked: (evt) => {
+                        let oldidx = listView.currentIndex;
+                        if (evt.button === Qt.RightButton) {
+                            contextMenu.popup();
+                        }else{
+                        listView.currentIndex = oldidx==index?-1:index;
+                        // Lib.debug('lstcuridx', oldidx, "=>", index);
+                        }
+                    }
+                }
+
             // Rectangle {
                 Layout.fillWidth: true
                 // color: "gray"
@@ -96,6 +102,7 @@ ScrollView {
                 // height: 90
 
                 RowLayout{
+                    // anchors.fill: parent
                     anchors.right : parent.right
                     anchors.left : parent.left
                     id: msgrow1
@@ -183,8 +190,9 @@ ScrollView {
                         height: txtcc.contentHeight
                         // color: "#505050"
                         // color: window.color
-                        color: Material.background
-                        border.width: 3
+                        // color: Material.background
+                        color: grid.bgcolor
+                        // border.width: 3
                         // border.color: "#999"
                         id: txtcc2
                         

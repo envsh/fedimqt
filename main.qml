@@ -50,8 +50,10 @@ ApplicationWindow {
         }
         Menu {
             title: qsTr("&Wndo")
-            Action { text: qsTr("&Next Page >") ; onTriggered: switchpage(false)}
-            Action { text: qsTr("&Prev Page >") ; onTriggered: switchpage(true) }
+            Action { text: qsTr("&Next Page") ; onTriggered: switchpage(false)
+                icon.source: "icons/barbuttonicon_forward_gray64.png"}
+            Action { text: qsTr("&Prev Page") ; onTriggered: switchpage(true) 
+                icon.source: "icons/barbuttonicon_back_gray64.png"}
             Action { text: qsTr("Logui"); onTriggered: switchpageidx(3) }
             Action { text: qsTr("&Aboutui"); onTriggered: switchpageidx(4) }
             Action { text: qsTr("&Room List"); onTriggered: switchpageidx(1) }
@@ -83,7 +85,11 @@ ApplicationWindow {
         }
         Menu {
             title: qsTr("&Help")
-            Action { text: qsTr("&About"); onTriggered: switchpageidx(4)  }
+            // .svg not work???
+            Action { text: qsTr("&About"); onTriggered: switchpageidx(4) 
+                icon.source: "icons/help.svg" }
+            Action { text: qsTr("&Settings"); onTriggered: switchpageidx(4)
+                icon.source: "icons/barbuttonicon_set.png"}
         }
     }
 

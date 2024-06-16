@@ -44,6 +44,16 @@ ScrollView {
     ListView {
         id: listView
         anchors.fill: parent
+        currentIndex: -1
+
+        // context menu
+        // 如果放在 delegate中，这种用法会生成很多 Menu 实例？？？
+        Menu {
+            id: contextMenu
+            MenuItem { text: "Cut" }
+            MenuItem { text: "Copy" }
+            MenuItem { text: "Paste" }
+        }
 
         model: ListModel{
             id: grplstmdl
@@ -62,16 +72,34 @@ ScrollView {
         }
 
         delegate: Rectangle {
-            color: Material.background
+            id: itemwin
+            // color: Material.background
             // color: tranparent
             width: topwin.width
             // height: topwin.height
             height: 66
             // color: "red"
+            property string bgcolor: index == listView.currentIndex ? "#4a4a4a" : Material.background
+            color: bgcolor
+
+            MouseArea {
+                    anchors.fill: parent
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+                    onClicked: (evt) => {
+                        let oldidx = listView.currentIndex;
+                        if (evt.button === Qt.RightButton) {
+                            contextMenu.popup();
+                        }else{
+                        listView.currentIndex = oldidx==index?-1:index;
+                        // Lib.debug('lstcuridx', oldidx, "=>", index);
+                        }
+                    }
+            }
 
             RowLayout{
-                anchors.right : parent.right
-                anchors.left : parent.left
+                anchors.fill: parent
+                // anchors.right : parent.right
+                // anchors.left : parent.left
             MyImage {
                 id: grpico
                 source: "../icons/group_40.png"
@@ -89,7 +117,8 @@ ScrollView {
                     Rectangle {
                         width: 120
                         height: 32
-                        color: Material.background
+                        // color: Material.background
+                        color: itemwin.bgcolor
                     MyText {
                         id: grpitem
                         text: Roomname
@@ -98,7 +127,8 @@ ScrollView {
                     }
                     Rectangle {
                         Layout.fillWidth:true
-                        color: Material.background
+                        // color: Material.background
+                        color: itemwin.bgcolor
                         height: 32
                     MyText {
                         id: wtttt
@@ -112,7 +142,8 @@ ScrollView {
                     // 时间，右对齐，hh:mm
                     Rectangle{
                         // color: "blue"
-                        color: Material.background
+                        // color: Material.background
+                        color: itemwin.bgcolor
                         width: 90
                         height: 26
                     MyText {
@@ -131,7 +162,8 @@ ScrollView {
                         // width: listView.width-152
                         // color: "blue"
                         // color: tranparent
-                        color: Material.background
+                        // color: Material.background
+                        color: itemwin.bgcolor
                         // width: 120
                         Layout.fillWidth: true
                         height: 26

@@ -10,7 +10,8 @@ ListModel {
     ////////
     ListElement {
         Sender: "Bill Smith"
-        Content: "555 3264"
+        // <img> works
+        Content: "555 3264 <a href='https://bill.sth/'>demo..</a> <img height=43 src='../icons/groupgray.png'/>"
         Roomid: ""
         Roomname: ""
         Feditype: ""

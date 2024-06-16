@@ -26,6 +26,7 @@ Text {
     focus: true
     // focusPolicy: Qt.StrongFocus
     property string tiptext//: qsTr("Save the active project")
+    property bool hoveronlink: false
     ToolTip{ 
         // Text 没有 Hovered 属性吧
         visible: tiptext.length>0
@@ -36,12 +37,25 @@ Text {
     ///
     // todo check scrolling not show
     onLinkHovered: (link)=> {
+        let newval = link != '';
+        if (newval != hoveronlink) {
+            hoveronlink = link != '';
+        }
         // console.log(link + " link hovered");
         // if (tiptext != link) tiptext = link;
+        // Qt.cursorShape = Qt.PointingHandCursor;
     }
     onLinkActivated: (link)=> {
         console.log(link + " link activated");
         if (link == '') return;
         let ok = Qt.openUrlExternally(link);
     }
+
+    HoverHandler {
+        enabled: hoveronlink
+        cursorShape: Qt.PointingHandCursor
+    }
+
+// cursorShape: Qt.PointingHandCursor
+
 }
