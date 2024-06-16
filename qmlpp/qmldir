@@ -5,6 +5,8 @@ module qmlpp
 singleton Dmymix 1.0 Dmymix.qml
 Dmymix 1.0 Dmymix.js
 Qmlppx 1.0 Qmlppx.js
+Qmlpp 1.0 Qmlpp.js
+Lib 1.0 tspp.js
 # MyButton 1.0 MyButton.qml
 
 singleton MySingleton 1.0 MySingleton.qml

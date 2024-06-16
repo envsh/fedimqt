@@ -7,7 +7,8 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 
-import "../main.js" as Lib;
+// import "../main.js" as Lib;
+import "../qmlpp"
 
 // not work
 // QtObject {
@@ -16,12 +17,6 @@ import "../main.js" as Lib;
 //     property map sndmsgpfxs : {"dftim": "", "gptcf": "", "cmd": "!", }
 // }
 
-// not work
-// property string foo: "fooprop"
-
-// Item {
-    // width:0
-    // height:0
 QtObject {
     id: vss
     // some settings
@@ -35,7 +30,6 @@ QtObject {
     //
     readonly property string foo: "fooprop"
     readonly property string bkdretpromis: "Promis<String>"
-    // property list<string> sndmsgpfxkeys : ["dftim", "gptcf", "cmd"] // {"dftim": "", "gptcf": "", "cmd": "!", }
     // why no length/count methods???
     readonly property var sndmsgpfxs: {"dftim":"dftimpfx： ", "gptcf":"请使用中文完成对话：", "cmd":"!"}
     property var m1tst : new Map()
@@ -58,19 +52,22 @@ QtObject {
     }
 
     Component.onCompleted: {
-        Lib.debug("why not run here???");
+        Lib.debug("");
+        // Lib.debug("why not run here???");
+        onCompleted2();
     }
     function onCompleted2() {
         // Lib.debug("chkmappp", JSON.stringify(vss.sndmsgpfxs));
         let txtobj = Qt.createQmlObject('import QtQuick; Text{}', vss);
-        Lib.debug("fly txtobj", txtobj, txtobj.font);
+        // Lib.debug("fly txtobj", txtobj, txtobj.font);
         vss.dftft = txtobj.font;
+        txtobj.destroy();
 
         // assert check
-        if (vss.getsndmsgpfx("dftim") != vss.sndmsgpfxs.dftim) {
-            Lib.warn("maybe some error", JSON.stringify(vss.sndmsgpfxs));
-        }
-        Lib.debug("m1tst", m1tst, Number.MAX_SAFE_INTEGER);
+        // if (vss.getsndmsgpfx("dftim") != vss.sndmsgpfxs.dftim) {
+        //     Lib.warn("maybe some error", JSON.stringify(vss.sndmsgpfxs));
+        // }
+        // Lib.debug("m1tst", m1tst, Number.MAX_SAFE_INTEGER);
     }
 
     function fetchmore_condstr() {

@@ -16,7 +16,7 @@ import "../qmlpp"
 
 // how singleton main.js???
 // import js now, from tspp/main.js
-import "../main.js" as Lib;
+// import "../main.js" as Lib;
 
 // ApplicationWindow {
 Rectangle {
@@ -359,18 +359,19 @@ ScrollView {
     // all functions are qt slots   
     // 子组件比main组件onCompleted更迟一些，要做初始化加载就在子组件中
     Component.onCompleted: {
+        Lib.debug("");
         Lib.settimeoutfuncs(qmlSetTimeout, qmlClearTimeout);
 
         // let rv = qcffi.invoke("thisqml");
         // Lib.debug(rv);
-        listView.model.dummy()
-        listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
+        // listView.model.dummy()
+        // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
 
-        Lib.dummy('wt')
-        Lib.util.dummy();
+        // Lib.dummy('wt')
+        // Lib.util.dummy();
         // Jlib.default.dummy(); // TypeError: Cannot call method 'dummy' of undefined
-        let m1 = new Map();
-        Lib.debug("m1", m1);
+        // let m1 = new Map();
+        // Lib.debug("m1", m1);
 
         // upstatusbar();
         upstatusmc(msglstmdl.count);

@@ -16,7 +16,7 @@ import "qmlpp"
 import "srcui"
 
 // import js now, from tspp/main.js
-import "main.js" as Lib;
+// import "main.js" as Lib;
 
 ApplicationWindow {
 
@@ -138,7 +138,7 @@ ApplicationWindow {
         // Rectangle { anchors.fill : parent;  color: "red" } // clear
 
         Component.onCompleted: {
-            Lib.debug("stkwin done");
+            // Lib.debug("stkwin done");
             // stackwin.push(aboutui);
             // stackwin.push(msglstwin);
         }
@@ -282,24 +282,27 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        Sss.onCompleted2();
+        Lib.debug("");
+        Qmlpp.qmlppinit(appwin);
         Lib.settimeoutfuncs(qmlSetTimeout, qmlClearTimeout);
-        Lib.debug("oneinst", MySingleton, MySingleton.pt1, MySingleton.dummy);
+        // Lib.debug("oneinst", MySingleton, MySingleton.pt1, MySingleton.dummy);
         // Lib.debug("oneinstui", MySingletonui, MySingletonui.objs);
         // Lib.debug("Sss",  Sss);
 
-        let rv = qcffi.invoke("thisqml");
-        Lib.debug(rv);
+        // let rv = qcffi.invoke("thisqml");
+        // Lib.debug(rv);
         // listView.model.dummy()
         // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
 
-        Lib.dummy('wt')
-        Lib.util.dummy();
+        // Lib.dummy('wt')
+        // Lib.util.dummy();
         // Jlib.default.dummy(); // TypeError: Cannot call method 'dummy' of undefined
         // dummymix.dummymix();
-        Lib.debug(Dmymix, Dmymix.exports.dummymix);
-        Lib.debug(Dmymix.dmymixfn, Dmymix.dummymix);
-        Lib.debug(Qmlppx.qmlTimer2(appwin));
+        // Lib.debug(Dmymix, Dmymix.exports.dummymix);
+        // Lib.debug(Dmymix.dmymixfn, Dmymix.dummymix);
+        // Lib.debug(Qmlppx.qmlTimer2(appwin));
+    }
+    function onCompleted2 () {
     }
     function onQmlAppEngineCreated(msg) {
         // init some here

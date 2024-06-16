@@ -1,4 +1,5 @@
 // .pragma library
+// var exports = {};
 
 // try qml load .qml and .js mixed
 // 在 qmldir 文件中添加: Qmlpp 1.0 Qmlpp.js
@@ -32,20 +33,23 @@
 // tsc --types Qt  qmlpp/Qmlpp.ts
 // ./node_modules/\@types/Qt/index.d.ts
 
-var exports = {};
+/////
+let loadcnt = 0;
+console.log("Qmlpp.ts: multiload check", loadcnt);
 
+/////
 var qmlappwin :any = null;
 
-function qmlppinit(win) {
+export function qmlppinit(win) {
     qmlappwin = win;
 }
 
-function qmlTimer() {
+export function qmlTimer() {
     // return Qt.createComponent("import QtQuick; Timer{}", appwin);
     return Qt.createQmlObject("import QtQuick; Timer{}", qmlappwin);
 }
 
-function qmlSetTimeout(cbfn, delay, ...args) {
+export function qmlSetTimeout(cbfn, delay, ...args) {
     // console.log(cbfn, delay, ...args);
     let tmer = qmlTimer();
     tmer.interval = delay;
@@ -56,7 +60,7 @@ function qmlSetTimeout(cbfn, delay, ...args) {
     tmer.start();
     return tmer
 }
-function qmlClearTimeout(tmer) {
+export function qmlClearTimeout(tmer) {
     // console.log("clrtmer", tmer);
     // tmer.running = false;
     tmer.stop();

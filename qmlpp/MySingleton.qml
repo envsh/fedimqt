@@ -7,7 +7,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 
-import "../main.js" as Lib;
+// import "../main.js" as Lib;
 
 // \see qmldir file:
 // module mainqml

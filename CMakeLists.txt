@@ -43,7 +43,7 @@ qt_add_executable(helloworld
 file(GLOB qmlfiles CONFIGURE_DEPENDS RELATIVE ${projdir} srcui/*.qml
     qmlpp/*.qml qmlpp/*.js)
 file(GLOB iconfiles CONFIGURE_DEPENDS RELATIVE ${projdir} icons/*.png)
-message("icons ${qmlfiles}")
+# message("icons ${qmlfiles}")
 if(${ANDROID})
 qt_add_qml_module(helloworld
     URI mainqml
@@ -52,7 +52,7 @@ qt_add_qml_module(helloworld
     RESOURCE_PREFIX /
 )
 qt_target_qml_sources(helloworld
-    QML_FILES main.qml main.js
+    QML_FILES main.qml
     # srcui/MyText.qml srcui/MyComboBox.qml srcui/MyButton.qml
     # srcui/MyImage.qml srcui/HelloModel.qml srcui/Logui.qml
     # srcui/Loginui.qml srcui/Aboutui.qml srcui/ShareState.qml
@@ -82,14 +82,17 @@ set_target_properties(helloworld PROPERTIES
 
 # add_custom_command(OUTPUT out1 COMMAND "tsc -v")
 # message("${out1}")
-add_custom_command(OUTPUT ${projdir}/main.js COMMENT "tscc111"
+
+add_custom_command(OUTPUT ${projdir}/qmlpp/tspp.js ${projdir}/qmlpp/Qmlpp.js
+    COMMENT "tscc {tspp,Qmlpp}.ts 111"
     # COMMAND "tsc" "-v"
-    COMMAND tsc --pretty --sourceMap --declaration --module commonjs --lib es2020,dom --esModuleInterop "${CMAKE_HOME_DIRECTORY}/main.ts"
+    COMMAND tsc --pretty --sourceMap --declaration --module commonjs --lib es6,es2020,dom --esModuleInterop --types "Qt" "${projdir}/qmlpp/tspp.ts" "${projdir}/qmlpp/Qmlpp.ts"
     # fix https://stackoverflow.com/questions/43042889/typescript-referenceerror-exports-is-not-defined
-    COMMAND "sed" "-i" ".bak" "'s/\"use strict\";/.pragma library\\n\\nvar exports = {};\\n\\n\"use strict\";/g'" "${CMAKE_HOME_DIRECTORY}/main.js"
-    DEPENDS ${projdir}/main.ts)
-add_custom_target(tscc COMMENT "tscc222"
-    DEPENDS ${projdir}/main.js
+    COMMAND "sed" "-i" ".bak" "'s/^\"use strict\";/.pragma library\\n\\nvar exports = {};\\n\\n\"use strict\";/g'" "${projdir}/qmlpp/tspp.js"
+    COMMAND "sed" "-i" ".bak" "'s/^\"use strict\";/.pragma library\\n\\nvar exports = {};\\n\\n\"use strict\";/g'" "${projdir}/qmlpp/Qmlpp.js"
+    DEPENDS ${projdir}/qmlpp/tspp.ts ${projdir}/qmlpp/Qmlpp.ts)
+add_custom_target(tscc COMMENT "tscc {tspp,Qmlpp}.ts 222"
+    DEPENDS ${projdir}/qmlpp/tspp.js ${projdir}/qmlpp/Qmlpp.js
 )
 add_dependencies(helloworld tscc)
 
@@ -132,7 +135,8 @@ add_dependencies(showapk helloworld)
 
 ### clean some
 add_custom_target(clngo rm -fv libhellogo.h)
-add_custom_target(clnts rm -fv main.js main.js.map main.d.ts)
+add_custom_target(clnts rm -fv qmlpp/tspp.js qmlpp/tspp.js.map qmlpp/tspp.d.ts qmlpp/Qmlpp.js qmlpp/Qmlpp.js.map qmlpp/Qmlpp.d.ts
+)
 
 add_custom_target(clnapk WORKING_DIRECTORY "${projdir}/build"
     COMMAND rm -fv build/android-build/helloworld.apk build/android-build/build/outputs/apk/debug/android-build-debug.apk android-build/helloworld.apk android-build/build/outputs/apk/debug/android-build-debug.apk)

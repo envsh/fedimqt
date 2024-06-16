@@ -2,7 +2,7 @@
 // .js 被加载很多次的问题
 // \see https://stackoverflow.com/questions/42483999/why-does-qml-engine-instantiate-the-same-script-multiple-times
 let loadcnt = 0;
-console.log("Qmlppx.js: indmymix", loadcnt, '.');
+console.log("Qmlppx.js: multiload check", loadcnt, '.');
 
 // try qml load .qml and .js mixed
 // Usage: import "qmlpp";

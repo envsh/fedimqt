@@ -9,7 +9,7 @@ import QtQuick.Layouts
 import "../qmlpp"
 
 // import js now, from tspp/main.js
-import "../main.js" as Lib;
+// import "../main.js" as Lib;
 
 // Rectangle {}
 // Text 
