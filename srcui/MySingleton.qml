@@ -26,6 +26,8 @@ QtObject {
     readonly property bool isosx : Qt.platform.os == "osx"
     readonly property bool islinux : Qt.platform.os == "linux"
     readonly property bool isunix : Qt.platform.os == "unix"
+    property int netuplen : 0
+    property int netdownlen: 0
 
     function dummy() {
         Lib.debug(pt1, pt2);

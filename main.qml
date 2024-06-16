@@ -158,20 +158,33 @@ ApplicationWindow {
             flat: true
             display: AbstractButton.IconOnly}
         MyButton{
-            icon.source: netreqbegin?"icons/loadingsp.gif" : "icons/transfer.png";
+            visible: !netreqbegin
+            icon.source: "icons/transfer.png";
             id: netreqst
-            tiptext: "ffff"
+            // tiptext: "ffff"
+            tiptext: 'UP:'+netrequplen+", DL:"+netreqdownlen
             implicitWidth: 22;
             implicitHeight:24;
             flat: true
             display: AbstractButton.IconOnly
             }
+        AnimatedImage{
+            visible: netreqbegin
+            paused : !netreqbegin
+            source: "icons/loadingsp.gif";
+            // implicitWidth: 22
+            // implicitHeight: 24
+            sourceSize.width: 22
+            sourceSize.height: 24
+        }
         MyText{id:uptimest; text: 'UT:'+999}
         }
     }
 
     ///////// script
-    property bool netreqbegin: fasle;
+    property bool netreqbegin: false;
+    property int netrequplen: 0;
+    property int netreqdownlen: 0;
 
     QmlCppBridge {    id : qcffi }
     ShareState { id: sss}
@@ -243,6 +256,15 @@ ApplicationWindow {
             case "netreqnote":
                 let isbegin = jso.Argv[0];
                 netreqbegin = isbegin;
+                if (isbegin) {
+                    netrequplen = jso.Argv[1]
+                    MySingleton.netuplen += netrequplen;
+                }
+                else {
+                    netreqdownlen = jso.Argv[1] 
+                    MySingleton.netuplen += netreqdownlen;
+                }
+                // netreqst.tiptext = 'UP:'+netrequplen+",DL:"+netreqdownlen;
                 break;
             default:
                 break;

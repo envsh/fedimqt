@@ -66,8 +66,8 @@ func startthinmtxproc() {
 func onmtxevtcb(hkt *guiclish.Hooktaskqst) {
 	guiclish.EmitEventFront("loadmsgrt", hkt.Hki)
 }
-func onnetreqnotice(begin bool) {
-	guiclish.EmitEventFront("netreqnote", begin)
+func onnetreqnotice(begin bool, len int) {
+	guiclish.EmitEventFront("netreqnote", begin, len)
 }
 
 // /// ffi section
