@@ -6,6 +6,8 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 
+import "../qmlpp"
+
 // import js now, from tspp/main.js
 import "../main.js" as Lib;
 
@@ -122,7 +124,7 @@ ScrollView {
                     MyText {
                         id: grpitem
                         text: Roomname
-                        font.pixelSize: sss.dftft.pixelSize+9
+                        font.pixelSize: Sss.dftft.pixelSize+9
                     }
                     }
                     Rectangle {
@@ -150,7 +152,7 @@ ScrollView {
                         // id: wtttt
                         text: Mtimemsui
                         width: 120
-                        font.pixelSize: sss.dftft.pixelSize-1
+                        font.pixelSize: Sss.dftft.pixelSize-1
                         horizontalAlignment: Text.Right
                     }
                     }
@@ -199,9 +201,9 @@ ScrollView {
     }
 
     function grpaddnodup(item, prepend) {
-        let has = sss.grps.has(item.Roomid);
+        let has = Sss.grps.has(item.Roomid);
         if (!has) {
-            sss.grps.set(item.Roomid, item);
+            Sss.grps.set(item.Roomid, item);
             if (prepend) {
                 listView.model.insert(0, item);
             }else{
@@ -209,7 +211,7 @@ ScrollView {
             }
             return true;
         }
-        // Lib.debug('item', !has, item.Eventid, sss.msgs.size, listView.model.count);
+        // Lib.debug('item', !has, item.Eventid, Sss.msgs.size, listView.model.count);
         return false;
     }
     function loadmsgret(retv) {
@@ -218,7 +220,7 @@ ScrollView {
         for (let i=0; i < retv.length; i++) {
             let rv = retv[i];
             // let item = {name:"", number: ""};
-            let item = sss.newFediRecord();
+            let item = Sss.newFediRecord();
             item.Dtime = rv.Dtime == '' ? rv.dtime : rv.Dtime;
             item.name = item.Sender = "gptcfai"
             item.Feditype = "gptcf"

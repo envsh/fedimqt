@@ -56,6 +56,4 @@ Text {
         cursorShape: Qt.PointingHandCursor
     }
 
-// cursorShape: Qt.PointingHandCursor
-
 }

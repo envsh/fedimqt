@@ -1,5 +1,4 @@
-// pragma singleton
-// pragma Singleton;
+pragma Singleton;
 // qml的singleton很难用啊.
 
 import QtQml
@@ -20,10 +19,10 @@ import "../main.js" as Lib;
 // not work
 // property string foo: "fooprop"
 
-Item {
-    width:0
-    height:0
-
+// Item {
+    // width:0
+    // height:0
+QtObject {
     id: vss
     // some settings
     readonly property string fetchmsg_condstr_tmpl: "order by mtime desc limit 21, offset 0"
@@ -59,6 +58,9 @@ Item {
     }
 
     Component.onCompleted: {
+        Lib.debug("why not run here???");
+    }
+    function onCompleted2() {
         // Lib.debug("chkmappp", JSON.stringify(vss.sndmsgpfxs));
         let txtobj = Qt.createQmlObject('import QtQuick; Text{}', vss);
         Lib.debug("fly txtobj", txtobj, txtobj.font);

@@ -1,7 +1,11 @@
 module qmlpp
 
+# todo .js 被加载很多次的问题
 # singleton Dmymix 1.0 Dmymix.js # not work
+singleton Dmymix 1.0 Dmymix.qml
 Dmymix 1.0 Dmymix.js
-Qmlpp 1.0 Qmlpp.js
+Qmlppx 1.0 Qmlppx.js
+# MyButton 1.0 MyButton.qml
 
-
+singleton MySingleton 1.0 MySingleton.qml
+singleton MySingletonui 1.0 MySingletonui.qml

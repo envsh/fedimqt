@@ -12,7 +12,7 @@ import QtQuick.Window
 /////
 // import QmlCppBridge 1.0 //
 
-// import "srcui"
+import "../qmlpp"
 
 // how singleton main.js???
 // import js now, from tspp/main.js
@@ -377,9 +377,9 @@ ScrollView {
     }
     //////
     function msgaddnodup(item, prepend) {
-        let has = sss.msgs.has(item.Eventid);
+        let has = Sss.msgs.has(item.Eventid);
         if (!has) {
-            sss.msgs.set(item.Eventid, item);
+            Sss.msgs.set(item.Eventid, item);
             if (prepend) {
                 listView.model.insert(0, item);
             }else{
@@ -387,7 +387,7 @@ ScrollView {
             }
             return true;
         }
-        // Lib.debug('item', !has, item.Eventid, sss.msgs.size, listView.model.count);
+        // Lib.debug('item', !has, item.Eventid, Sss.msgs.size, listView.model.count);
         return false;
     }
     function  onloadmsg () {
@@ -413,12 +413,12 @@ ScrollView {
             Lib.debug('itemcnt', listView.model.count);
     }
     function fetchmore() {
-        let fmcond = sss.fetchmore_condstr();
-            Lib.debug('...', sss.fmnext_batch, fmcond);
+        let fmcond = Sss.fetchmore_condstr();
+            Lib.debug('...', Sss.fmnext_batch, fmcond);
             let req = Lib.tojson({Cmd: "loadmsg", Argv:[fmcond]});
             // if (true) return;
             let resp = qcffi.invoke(req);
-            // assert(resp == sss.bkdretpromis, 'error invoke', req);
+            // assert(resp == Sss.bkdretpromis, 'error invoke', req);
             // Lib.debug('resplen', resp.length);
             // let jso = JSON.parse(resp);
             // Lib.debug("rowcnt", jso.Retc, jso.Retv.length);
@@ -443,7 +443,7 @@ ScrollView {
         for (let i=0; i < retv.length; i++) {
             let rv = retv[i];
             // let item = {name:"", number: ""};
-            let item = sss.newFediRecord();
+            let item = Sss.newFediRecord();
             item.Dtime = rv.Dtime == '' ? rv.dtime : rv.Dtime;
             item.name = item.Sender = "gptcfai"
             item.Feditype = "gptcf"
@@ -464,7 +464,7 @@ ScrollView {
 
             // listView.model.insert(0, item);
             let ok = msgaddnodup(item, true);
-            sss.setnextbatch(item.Mtimems);
+            Sss.setnextbatch(item.Mtimems);
             // Lib.debug(i, ok, item.Eventid);
         }
         let addcnt = listView.model.count - oldcnt;
@@ -481,11 +481,11 @@ ScrollView {
     }
 
     function sendmsg() {
-        // Lib.debug("sss", sss.foo, sss.getsndmsgpfx("dftim"), JSON.stringify(sss.barz));
+        // Lib.debug("Sss", Sss.foo, Sss.getsndmsgpfx("dftim"), JSON.stringify(Sss.barz));
         // return;
 
         let sndmode = msgsndmode.currentValue;
-        let msgpfx = sss.getsndmsgpfx(sndmode);
+        let msgpfx = Sss.getsndmsgpfx(sndmode);
         let msg = usriptmsg.text;
         msg = msgpfx + msg;
         Lib.debug("usriptmsg", msg.length, sndmode, msg);
@@ -500,7 +500,7 @@ ScrollView {
         }
     }
     function sendmsgret(cmdo) {
-        let item = sss.newFediRecord();
+        let item = Sss.newFediRecord();
         item.Content = cmdo.Retv[0].content;
         item.Dtime = cmdo.Dtime// rv.Dtime == '' ? rv.dtime : rv.Dtime;
         item.name = item.Sender = "gptcfai";

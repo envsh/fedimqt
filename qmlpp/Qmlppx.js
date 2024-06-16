@@ -1,3 +1,9 @@
+.pragma library
+// .js 被加载很多次的问题
+// \see https://stackoverflow.com/questions/42483999/why-does-qml-engine-instantiate-the-same-script-multiple-times
+let loadcnt = 0;
+console.log("Qmlppx.js: indmymix", loadcnt, '.');
+
 // try qml load .qml and .js mixed
 // Usage: import "qmlpp";
 // Dmymix.exports.dummymix()
@@ -7,6 +13,8 @@
 // 不再需要显式的 import "dummy.js" as Dummy;
 // 不能在qmldir里声明为singleton
 
+
+///////////
 var exports = {};
 
 "use strict";
@@ -23,11 +31,11 @@ var exports = {};
 // exports.dummymix = dummymix;
 
 /////
-function qmlTimer() {
+function qmlTimer2(appwin) {
     // return Qt.createComponent("import QtQuick; Timer{}", appwin);
     return Qt.createQmlObject("import QtQuick; Timer{}", appwin);
 }
-function qmlSetTimeout(cbfn, delay, ...args) {
+function qmlSetTimeout2(cbfn, delay, ...args) {
     // console.log(cbfn, delay, ...args);
     let tmer = qmlTimer();
     tmer.interval = delay;
@@ -38,7 +46,7 @@ function qmlSetTimeout(cbfn, delay, ...args) {
     tmer.start();
     return tmer
 }
-function qmlClearTimeout(tmer) {
+function qmlClearTimeout2(tmer) {
     // console.log("clrtmer", tmer);
     // tmer.running = false;
     tmer.stop();

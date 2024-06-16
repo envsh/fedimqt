@@ -12,8 +12,8 @@ import QtQuick.Window
 /////
 import QmlCppBridge 1.0 //
 
-import "srcui"
 import "qmlpp"
+import "srcui"
 
 // import js now, from tspp/main.js
 import "main.js" as Lib;
@@ -77,9 +77,11 @@ ApplicationWindow {
         Menu {
             title: qsTr("&Misc")
             Action { text: qsTr("Scroll Bottom"); 
-                onTriggered: msglstwin.scrollvto(false) }
+                onTriggered: msglstwin.scrollvto(false);
+                icon.source: "icons/barbuttonicon_down_2x.png"}
             Action { text: qsTr("Scroll Top");
-                onTriggered: msglstwin.scrollvto(true) }
+                onTriggered: msglstwin.scrollvto(true);
+                icon.source: "icons/barbuttonicon_up_2x.png" }
             Action { text: qsTr("&Copy") }
             Action { text: qsTr("&Paste") }
         }
@@ -87,7 +89,8 @@ ApplicationWindow {
             title: qsTr("&Help")
             // .svg not work???
             Action { text: qsTr("&About"); onTriggered: switchpageidx(4) 
-                icon.source: "icons/help.svg" }
+                // icon.source: "icons/help.svg"
+            }
             Action { text: qsTr("&Settings"); onTriggered: switchpageidx(4)
                 icon.source: "icons/barbuttonicon_set.png"}
         }
@@ -152,13 +155,14 @@ ApplicationWindow {
             anchors.left : parent.left
             anchors.right : parent.right
 
-        MyText{ id: msgcntst; text: 'MC:'+999}
-        MyText{ id: grpcntst; text: 'RC:'+99}
-        MyText{id: curwinst; text: 'CP:'+'MSGWIN'}
-        MyText{id: lastlogst; text: 'LL:'+'wwwweeeeeeeeeeee';
+        // MyLabel { tiptext:"hehehhehehe" }
+        MyLabel{ id: msgcntst; text: 'MC:'+999}
+        MyLabel{ id: grpcntst; text: 'RC:'+99}
+        MyLabel{id: curwinst; text: 'CP:'+'MSGWIN'}
+        MyLabel{id: lastlogst; text: 'LL:'+'wwwweeeeeeeeeeee';
             Layout.fillWidth: true}
         MyButton{icon.source:"icons/online_2x.png";
-            tiptext: "ffff"
+            tiptext: "online now"
             implicitWidth: 22;
             implicitHeight:24;
             flat: true
@@ -183,7 +187,7 @@ ApplicationWindow {
             sourceSize.width: 22
             sourceSize.height: 24
         }
-        MyText{id:uptimest; text: 'UT:'+999}
+        MyLabel{id:uptimest; text: 'UT:'+999; tiptext: 'Uptime:'+999}
         }
     }
 
@@ -193,7 +197,7 @@ ApplicationWindow {
     property int netreqdownlen: 0;
 
     QmlCppBridge {    id : qcffi }
-    ShareState { id: sss}
+    // ShareState { id: sss}
     // SingletonDemo { id: oneinst } // not work
 
     function invokebkd(cmd, ...args) {
@@ -278,10 +282,11 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
+        Sss.onCompleted2();
         Lib.settimeoutfuncs(qmlSetTimeout, qmlClearTimeout);
         Lib.debug("oneinst", MySingleton, MySingleton.pt1, MySingleton.dummy);
-        Lib.debug("oneinstui", MySingletonui, MySingletonui.objs);
-        
+        // Lib.debug("oneinstui", MySingletonui, MySingletonui.objs);
+        // Lib.debug("Sss",  Sss);
 
         let rv = qcffi.invoke("thisqml");
         Lib.debug(rv);
@@ -294,6 +299,7 @@ ApplicationWindow {
         // dummymix.dummymix();
         Lib.debug(Dmymix, Dmymix.exports.dummymix);
         Lib.debug(Dmymix.dmymixfn, Dmymix.dummymix);
+        Lib.debug(Qmlppx.qmlTimer2(appwin));
     }
     function onQmlAppEngineCreated(msg) {
         // init some here
@@ -340,7 +346,7 @@ ApplicationWindow {
     }
 
     function upstatusbar() {
-        msgcntst.text = 'MC:'+sss.msgs.size;
+        msgcntst.text = 'MC:'+Sss.msgs.size;
     }
     function upstatusmc(cnt) {
         msgcntst.text = 'MC:'+cnt;
@@ -355,7 +361,7 @@ ApplicationWindow {
         lastlogst.text = 'LL:'+lastlog;
     }
     function upstatusuptime() {
-        // Lib.debug('tm', sss.starttime);
+        // Lib.debug('tm', Sss.starttime);
         let nowtm = new Date();
         let uptm = Lib.datesubmsui(nowtm, MySingleton.starttime);
         uptimest.text = 'UT:'+uptm;

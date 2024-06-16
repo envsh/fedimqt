@@ -6,6 +6,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 
+import "../qmlpp"
 
 // Rectangle {}
 // Text 
@@ -32,7 +33,7 @@ Rectangle {
         width: parent.width-55
         
 
-        MyText {text:"login account..."}
+        MyLabel {text:"login account..."}
         TextEdit { text:  "aboutui of im.fedy.chatnt";
             color: Material.foreground}
 

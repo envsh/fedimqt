@@ -33,4 +33,9 @@ Button{
         text: tiptext
     }
 
+    HoverHandler {
+        enabled: true
+        cursorShape: Qt.PointingHandCursor
+    }
+
 }

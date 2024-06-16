@@ -1,3 +1,5 @@
+// .pragma library
+
 // try qml load .qml and .js mixed
 // 在 qmldir 文件中添加: Qmlpp 1.0 Qmlpp.js
 // Usage: import "qmlpp";
@@ -24,3 +26,40 @@
 // }
 // exports.dummymix = dummymix;
 
+// import QtQml
+
+// tsc 搜索 type 的路径
+// tsc --types Qt  qmlpp/Qmlpp.ts
+// ./node_modules/\@types/Qt/index.d.ts
+
+var exports = {};
+
+var qmlappwin :any = null;
+
+function qmlppinit(win) {
+    qmlappwin = win;
+}
+
+function qmlTimer() {
+    // return Qt.createComponent("import QtQuick; Timer{}", appwin);
+    return Qt.createQmlObject("import QtQuick; Timer{}", qmlappwin);
+}
+
+function qmlSetTimeout(cbfn, delay, ...args) {
+    // console.log(cbfn, delay, ...args);
+    let tmer = qmlTimer();
+    tmer.interval = delay;
+    tmer.repeat = true; // like origin setTimeout
+    let cb = () => { cbfn(...args); };
+    tmer.triggered.connect(cb);
+    // tmer.running = true;
+    tmer.start();
+    return tmer
+}
+function qmlClearTimeout(tmer) {
+    // console.log("clrtmer", tmer);
+    // tmer.running = false;
+    tmer.stop();
+    // tmer.disconnect(); // not work
+    tmer.destroy();
+}

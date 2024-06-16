@@ -86,7 +86,7 @@ add_custom_command(OUTPUT ${projdir}/main.js COMMENT "tscc111"
     # COMMAND "tsc" "-v"
     COMMAND tsc --pretty --sourceMap --declaration --module commonjs --lib es2020,dom --esModuleInterop "${CMAKE_HOME_DIRECTORY}/main.ts"
     # fix https://stackoverflow.com/questions/43042889/typescript-referenceerror-exports-is-not-defined
-    COMMAND "sed" "-i" ".bak" "'s/\"use strict\";/var exports = {};\\n\\n\"use strict\";/g'" "${CMAKE_HOME_DIRECTORY}/main.js"
+    COMMAND "sed" "-i" ".bak" "'s/\"use strict\";/.pragma library\\n\\nvar exports = {};\\n\\n\"use strict\";/g'" "${CMAKE_HOME_DIRECTORY}/main.js"
     DEPENDS ${projdir}/main.ts)
 add_custom_target(tscc COMMENT "tscc222"
     DEPENDS ${projdir}/main.js
