@@ -39,11 +39,11 @@ QtObject {
 
     // script section
     function getsndmsgpfx(name) {
-        Lib.debug("vss", vss.sndmsgpfxs, Lib.tojson(vss.sndmsgpfxs));
+        Tspp.debug("vss", vss.sndmsgpfxs, Tspp.tojson(vss.sndmsgpfxs));
         return vss.sndmsgpfxs[name];
     }
     function trimsndmsgpfx(name, msg) {
-        Lib.debug("vss", vss.sndmsgpfxs);
+        Tspp.debug("vss", vss.sndmsgpfxs);
         let pfx = vss.sndmsgpfxs[name];
         if (pfx != '' && msg.startsWith(pfx)) {
             return msg.substring(pfx.length);
@@ -52,22 +52,22 @@ QtObject {
     }
 
     Component.onCompleted: {
-        Lib.debug("");
-        // Lib.debug("why not run here???");
+        Tspp.debug("");
+        // Tspp.debug("why not run here???");
         onCompleted2();
     }
     function onCompleted2() {
-        // Lib.debug("chkmappp", JSON.stringify(vss.sndmsgpfxs));
+        // Tspp.debug("chkmappp", JSON.stringify(vss.sndmsgpfxs));
         let txtobj = Qt.createQmlObject('import QtQuick; Text{}', vss);
-        // Lib.debug("fly txtobj", txtobj, txtobj.font);
+        // Tspp.debug("fly txtobj", txtobj, txtobj.font);
         vss.dftft = txtobj.font;
         txtobj.destroy();
 
         // assert check
         // if (vss.getsndmsgpfx("dftim") != vss.sndmsgpfxs.dftim) {
-        //     Lib.warn("maybe some error", JSON.stringify(vss.sndmsgpfxs));
+        //     Tspp.warn("maybe some error", JSON.stringify(vss.sndmsgpfxs));
         // }
-        // Lib.debug("m1tst", m1tst, Number.MAX_SAFE_INTEGER);
+        // Tspp.debug("m1tst", m1tst, Number.MAX_SAFE_INTEGER);
     }
 
     function fetchmore_condstr() {

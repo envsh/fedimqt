@@ -90,7 +90,7 @@ ScrollView {
                             contextMenu.popup();
                         }else{
                         listView.currentIndex = oldidx==index?-1:index;
-                        // Lib.debug('lstcuridx', oldidx, "=>", index);
+                        // Tspp.debug('lstcuridx', oldidx, "=>", index);
                         }
                     }
                 }
@@ -254,7 +254,7 @@ ScrollView {
         }
     
         onContentYChanged: {
-            // Lib.debug(contentY, height, contentHeight)
+            // Tspp.debug(contentY, height, contentHeight)
             if (contentY + height >= contentHeight) {
                 // if (model.canFetchMore()) {
                     // model.fetchMore();
@@ -264,26 +264,27 @@ ScrollView {
         // boundsBehavior: Flickable.DragAndOvershootBounds
         onDragStarted:  {
             let sbv = scroll1.ScrollBar.vertical;
-            // Lib.debug("drag start", listView.verticalOvershoot, listView.draggingVertically);
+            // Tspp.debug("drag start", listView.verticalOvershoot, listView.draggingVertically);
         }
         onDragEnded: {
             let sbv = scroll1.ScrollBar.vertical;
-            // Lib.debug("drag end", listView.verticalOvershoot, listView.draggingVertically);
+            // Tspp.debug("drag end", listView.verticalOvershoot, listView.draggingVertically);
+            // todo android 上，这个值很大，大概很容易达到 +-200
             if (listView.verticalOvershoot < -6.0) {
-                Lib.info("fetch more triggered", listView.verticalOvershoot);
+                Tspp.info("fetch more triggered", listView.verticalOvershoot);
                 logui.addlog("fetch more triggered " + listView.verticalOvershoot);
             } else if (listView.verticalOvershoot > 16.0) {
-                Lib.info("refresh latest triggered", listView.verticalOvershoot);
+                Tspp.info("refresh latest triggered", listView.verticalOvershoot);
             }
 
         }
         onMovementEnded: {
             let sbv = scroll1.ScrollBar.vertical;
-            // Lib.debug("drag end", sbv.position, sbv.size);
+            // Tspp.debug("drag end", sbv.position, sbv.size);
         }
         onMovementStarted: {
             let sbv = scroll1.ScrollBar.vertical;
-            // Lib.debug("drag end", sbv.position, sbv.size);
+            // Tspp.debug("drag end", sbv.position, sbv.size);
         }
     }
 
@@ -326,10 +327,10 @@ ScrollView {
                 //     // border.color: "transparent"
                 // }
 
-                onEditingFinished: ()=>{ Lib.debug("iptedfin") }
-                // Keys.onEnterPressed: ()=>{ Lib.debug("iptetpr") }
+                onEditingFinished: ()=>{ Tspp.debug("iptedfin") }
+                // Keys.onEnterPressed: ()=>{ Tspp.debug("iptetpr") }
                 Keys.onReturnPressed: (ke)=>{
-                    Lib.debug("iptetpr2", ke, ke.modifiers, Qt.Key_Control, Qt.Key_);
+                    Tspp.debug("iptetpr2", ke, ke.modifiers, Qt.Key_Control, Qt.Key_);
                     if (ke.modifiers == Qt.ControlModifier) {
                         // Ctrl+Enter=Send
                         
@@ -362,19 +363,19 @@ ScrollView {
     // all functions are qt slots   
     // 子组件比main组件onCompleted更迟一些，要做初始化加载就在子组件中
     Component.onCompleted: {
-        Lib.debug("");
-        Lib.settimeoutfuncs(qmlSetTimeout, qmlClearTimeout);
+        Tspp.debug("");
+        Tspp.settimeoutfuncs(qmlSetTimeout, qmlClearTimeout);
 
         // let rv = qcffi.invoke("thisqml");
-        // Lib.debug(rv);
+        // Tspp.debug(rv);
         // listView.model.dummy()
         // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
 
-        // Lib.dummy('wt')
-        // Lib.util.dummy();
-        // Jlib.default.dummy(); // TypeError: Cannot call method 'dummy' of undefined
+        // Tspp.dummy('wt')
+        // Tspp.util.dummy();
+        // JTspp.default.dummy(); // TypeError: Cannot call method 'dummy' of undefined
         // let m1 = new Map();
-        // Lib.debug("m1", m1);
+        // Tspp.debug("m1", m1);
 
         // upstatusbar();
         upstatusmc(msglstmdl.count);
@@ -391,16 +392,16 @@ ScrollView {
             }
             return true;
         }
-        // Lib.debug('item', !has, item.Eventid, Sss.msgs.size, listView.model.count);
+        // Tspp.debug('item', !has, item.Eventid, Sss.msgs.size, listView.model.count);
         return false;
     }
     function  onloadmsg () {
-            Lib.debug('clicked');
-            let req = Lib.tojson({Cmd: "loadmsg", Argv:["1=1 limit 300"]});
+            Tspp.debug('clicked');
+            let req = Tspp.tojson({Cmd: "loadmsg", Argv:["1=1 limit 300"]});
             let resp = qcffi.invoke(req);
-            Lib.debug('resplen', resp.length);
+            Tspp.debug('resplen', resp.length);
             // let jso = JSON.parse(resp);
-            // Lib.debug("rowcnt", jso.Retc, jso.Retv.length);
+            // Tspp.debug("rowcnt", jso.Retc, jso.Retv.length);
             // for (let i=0; i < jso.Retc; i++) {
             //     let rv = jso.Retv[i];
             //     // let item = {name:"", number: ""};
@@ -412,20 +413,20 @@ ScrollView {
             //         // listView.model.insert(0, item);
             //     }
             //     // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
-            //     // Lib.debug('typeof', typeof rv.Sender)
+            //     // Tspp.debug('typeof', typeof rv.Sender)
             // }
-            Lib.debug('itemcnt', listView.model.count);
+            Tspp.debug('itemcnt', listView.model.count);
     }
     function fetchmore() {
         let fmcond = Sss.fetchmore_condstr();
-            Lib.debug('...', Sss.fmnext_batch, fmcond);
-            let req = Lib.tojson({Cmd: "loadmsg", Argv:[fmcond]});
+            Tspp.debug('...', Sss.fmnext_batch, fmcond);
+            let req = Tspp.tojson({Cmd: "loadmsg", Argv:[fmcond]});
             // if (true) return;
             let resp = qcffi.invoke(req);
             // assert(resp == Sss.bkdretpromis, 'error invoke', req);
-            // Lib.debug('resplen', resp.length);
+            // Tspp.debug('resplen', resp.length);
             // let jso = JSON.parse(resp);
-            // Lib.debug("rowcnt", jso.Retc, jso.Retv.length);
+            // Tspp.debug("rowcnt", jso.Retc, jso.Retv.length);
             // for (let i=0; i < jso.Retc; i++) {
             //     let rv = jso.Retv[i];
             //     // let item = {name:"", number: ""};
@@ -437,12 +438,12 @@ ScrollView {
             //         // listView.model.insert(0, item);
             //     }
             //     // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
-            //     // Lib.debug('typeof', typeof rv.Sender)
+            //     // Tspp.debug('typeof', typeof rv.Sender)
             // }
-            // Lib.debug('itemcnt', listView.model.count);
+            // Tspp.debug('itemcnt', listView.model.count);
     }
     function loadmsgret(retv) {
-        Lib.debug("...rowcnt", retv.length);
+        // Tspp.debug("...rowcnt", retv.length);
         let oldcnt = listView.model.count;
         for (let i=0; i < retv.length; i++) {
             let rv = retv[i];
@@ -459,44 +460,44 @@ ScrollView {
             item.Eventid = rv.Eventid;
             item = rv;
             item.Dtime = '0s0ms';
-            item.Mtimemsui = Lib.objtmstrmin(new Date(item.Mtimems))
+            item.Mtimemsui = Tspp.objtmstrmin(new Date(item.Mtimems))
             for (let j=0;j < 30; j++) {
                 // listView.model.insert(0, item);
             }
             // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
-            // Lib.debug('typeof', typeof rv.Sender)
+            // Tspp.debug('typeof', typeof rv.Sender)
 
             // listView.model.insert(0, item);
             let ok = msgaddnodup(item, true);
             Sss.setnextbatch(item.Mtimems);
-            // Lib.debug(i, ok, item.Eventid);
+            // Tspp.debug(i, ok, item.Eventid);
         }
         let addcnt = listView.model.count - oldcnt;
         if (addcnt>0) {
             // scrollvto(true);
-             Lib.runonce(286, scrollvto, true);
+             Tspp.runonce(286, scrollvto, true);
             //  upstatusbar();
             upstatusmc(msglstmdl.count);
         }
-        Lib.debug('itemcnt',  addcnt, listView.model.count);
+        // Tspp.debug('itemcnt',  addcnt, listView.model.count);
     }
     function fetchmorert(roomid) {
         invokebkd("loadmorert", roomid);
     }
 
     function sendmsg() {
-        // Lib.debug("Sss", Sss.foo, Sss.getsndmsgpfx("dftim"), JSON.stringify(Sss.barz));
+        // Tspp.debug("Sss", Sss.foo, Sss.getsndmsgpfx("dftim"), JSON.stringify(Sss.barz));
         // return;
 
         let sndmode = msgsndmode.currentValue;
         let msgpfx = Sss.getsndmsgpfx(sndmode);
         let msg = usriptmsg.text;
         msg = msgpfx + msg;
-        Lib.debug("usriptmsg", msg.length, sndmode, msg);
+        Tspp.debug("usriptmsg", msg.length, sndmode, msg);
 
-        let req = Lib.tojson({Cmd: "sendmsg", Argv:[sndmode, msg]});
+        let req = Tspp.tojson({Cmd: "sendmsg", Argv:[sndmode, msg]});
         let resp = qcffi.invoke(req); // todo: will freeze ui
-        Lib.debug("resp", resp);
+        Tspp.debug("resp", resp);
         if (false) { // async mode, no result data here
             let jso = JSON.parse(resp);
             let item = {Content: jso.Retv[0]};
@@ -514,26 +515,26 @@ ScrollView {
         item.Eventid = '' //rv.Eventid!=''? rv.Eventid : "$ifsf";
         item.Eventid = '$'+(new Date()).valueOf();
         // item.Mtimems = (new Date()).tohhmm();
-        item.Mtimemsui = Lib.objtmstrmin(new Date());
+        item.Mtimemsui = Tspp.objtmstrmin(new Date());
         // item = rv;
 
         // listView.model.insert(0, item);
         msgaddnodup(item, false);
         // scrollvto(false);
-        Lib.runonce(286, scrollvto, false);
+        Tspp.runonce(286, scrollvto, false);
     }
 
 
     function scrollvto(top : bool) {
-        // Lib.debug("top=", top);
+        // Tspp.debug("top=", top);
         // 0.0 - 1.0
         let sbv = scroll1.ScrollBar.vertical;
         if (top) {
             sbv.position = 0.0;
         }else{
-            // Lib.debug("nowpos", sbv.position);
+            // Tspp.debug("nowpos", sbv.position);
             sbv.position = 1.0 - sbv.size // scroll1.contentHeight - scroll1.height;
-            // Lib.debug("cch", scroll1.contentHeight, "winh", scroll1.height);
+            // Tspp.debug("cch", scroll1.contentHeight, "winh", scroll1.height);
         }
     }
 

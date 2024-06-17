@@ -38,12 +38,17 @@ qt_add_executable(helloworld
     maincxx.cpp
     mainc.c
 )
+
+# must before qt_add_qml_module
+set_source_files_properties(srcui/Sss.qml
+    qmlpp/MySingleton.qml qmlpp/MySingletonui.qml
+    PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 # message("and... ${ANDROID}")
 # must relative path
 file(GLOB qmlfiles CONFIGURE_DEPENDS RELATIVE ${projdir} srcui/*.qml
     qmlpp/*.qml qmlpp/*.js)
-file(GLOB iconfiles CONFIGURE_DEPENDS RELATIVE ${projdir} icons/*.png)
-# message("icons ${qmlfiles}")
+file(GLOB iconfiles CONFIGURE_DEPENDS RELATIVE ${projdir} icons/*.png icons/*.gif)
+message("icons ${qmlfiles}")
 if(${ANDROID})
 qt_add_qml_module(helloworld
     URI mainqml
@@ -60,14 +65,14 @@ qt_target_qml_sources(helloworld
     # srcui/MsgText.qml srcui/MySingleton.qml srcui/MySingletonui.qml
 
     ${qmlfiles}
+    srcui/qmldir
+    qmlpp/qmldir
     
     # RESOURCES icons/logo.png
     RESOURCES ${iconfiles}
 )
 endif()
-set_source_files_properties(srcui/ShareState.qml
-    srcui/MySingleton.qml srcui/MySingletonui.qml
-    PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+
 
 target_link_libraries(helloworld PRIVATE Qt6::Widgets Qt6::Qml Qt6::QmlIntegration Qt6::Quick Qt6::QuickControls2 hellogo)
 target_link_directories(helloworld PUBLIC ".")
@@ -83,16 +88,16 @@ set_target_properties(helloworld PROPERTIES
 # add_custom_command(OUTPUT out1 COMMAND "tsc -v")
 # message("${out1}")
 
-add_custom_command(OUTPUT ${projdir}/qmlpp/tspp.js ${projdir}/qmlpp/Qmlpp.js
+add_custom_command(OUTPUT ${projdir}/qmlpp/Tspp.js ${projdir}/qmlpp/Qmlpp.js
     COMMENT "tscc {tspp,Qmlpp}.ts 111"
     # COMMAND "tsc" "-v"
-    COMMAND tsc --pretty --sourceMap --declaration --module commonjs --lib es6,es2020,dom --esModuleInterop --types "Qt" "${projdir}/qmlpp/tspp.ts" "${projdir}/qmlpp/Qmlpp.ts"
+    COMMAND tsc --pretty --sourceMap --declaration --module commonjs --lib es6,es2020,dom --esModuleInterop --types "Qt" "${projdir}/qmlpp/Tspp.ts" "${projdir}/qmlpp/Qmlpp.ts"
     # fix https://stackoverflow.com/questions/43042889/typescript-referenceerror-exports-is-not-defined
-    COMMAND "sed" "-i" ".bak" "'s/^\"use strict\";/.pragma library\\n\\nvar exports = {};\\n\\n\"use strict\";/g'" "${projdir}/qmlpp/tspp.js"
+    COMMAND "sed" "-i" ".bak" "'s/^\"use strict\";/.pragma library\\n\\nvar exports = {};\\n\\n\"use strict\";/g'" "${projdir}/qmlpp/Tspp.js"
     COMMAND "sed" "-i" ".bak" "'s/^\"use strict\";/.pragma library\\n\\nvar exports = {};\\n\\n\"use strict\";/g'" "${projdir}/qmlpp/Qmlpp.js"
-    DEPENDS ${projdir}/qmlpp/tspp.ts ${projdir}/qmlpp/Qmlpp.ts)
+    DEPENDS ${projdir}/qmlpp/Tspp.ts ${projdir}/qmlpp/Qmlpp.ts)
 add_custom_target(tscc COMMENT "tscc {tspp,Qmlpp}.ts 222"
-    DEPENDS ${projdir}/qmlpp/tspp.js ${projdir}/qmlpp/Qmlpp.js
+    DEPENDS ${projdir}/qmlpp/Tspp.js ${projdir}/qmlpp/Qmlpp.js
 )
 add_dependencies(helloworld tscc)
 
@@ -108,6 +113,8 @@ add_custom_command(OUTPUT ../jniLibs/libhellogo.h
     COMMAND GOOS=android GOARCH=arm64 CC="${CGO_CCx}" CGO_CFLAGS="\"${CGO_CFLAGSx}\"" CGO_LDFLAGS="\"-arch arm64\"" CGO_ENABLED=1 go build -buildmode=c-shared -o ../jniLIbs/libhellogo${shextsfx} ./
     COMMAND ls -lh ../jniLibs/libhellogo${shextsfx} && file ../jniLibs/libhellogo${shextsfx}
     COMMAND cp ../jniLibs/libhellogo${shextsfx} ../build/
+    COMMAND cp ../jniLibs/libhellogo${shextsfx} ../
+    COMMAND cp ../jniLibs/libhellogo${shextsfx} ../build/android-build/libs/arm64-v8a/
     # SOURCES ./srcgo/*.go ./srcgo/go.*
     # COMMAND_EXPAND_LISTS
     DEPENDS ${projdir}/srcgo/*.go ${projdir}/srcgo/go.mod
@@ -134,9 +141,12 @@ add_custom_target(showapk
 add_dependencies(showapk helloworld)
 
 ### clean some
-add_custom_target(clngo rm -fv libhellogo.h)
+add_custom_target(clngo rm -fv ${projdir}/libhellogo.h ${projdir}/jniLibs/libhellogo.h)
 add_custom_target(clnts rm -fv qmlpp/tspp.js qmlpp/tspp.js.map qmlpp/tspp.d.ts qmlpp/Qmlpp.js qmlpp/Qmlpp.js.map qmlpp/Qmlpp.d.ts
 )
 
 add_custom_target(clnapk WORKING_DIRECTORY "${projdir}/build"
     COMMAND rm -fv build/android-build/helloworld.apk build/android-build/build/outputs/apk/debug/android-build-debug.apk android-build/helloworld.apk android-build/build/outputs/apk/debug/android-build-debug.apk)
+
+add_custom_target(instapk WORKING_DIRECTORY "${projdir}/build"
+    COMMAND /opt/android-sdk/adbtools/adb install  android-build/helloworld.apk )

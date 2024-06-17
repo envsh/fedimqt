@@ -93,7 +93,7 @@ ScrollView {
                             contextMenu.popup();
                         }else{
                         listView.currentIndex = oldidx==index?-1:index;
-                        // Lib.debug('lstcuridx', oldidx, "=>", index);
+                        // Tspp.debug('lstcuridx', oldidx, "=>", index);
                         }
                     }
             }
@@ -196,7 +196,7 @@ ScrollView {
 
     ///// script
     Component.onCompleted : {
-        Lib.debug("hehhe",grplstmdl.count);
+        Tspp.debug("hehhe",grplstmdl.count);
         upstatusrc(grplstmdl.count);
     }
 
@@ -211,11 +211,11 @@ ScrollView {
             }
             return true;
         }
-        // Lib.debug('item', !has, item.Eventid, Sss.msgs.size, listView.model.count);
+        // Tspp.debug('item', !has, item.Eventid, Sss.msgs.size, listView.model.count);
         return false;
     }
     function loadmsgret(retv) {
-        Lib.debug("...rowcnt", retv.length);
+        // Tspp.debug("...rowcnt", retv.length);
         let oldcnt = listView.model.count;
         for (let i=0; i < retv.length; i++) {
             let rv = retv[i];
@@ -232,37 +232,37 @@ ScrollView {
             item.Eventid = rv.Eventid;
             item = rv;
             item.Dtime = '0s0ms';
-            item.Mtimemsui = Lib.objtmstrmin(new Date(item.Mtimems))
+            item.Mtimemsui = Tspp.objtmstrmin(new Date(item.Mtimems))
             for (let j=0;j < 30; j++) {
                 // listView.model.insert(0, item);
             }
             // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
-            // Lib.debug('typeof', typeof rv.Sender)
+            // Tspp.debug('typeof', typeof rv.Sender)
 
             // listView.model.insert(0, item);
             let ok = grpaddnodup(item, true);
-            // Lib.debug(i, ok, item.Eventid);
+            // Tspp.debug(i, ok, item.Eventid);
         }
         let addcnt = listView.model.count - oldcnt;
         if (addcnt>0) {
             // scrollvto(true);
-            //  Lib.runonce(286, scrollvto, true);
+            //  Tspp.runonce(286, scrollvto, true);
             upstatusrc(grplstmdl.count);
         }
-        Lib.debug('grpcnt',  addcnt, listView.model.count);
+        // Tspp.debug('grpcnt',  addcnt, listView.model.count);
     }
 
     function onGotRooms(retv) {
         let oldcnt = listView.model.count;
         for (let i=0;i < retv.length; i++) {
             let item = retv[i];
-            item.Mtimemsui = Lib.objtmstrmin(new Date(item.Mtimems));
+            item.Mtimemsui = Tspp.objtmstrmin(new Date(item.Mtimems));
             let ok = grpaddnodup(item, true);
         }
         let addcnt = listView.model.count-oldcnt;
         if (addcnt>0) {
             upstatusrc(grplstmdl.count);
         }
-        Lib.debug('grpcnt',  addcnt, listView.model.count);
+        Tspp.debug('grpcnt',  addcnt, listView.model.count);
     }
 }

@@ -18,7 +18,7 @@ import (
 */
 import "C"
 
-// //
+// ////
 var mainrun = false
 
 func main() {
@@ -49,8 +49,8 @@ func mainorinit() {
 func bgproc() {
 
 	for i := 0; ; i++ {
-		gopp.SleepSec(13)
-		log.Println("loopcnt", i)
+		gopp.SleepSec(33)
+		log.Println("loopcnt", i, 33)
 		// callqml(fmt.Sprintf("thisgo,callqml %d", i))
 		guiclish.EmitEventFront("notice", fmt.Sprintf("thisgo,callqml %d", i))
 	}

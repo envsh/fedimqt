@@ -138,7 +138,7 @@ ApplicationWindow {
         // Rectangle { anchors.fill : parent;  color: "red" } // clear
 
         Component.onCompleted: {
-            // Lib.debug("stkwin done");
+            // Tspp.debug("stkwin done");
             // stackwin.push(aboutui);
             // stackwin.push(msglstwin);
         }
@@ -202,29 +202,29 @@ ApplicationWindow {
     property int netreqdownlen: 0;
 
     QmlCppBridge {    id : qcffi }
-    // ShareState { id: sss}
+    // ShareState { id: Sss}
     // SingletonDemo { id: oneinst } // not work
 
     function invokebkd(cmd, ...args) {
         let req = {Cmd: cmd, Argv: args};
-        return qcffi.invoke(Lib.tojson(req));
+        return qcffi.invoke(Tspp.tojson(req));
     }
     // all functions are qt slots   
     function oncallqml(jstr) {
-        Lib.debug(jstr);
+        // Tspp.debug(jstr);
         if (jstr.startsWith('QmlAppEngineOK')) {
             onQmlAppEngineCreated(jstr);
         } else if (jstr == 'hello this c++'){
             // just a debug msg
         }else{
-        // Lib.info("lstcnt", listView.count);  // print ui object property
+        // Tspp.info("lstcnt", listView.count);  // print ui object property
         // try {
         let jso = JSON.parse(jstr);
-        // Lib.debug('Cmd:', jso.Cmd, jso.Argv);
+        // Tspp.debug('Cmd:', jso.Cmd, jso.Argv);
         dispatchEvent(jso);
         // }catch(err) {
             // console.error(err, ":", jstr);
-            // Lib.error(err, ":", jstr.length, jstr.substring(0, 56));
+            // Tspp.error(err, ":", jstr.length, jstr.substring(0, 56));
         // }
         }
     }
@@ -242,6 +242,9 @@ ApplicationWindow {
             case "loadmsgrt":
                 msglstwin.loadmsgret(jso.Argv);
                 romlstwin.loadmsgret(jso.Argv);
+                break;
+            case "loadmorert":
+                Tspp.info("todoooo", jso.Cmd, jso);
                 break;
             case "loadroom":
                 romlstwin.onGotRooms(jso.Retv);
@@ -285,42 +288,45 @@ ApplicationWindow {
                 let online = jso.Argv[0];
                 // onlinest.icon.source = online?"icons/online_2x.png":"icons/offline_2x.png";
                 onlinest.icon.color = online?"darkgreen":""
-                let tmstr = Lib.nowtmstrzh();
+                let tmstr = Tspp.nowtmstrzh();
                 onlinest.tiptext = (online?"Onlined: ":"Offlined: ") + tmstr;
                 break;
+            case 'qmlAppEngineCreated':
+                // that's ok
+                break;
             default:
-                Lib.info('Not catched case:', jso.Cmd, jso);
+                Tspp.info('Not catched case:', jso.Cmd, jso);
                 break;
         }
     }
 
     Component.onCompleted: {
-        Lib.debug("");
+        Tspp.debug("");
         Qmlpp.qmlppinit(appwin);
-        Lib.settimeoutfuncs(qmlSetTimeout, qmlClearTimeout);
-        // Lib.debug("oneinst", MySingleton, MySingleton.pt1, MySingleton.dummy);
-        // Lib.debug("oneinstui", MySingletonui, MySingletonui.objs);
-        // Lib.debug("Sss",  Sss);
+        Tspp.settimeoutfuncs(qmlSetTimeout, qmlClearTimeout);
+        // Tspp.debug("oneinst", MySingleton, MySingleton.pt1, MySingleton.dummy);
+        // Tspp.debug("oneinstui", MySingletonui, MySingletonui.objs);
+        // Tspp.debug("Sss",  Sss);
 
         // let rv = qcffi.invoke("thisqml");
-        // Lib.debug(rv);
+        // Tspp.debug(rv);
         // listView.model.dummy()
         // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
 
-        // Lib.dummy('wt')
-        // Lib.util.dummy();
-        // Jlib.default.dummy(); // TypeError: Cannot call method 'dummy' of undefined
+        // Tspp.dummy('wt')
+        // Tspp.util.dummy();
+        // JTspp.default.dummy(); // TypeError: Cannot call method 'dummy' of undefined
         // dummymix.dummymix();
-        // Lib.debug(Dmymix, Dmymix.exports.dummymix);
-        // Lib.debug(Dmymix.dmymixfn, Dmymix.dummymix);
-        // Lib.debug(Qmlppx.qmlTimer2(appwin));
+        // Tspp.debug(Dmymix, Dmymix.exports.dummymix);
+        // Tspp.debug(Dmymix.dmymixfn, Dmymix.dummymix);
+        // Tspp.debug(Qmlppx.qmlTimer2(appwin));
     }
     function onCompleted2 () {
     }
     // uifullloaded now
     function onQmlAppEngineCreated(msg) {
         // init some here
-        Lib.debug("wtodo", msg);
+        Tspp.debug("wtodo", msg, Sss.bkdretpromis);
         let rv = invokebkd("qmlAppEngineCreated"); // notify go
         // check account exists, and login default one
         // if no account, switch to login page
@@ -332,19 +338,19 @@ ApplicationWindow {
     // var pageitems = [aboutui,msglstwin];
     function switchpage(prev : bool) {
         let stkwin = stackwin;
-        // Lib.debug("prev", prev, stkwin.depth, stkwin.curidx, stkwin.childs.length);
+        // Tspp.debug("prev", prev, stkwin.depth, stkwin.curidx, stkwin.childs.length);
         // stackwin.index = -1; // non-exist???
         let nxtidx = stkwin.curidx + ( prev ? -1: 1);
         if (nxtidx < 0) nxtidx = stkwin.childs.length-1;
         if (nxtidx >= stkwin.childs.length) nxtidx = 0;
-        Lib.debug("switpage", stkwin.curidx, "=>", nxtidx);
+        Tspp.debug("switpage", stkwin.curidx, "=>", nxtidx);
         stkwin.curidx = nxtidx;
 
         let curitem = stkwin.currentItem;
         stkwin.replace(curitem, stkwin.childs[nxtidx]);
         
         stkwin.find(function(item, index) {
-            Lib.debug('idx', index);
+            Tspp.debug('idx', index);
             // return item.isTheOne
             return false;
         }, StackView.DontLoad);
@@ -355,7 +361,7 @@ ApplicationWindow {
         let nxtidx = idx;
         let nxtitem = stkwin.childs[nxtidx];
         stkwin.curidx = nxtidx;
-        Lib.debug(idx, "curitem", curitem, "nxtitem", nxtitem);
+        Tspp.debug(idx, "curitem", curitem, "nxtitem", nxtitem);
         stkwin.replace(curitem, nxtitem);
     }
 
@@ -379,9 +385,9 @@ ApplicationWindow {
         lastlogst.text = 'LL:'+lastlog;
     }
     function upstatusuptime() {
-        // Lib.debug('tm', Sss.starttime);
+        // Tspp.debug('tm', Sss.starttime);
         let nowtm = new Date();
-        let uptm = Lib.datesubmsui(nowtm, MySingleton.starttime);
+        let uptm = Tspp.datesubmsui(nowtm, MySingleton.starttime);
         uptimest.text = 'UT:'+uptm;
     }
 

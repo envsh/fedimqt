@@ -1,5 +1,6 @@
 # same name as qml_add_ ...
-module mainqml
-singleton Sss 1.0 ShareState.qml
+module mainqml2
+# orignal ShareState.qml
+singleton Sss 1.0 Sss.qml
 # singleton ShareState 1.0 ShareState.qml
 # singleton MyOtherSingleton 1.0 MyOtherSingleton.qml
