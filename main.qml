@@ -145,7 +145,7 @@ ApplicationWindow {
     }
 
     Rectangle {
-        color: "darkgreen"
+        color: "darkblue"
         // height: inbtn.height
         height: 38
         width: parent.width
@@ -161,9 +161,14 @@ ApplicationWindow {
         MyLabel{id: curwinst; text: 'CP:'+'MSGWIN'}
         MyLabel{id: lastlogst; text: 'LL:'+'wwwweeeeeeeeeeee';
             Layout.fillWidth: true}
-        MyButton{icon.source:"icons/online_2x.png";
-            tiptext: "online now"
-            implicitWidth: 22;
+        MyButton{
+            icon.source:"icons/online_2x.png";
+            // icon.source:"icons/question-mark-gray64.png";
+            // icon.source:"icons/remove-symbol_gray64.png";
+            // icon.color: "black"
+            id: onlinest
+            tiptext: "net unknown"
+            implicitWidth: 24;
             implicitHeight:24;
             flat: true
             display: AbstractButton.IconOnly}
@@ -276,7 +281,15 @@ ApplicationWindow {
                 }
                 // netreqst.tiptext = 'UP:'+netrequplen+",DL:"+netreqdownlen;
                 break;
+            case "netstatus":
+                let online = jso.Argv[0];
+                // onlinest.icon.source = online?"icons/online_2x.png":"icons/offline_2x.png";
+                onlinest.icon.color = online?"darkgreen":""
+                let tmstr = Lib.nowtmstrzh();
+                onlinest.tiptext = (online?"Onlined: ":"Offlined: ") + tmstr;
+                break;
             default:
+                Lib.info('Not catched case:', jso.Cmd, jso);
                 break;
         }
     }
@@ -304,14 +317,16 @@ ApplicationWindow {
     }
     function onCompleted2 () {
     }
+    // uifullloaded now
     function onQmlAppEngineCreated(msg) {
         // init some here
         Lib.debug("wtodo", msg);
+        let rv = invokebkd("qmlAppEngineCreated"); // notify go
         // check account exists, and login default one
         // if no account, switch to login page
         // let rv = invokebkd("listcfg", "accountline");
-        let rv = invokebkd("getcfg", "", "lastaccountline");
-        let rv2 = invokebkd("loadroom", "1=1 limit 99", );
+        let rv2 = invokebkd("getcfg", "", "lastaccountline");
+        // let rv3 = invokebkd("loadroom", "1=1 limit 99");
     }
     //////
     // var pageitems = [aboutui,msglstwin];

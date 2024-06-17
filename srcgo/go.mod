@@ -2,18 +2,18 @@ module main
 
 go 1.22.3
 
-require github.com/kitech/gopp v0.0.0
+require (
+	github.com/envsh/fedind/guiclish v0.0.0-00010101000000-000000000000
+	github.com/kitech/gopp v0.0.0
+)
 
 // require github.com/kitech/gopp/cgopp v0.0.0
 replace github.com/kitech/gopp => ../../goplusplus
 
 replace github.com/kitech/gopp/cgopp => ../../goplusplus/cgopp
 
-require (
-	// fedimac v0.0.0
-	github.com/ebitengine/purego v0.7.1
-)
-
+// fedimac v0.0.0
+require github.com/ebitengine/purego v0.7.1
 
 // replace github.com/kitech/gopp/cgopp => ../../goplusplus/cgopp
 replace github.com/envsh/fedind/guiclish => ../../fedindgo/guiclish
@@ -47,7 +47,6 @@ require (
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/envsh/fedind/backend v0.0.0-00010101000000-000000000000 // indirect
 	github.com/envsh/fedind/envcfg v0.0.0 // indirect
-	github.com/envsh/fedind/guiclish v0.0.0-00010101000000-000000000000 // indirect
 	github.com/envsh/fedind/statics v0.0.0 // indirect
 	github.com/go-stack/stack v1.8.1 // indirect
 	github.com/gobwas/httphead v0.1.0 // indirect
@@ -58,7 +57,7 @@ require (
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/gorilla/websocket v1.5.1 // indirect
 	github.com/h2non/filetype v1.1.3 // indirect
-	github.com/huandu/xstrings v1.4.0 // indirect
+	github.com/huandu/xstrings v1.5.0 // indirect
 	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
 	github.com/jackc/pgconn v1.14.3 // indirect
 	github.com/jackc/pgio v1.0.0 // indirect

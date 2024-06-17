@@ -303,6 +303,7 @@ ScrollView {
             anchors.right : parent.right
 
             MyButton{ text:"SIMG"; implicitWidth: 32;
+                tiptext: qsTr("Select and send Photo/File(s)")
                 display: AbstractButton.IconOnly
                 icon.source: "../icons/add.png"}
 
@@ -341,9 +342,11 @@ ScrollView {
             MyButton{ text:"Emoji"; onClicked: dummy();
                 implicitWidth: 32;
                 display: AbstractButton.IconOnly
+                tiptext: qsTr("Select Emoji(s)")
                 icon.source: "../icons/smile_gray64.png"}
             MyButton{ text:"Sendit!!!"; onClicked: sendmsg();
                 implicitWidth: 52;
+                tiptext: qsTr("Send Message!!!")
                 display: AbstractButton.IconOnly
                 icon.source: "../icons/cursor_gray64.png"}
             // MyImage {source:"../icons/cursor_gray64.png"; height:26; width:26}

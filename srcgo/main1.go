@@ -37,6 +37,7 @@ func mainorinit() {
 	log.SetFlags(log.Flags() | log.Lshortfile ^ log.Ldate)
 	log.Println("mainorinit")
 	interopinit()
+	guiclish.OnlineStatusSetcb(onnetonlinestatus)
 	guiclish.MatrixEventSetcb(onmtxevtcb)
 	guiclish.SetNetreqNotecb(onnetreqnotice)
 	go bgproc()
@@ -63,11 +64,19 @@ func startthinmtxproc() {
 		log.Println("main.thinmtxproc done", mtxsrv, mtxusr, mtxacctk)
 	}()
 }
-func onmtxevtcb(hkt *guiclish.Hooktaskqst) {
-	guiclish.EmitEventFront("loadmsgrt", hkt.Hki)
+func onmtxevtcb(hkt *guiclish.Hooktaskqst, msgo *guiclish.Messagestable) {
+	if hkt != nil {
+		guiclish.EmitEventFront("loadmsgrt", hkt.Hki)
+	}
+	if msgo != nil {
+		guiclish.EmitEventFront("loadmsgrt", msgo)
+	}
 }
 func onnetreqnotice(begin bool, len int) {
 	guiclish.EmitEventFront("netreqnote", begin, len)
+}
+func onnetonlinestatus(online bool) {
+	guiclish.EmitEventFront("netstatus", online)
 }
 
 // /// ffi section
