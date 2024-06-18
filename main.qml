@@ -211,7 +211,7 @@ ApplicationWindow {
     }
     // all functions are qt slots   
     function oncallqml(jstr) {
-        Tspp.debug(jstr);
+        // Tspp.debug(jstr);
         if (jstr.startsWith('QmlAppEngineOK')) {
             onQmlAppEngineCreated(jstr);
         } else if (jstr.startsWith('hello this c++')){

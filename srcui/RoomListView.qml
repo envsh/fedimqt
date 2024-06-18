@@ -217,7 +217,8 @@ ScrollView {
     function loadmsgret(retv) {
         // Tspp.debug("...rowcnt", retv.length);
         let oldcnt = listView.model.count;
-        for (let i=0; i < retv.length; i++) {
+        let isnew = retv[0]
+        for (let i=1; i < retv.length; i++) {
             let rv = retv[i];
             // let item = {name:"", number: ""};
             let item = Sss.newFediRecord();

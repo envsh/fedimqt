@@ -85,12 +85,12 @@ func startthinmtxproc() {
 		log.Println("main.thinmtxproc done", mtxsrv, mtxusr, mtxacctk)
 	}()
 }
-func onmtxevtcb(hkt *guiclish.Hooktaskqst, msgo *guiclish.Messagestable) {
+func onmtxevtcb(hkt *guiclish.Hooktaskqst, msgo *guiclish.Messagestable, isnew bool) {
 	if hkt != nil {
-		guiclish.EmitEventFront("loadmsgrt", hkt.Hki)
+		guiclish.EmitEventFront("loadmsgrt", isnew, hkt.Hki)
 	}
 	if msgo != nil {
-		guiclish.EmitEventFront("loadmsgrt", msgo)
+		guiclish.EmitEventFront("loadmsgrt", isnew, msgo)
 	}
 }
 func onnetreqnotice(begin bool, len int) {

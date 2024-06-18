@@ -198,6 +198,7 @@ ScrollView {
                         
 
                     MsgText {
+                        // todo if text too long, folder it???
                         id: txtcc
                         textFormat: txtccfmt
                         text: Content!=''?Content:'Content here'
@@ -445,7 +446,8 @@ ScrollView {
     function loadmsgret(retv) {
         // Tspp.debug("...rowcnt", retv.length);
         let oldcnt = listView.model.count;
-        for (let i=0; i < retv.length; i++) {
+        let isnew = retv[0]
+        for (let i=1; i < retv.length; i++) {
             let rv = retv[i];
             // let item = {name:"", number: ""};
             let item = Sss.newFediRecord();
@@ -468,7 +470,8 @@ ScrollView {
             // Tspp.debug('typeof', typeof rv.Sender)
 
             // listView.model.insert(0, item);
-            let ok = msgaddnodup(item, true);
+            let prepend = !isnew;
+            let ok = msgaddnodup(item, prepend);
             Sss.setnextbatch(item.Mtimems);
             // Tspp.debug(i, ok, item.Eventid);
         }
