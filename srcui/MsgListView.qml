@@ -562,9 +562,11 @@ ScrollView {
         item.Roomid = "mainline@cf";
         item.Roomname = "mainline";
         item.Eventid = '' //rv.Eventid!=''? rv.Eventid : "$ifsf";
-        item.Eventid = '$'+(new Date()).valueOf();
+        let nowt = new Date();
+        item.Eventid = '$'+nowt.valueOf();
         // item.Mtimems = (new Date()).tohhmm();
-        item.Mtimemsui = Tspp.objtmstrmin(new Date());
+        item.Mtimems = nowt.valueOf();
+        item.Mtimemsui = Tspp.objtmstrmin(nowt);
         // item = rv;
 
         // listView.model.insert(0, item);
