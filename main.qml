@@ -211,11 +211,12 @@ ApplicationWindow {
     }
     // all functions are qt slots   
     function oncallqml(jstr) {
-        // Tspp.debug(jstr);
+        Tspp.debug(jstr);
         if (jstr.startsWith('QmlAppEngineOK')) {
             onQmlAppEngineCreated(jstr);
-        } else if (jstr == 'hello this c++'){
-            // just a debug msg
+        } else if (jstr.startsWith('hello this c++')){
+            // just a debug msg and compqtver
+            aboutui.setcompqtver(jstr.substring(15));
         }else{
         // Tspp.info("lstcnt", listView.count);  // print ui object property
         // try {

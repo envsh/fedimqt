@@ -112,8 +112,11 @@ add_custom_command(OUTPUT ../jniLibs/libhellogo.h
     COMMAND pwd && go version
     COMMAND GOOS=android GOARCH=arm64 CC="${CGO_CCx}" CGO_CFLAGS="\"${CGO_CFLAGSx}\"" CGO_LDFLAGS="\"-arch arm64\"" CGO_ENABLED=1 go build -buildmode=c-shared -o ../jniLIbs/libhellogo${shextsfx} ./
     COMMAND ls -lh ../jniLibs/libhellogo${shextsfx} && file ../jniLibs/libhellogo${shextsfx}
+    # 好像这个没有什么用
     COMMAND cp ../jniLibs/libhellogo${shextsfx} ../build/
+    # 好像link时用的这个
     COMMAND cp ../jniLibs/libhellogo${shextsfx} ../
+    # 好像打包apk用的这个
     COMMAND cp ../jniLibs/libhellogo${shextsfx} ../build/android-build/libs/arm64-v8a/
     # SOURCES ./srcgo/*.go ./srcgo/go.*
     # COMMAND_EXPAND_LISTS

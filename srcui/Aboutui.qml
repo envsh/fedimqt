@@ -34,7 +34,7 @@ Item {
         MyLabel {text: JSON.stringify(Qt.platform)}
 
         MyLabel {text: "CompQtVer"}
-        MyLabel {text: ""}
+        MyLabel {id:compqtver; text: ""}
         MyLabel {text: "RunQtVer"}
         MyLabel {id:rtqtver; text: ""}
         MyLabel {text: "RunGoVer"}
@@ -51,6 +51,9 @@ Item {
     }
 
     /////
+    function setcompqtver(val) {
+        compqtver.text = val;
+    }
     function setrtqtver(val) {
         rtqtver.text = val;
     }
