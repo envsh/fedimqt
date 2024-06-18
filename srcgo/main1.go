@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
+	"runtime"
+	"time"
 
 	"github.com/ebitengine/purego"
 	_ "github.com/ebitengine/purego"
@@ -10,7 +13,11 @@ import (
 	"github.com/kitech/gopp"
 	"github.com/kitech/gopp/cgopp"
 	_ "github.com/kitech/gopp/cgopp"
+	"github.com/kitech/minqt"
+
 	// _ "github.com/jupiterrider/ffi"
+
+	_ "github.com/kitech/minqt"
 )
 
 /*
@@ -44,9 +51,23 @@ func mainorinit() {
 	// go fedimac.Appclientmain()
 	// guiclish.Locdb()
 	// startthinmtxproc()
+
+	time.AfterFunc(gopp.DurandMs(999, 999), func() {
+		qtver := minqt.QVersion()
+		// qtver := "2.3.4"
+		// log.Println(qtver)
+		guiclish.EmitEventFront("notice", "rtqtver", qtver)
+		dir, _ := os.Getwd()
+		guiclish.EmitEventFront("notice", "workdir", dir)
+		gover := runtime.Version()
+		guiclish.EmitEventFront("notice", "rtgover", gover)
+	})
 }
 
 func bgproc() {
+	{
+
+	}
 
 	for i := 0; ; i++ {
 		gopp.SleepSec(33)
@@ -75,8 +96,8 @@ func onmtxevtcb(hkt *guiclish.Hooktaskqst, msgo *guiclish.Messagestable) {
 func onnetreqnotice(begin bool, len int) {
 	guiclish.EmitEventFront("netreqnote", begin, len)
 }
-func onnetonlinestatus(online bool) {
-	guiclish.EmitEventFront("netstatus", online)
+func onnetonlinestatus(online bool, errmsg string) {
+	guiclish.EmitEventFront("netstatus", online, errmsg)
 }
 
 // /// ffi section

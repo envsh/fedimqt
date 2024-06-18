@@ -15,6 +15,9 @@ import QtQuick.Layouts
 // label with tooltip
 Label{
     text: "MyLabel"
+                
+    elide: Text.ElideRight
+    maximumLineCount: 1
 
     property string tiptext//: qsTr("Save the active project")
     ToolTip{ 

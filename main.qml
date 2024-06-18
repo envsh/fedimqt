@@ -159,7 +159,7 @@ ApplicationWindow {
         MyLabel{ id: msgcntst; text: 'MC:'+999}
         MyLabel{ id: grpcntst; text: 'RC:'+99}
         MyLabel{id: curwinst; text: 'CP:'+'MSGWIN'}
-        MyLabel{id: lastlogst; text: 'LL:'+'wwwweeeeeeeeeeee';
+        MyLabel{id: lastlogst; text: 'Ready. wwwweeeeeeeeeeee';
             Layout.fillWidth: true}
         MyButton{
             icon.source:"icons/online_2x.png";
@@ -231,6 +231,10 @@ ApplicationWindow {
     function dispatchEvent(jso) {
         switch (jso.Cmd) {
             case "notice":
+                if (jso.Argv[0] == "olnchkerr") { upstatusll(Sss.onolnchkerr(jso.Argv)) }
+                else if (jso.Argv[0] == "rtqtver") { aboutui.setrtqtver(jso.Argv[1]) }
+                else if (jso.Argv[0] == "workdir") { aboutui.setworkdir(jso.Argv[1]) }
+                else if (jso.Argv[0] == "rtgover") { aboutui.setrtgover(jso.Argv[1]) }
                 break;
             case "sendmsg":
                 msglstwin.sendmsgret(jso);
@@ -289,7 +293,7 @@ ApplicationWindow {
                 // onlinest.icon.source = online?"icons/online_2x.png":"icons/offline_2x.png";
                 onlinest.icon.color = online?"darkgreen":""
                 let tmstr = Tspp.nowtmstrzh();
-                onlinest.tiptext = (online?"Onlined: ":"Offlined: ") + tmstr;
+                onlinest.tiptext = (jso.Argv[1]==''?"Ok" : jso.Argv[1]) + ': ' + tmstr;
                 break;
             case 'qmlAppEngineCreated':
                 // that's ok
@@ -383,12 +387,14 @@ ApplicationWindow {
     }
     function upstatusll(lastlog) {
         lastlogst.text = 'LL:'+lastlog;
+        lastlogst.tiptext = 'LL:'+lastlog;
     }
     function upstatusuptime() {
         // Tspp.debug('tm', Sss.starttime);
         let nowtm = new Date();
         let uptm = Tspp.datesubmsui(nowtm, MySingleton.starttime);
         uptimest.text = 'UT:'+uptm;
+        uptimest.tiptext = 'UT:'+uptm;
     }
 
     // 这个Timer 好像在 android 上没有执行

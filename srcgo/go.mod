@@ -24,6 +24,9 @@ replace github.com/envsh/fedind/envcfg => ../../fedindgo/envcfg
 
 replace github.com/envsh/fedind/statics => ../../fedindgo/statics
 
+require github.com/kitech/minqt v0.0.0
+replace github.com/kitech/minqt => ../../minqtgo
+
 require (
 	git.ekzyis.com/ekzyis/nip44 v0.0.0-20231230170032-ddde532a9e6c // indirect
 	github.com/Kasita-Inc/gadget v0.0.0-20181214222941-00e7cc205221 // indirect

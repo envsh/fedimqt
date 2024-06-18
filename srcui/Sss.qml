@@ -37,6 +37,9 @@ QtObject {
     property var grps : new Map() // grpid=>grpobj
     property var dftft: null // should be font object
 
+    property int olnchkerrcnt : 0
+    property string olnchkerrmsg : '';
+
     // script section
     function getsndmsgpfx(name) {
         Tspp.debug("vss", vss.sndmsgpfxs, Tspp.tojson(vss.sndmsgpfxs));
@@ -100,5 +103,19 @@ QtObject {
             Dtime: "0s0ms",
         };
         return obj;
+    }
+
+    function onolnchkerr(Argv) {
+        let msg = Argv[1];
+        if (msg == Sss.olnchkerrmsg) {
+            Sss.olnchkerrcnt += 1;
+        }else{
+            Sss.olnchkerrmsg = msg;
+            Sss.olnchkerrcnt = 1;
+        }
+        // upstatusll(msg + ' ' + Sss.olnchkerrcnt);
+        // Tspp.debug(msg, Sss.olnchkerrcnt);
+        let ret = msg + ' ' + Sss.olnchkerrcnt;
+        return ret;
     }
 }
