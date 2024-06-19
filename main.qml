@@ -156,10 +156,10 @@ ApplicationWindow {
             anchors.right : parent.right
 
         // MyLabel { tiptext:"hehehhehehe" }
-        MyLabel{ id: msgcntst; text: 'MC:'+999}
-        MyLabel{ id: grpcntst; text: 'RC:'+99}
+        MyLabel{ id: msgcntst; objectName:"mainui.stb.msgcntlb"; text: 'MC:'+999}
+        MyLabel{ id: grpcntst; objectName:"mainui.stb.grpcntlb"; text: 'RC:'+99}
         MyLabel{id: curwinst; text: 'CP:'+'MSGWIN'}
-        MyLabel{id: lastlogst; text: 'Ready. wwwweeeeeeeeeeee';
+        MyLabel{id: lastlogst; objectName:"mainui.stb.lastloglb" ; text: 'Ready. wwwweeeeeeeeeeee';
             Layout.fillWidth: true}
         MyButton{
             icon.source:"icons/online_2x.png";
@@ -192,7 +192,7 @@ ApplicationWindow {
             sourceSize.width: 22
             sourceSize.height: 24
         }
-        MyLabel{id:uptimest; text: 'UT:'+999; tiptext: 'Uptime:'+999}
+        MyLabel{id:uptimest; objectName:"mainui.stb.uptimelb"; text: 'UT:'+999; tiptext: 'Uptime:'+999}
         }
     }
 
@@ -406,7 +406,7 @@ ApplicationWindow {
         repeat: true
         running: true
         triggeredOnStart: true
-        onTriggered: { upstatusuptime() }
+        // onTriggered: { upstatusuptime() }
     }
 
     /////

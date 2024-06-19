@@ -22,6 +22,7 @@ Item {
     Aboutuint{ id: uiofnt; objectName: "Aboutuint" }
     property int passwd : 6789 // get property in c++ // works
     objectName: "Aboutuiqml" // findChild in c++ // works
+    // id: aboutuiqml
 
     width: 300
     height: 300

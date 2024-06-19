@@ -48,6 +48,7 @@ func mainorinit() {
 	guiclish.MatrixEventSetcb(onmtxevtcb)
 	guiclish.SetNetreqNotecb(onnetreqnotice)
 	go bgproc()
+	go uptimebgproc()
 	// go fedimac.Appclientmain()
 	// guiclish.Locdb()
 	// startthinmtxproc()
@@ -91,6 +92,35 @@ func bgproc() {
 		guiclish.EmitEventFront("notice", fmt.Sprintf("thisgo,callqml %d", i))
 	}
 }
+func uptimebgproc() {
+	for {
+		if qmlcpm == nil {
+			gopp.SleepSec(1)
+			continue
+		}
+		if true {
+			txt := fmt.Sprintf("%v", time.Since(gopp.StartTime))
+			// btime := time.Now()
+			// Updates can only be scheduled from GUI thread or from QQuickItem::updatePaintNode()
+			minqt.RunonUithread(func() {
+				qmlcpm.stbuptimelb.SetProperty("tiptext", txt)
+				qmlcpm.stbuptimelb.SetProperty("text", txt)
+			})
+			// qmlcpm.stbuptimelb.Property("tiptext")
+			// qmlcpm.stbuptimelb.Property("text")
+
+			// log.Println(time.Since(btime)) // 竟然有1-2ms!!!
+		}
+		gopp.SleepSec(3)
+
+		// btime := time.Now()
+		// for i := 0; i < 100; i++ {
+		// 	minqt.Dlsym0("QObjectProperty1")
+		// }
+		// log.Println(time.Since(btime))
+	}
+}
+
 func startthinmtxproc() {
 	mtxsrv := ""
 	mtxusr := ""

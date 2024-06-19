@@ -25,6 +25,8 @@ int maincxxwgt(int argc, char**argv) {
 #include "QmlCppBridge.h"
 
 QQmlApplicationEngine* qmlapp = nullptr;
+// itis cgofunc
+extern "C" QQmlApplicationEngine* qmlappenginenew(int step);
 
 void onQmlAppEngineCreated(QObject *obj, const QUrl &objUrl) {
     auto url = objUrl;
@@ -43,11 +45,10 @@ void onQmlAppEngineCreated(QObject *obj, const QUrl &objUrl) {
     auto rootobj = rootobjs.value(0); // it's main.qml
     auto uiofnt = rootobj->findChild<QObject*>(QString("Aboutuint"));
     qDebug()<<__FUNCTION__<<uiofnt;
+    qmlappenginenew(3);
 }
 
 
-// itis cgofunc
-extern "C" QQmlApplicationEngine* qmlappenginenew(int step);
 
 extern "C"
 int maincxxqml(int argc, char**argv) {
