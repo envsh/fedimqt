@@ -24,6 +24,28 @@ int maincxxwgt(int argc, char**argv) {
 
 #include "QmlCppBridge.h"
 
+QQmlApplicationEngine* qmlapp = nullptr;
+
+void onQmlAppEngineCreated(QObject *obj, const QUrl &objUrl) {
+    auto url = objUrl;
+                        qDebug()<<__FUNCTION__<<"QmlAppEngine created";
+                        QString resmsg = QString("QmlAppEngineOK %1").arg(objUrl.toString());
+                        if (!obj && url == objUrl) {
+                            resmsg = QString("load error exit %1").arg(objUrl.toString());
+                            qDebug()<<__FUNCTION__<<"load error exit"<<objUrl;
+                            QCoreApplication::exit(-1);
+                        }
+                        qtemitcallqmlcxx(resmsg);
+
+    auto engine = qmlapp;
+    auto rootobjs = engine->rootObjects();
+    // qDebug()<<__FUNCTION__<<rootobjs; // only one
+    auto rootobj = rootobjs.value(0); // it's main.qml
+    auto uiofnt = rootobj->findChild<QObject*>(QString("Aboutuint"));
+    qDebug()<<__FUNCTION__<<uiofnt;
+}
+
+
 extern "C"
 int maincxxqml(int argc, char**argv) {
     // QmlCppBridge::regist();
@@ -31,6 +53,7 @@ int maincxxqml(int argc, char**argv) {
 
     // QT_DEBUG_PLUGINS=1 DYLD_PRINT_LIBRARIES=1 ./exe
     QQmlApplicationEngine engine;
+    qmlapp = &engine;
     // QQmlEngine::addImportPath();
     // QQmlEngine::importPathList();
     auto qmldirs = engine.importPathList();
@@ -47,14 +70,7 @@ int maincxxqml(int argc, char**argv) {
     qDebug()<<__FUNCTION__<<"():"<<"main.qml:"<<url;
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
                      [url](QObject *obj, const QUrl &objUrl) {
-                        qDebug()<<__FUNCTION__<<"QmlAppEngine created";
-                        QString resmsg = QString("QmlAppEngineOK %1").arg(objUrl.toString());
-                        if (!obj && url == objUrl) {
-                            resmsg = QString("load error exit %1").arg(objUrl.toString());
-                            qDebug()<<__FUNCTION__<<"load error exit"<<objUrl;
-                            QCoreApplication::exit(-1);
-                        }
-                        qtemitcallqmlcxx(resmsg);
+                        onQmlAppEngineCreated(obj, objUrl);
                      },
                      Qt::QueuedConnection);
     engine.load(url);
@@ -67,6 +83,7 @@ int maincxxqml(int argc, char**argv) {
 
     return app.exec();
 }
+
 
 // QT_DEBUG_PLUGINS=1 DYLD_PRINT_LIBRARIES=1 ./exe
 

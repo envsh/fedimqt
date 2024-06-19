@@ -202,6 +202,7 @@ ApplicationWindow {
     property int netreqdownlen: 0;
 
     QmlCppBridge {    id : qcffi }
+    // Aboutuint{ id: uiofnt }
     // ShareState { id: Sss}
     // SingletonDemo { id: oneinst } // not work
 
@@ -332,6 +333,7 @@ ApplicationWindow {
     function onQmlAppEngineCreated(msg) {
         // init some here
         Tspp.debug("wtodo", msg, Sss.bkdretpromis);
+        // Tspp.debug("uiofnt.qtrtver", uiofnt.qtrtver);
         let rv = invokebkd("qmlAppEngineCreated"); // notify go
         // check account exists, and login default one
         // if no account, switch to login page

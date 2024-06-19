@@ -8,6 +8,8 @@ import QtQuick.Layouts
 
 import "../qmlpp"
 
+import Aboutuint
+
 // Rectangle {}
 // Text 
 // Button
@@ -15,6 +17,10 @@ import "../qmlpp"
 
 // Rectangle {
 Item {
+    // 为什么在main.qml里可以初始化，在这就不行呢？
+    // 在这需要import一下？？？
+    Aboutuint{ id: uiofnt; objectName: "Aboutuint" }
+
     width: 300
     height: 300
 
@@ -34,9 +40,9 @@ Item {
         MyLabel {text: JSON.stringify(Qt.platform)}
 
         MyLabel {text: "CompQtVer"}
-        MyLabel {id:compqtver; text: ""}
+        MyLabel {id:compqtver; text: uiofnt.qtctver}
         MyLabel {text: "RunQtVer"}
-        MyLabel {id:rtqtver; text: ""}
+        MyLabel {id:rtqtver; text: uiofnt.qtrtver}
         MyLabel {text: "RunGoVer"}
         MyLabel {id:rtgover; text: ""}
 
@@ -48,14 +54,17 @@ Item {
 
         MyLabel {text: "Workdir"}
         MyLabel {id:workdir; text: ""}
+
+        MyLabel {text: "TestProp1"}
+        MyLabel {id: testprop1; text: ""}
     }
 
     /////
     function setcompqtver(val) {
-        compqtver.text = val;
+        // compqtver.text = val;
     }
     function setrtqtver(val) {
-        rtqtver.text = val;
+        // rtqtver.text = val;
     }
     function setworkdir(val) {
         workdir.text = val;

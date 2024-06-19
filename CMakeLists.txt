@@ -31,6 +31,13 @@ qt_add_executable(helloworld
     ${UISRCS}
     # ./uis/vlistview.ui
 
+    srcc/qtuninline.cpp
+    srcc/aboutui.cpp
+    srcc/appwinui.cpp
+    srcc/msgwinui.cpp
+    srcc/roomwinui.cpp
+    srcc/msgmodel.cpp
+    srcc/roommodel.cpp
     QmlCppBridge.cpp
     myitemdg.cpp
     myview.cpp
@@ -48,13 +55,14 @@ set_source_files_properties(srcui/Sss.qml
 file(GLOB qmlfiles CONFIGURE_DEPENDS RELATIVE ${projdir} srcui/*.qml
     qmlpp/*.qml qmlpp/*.js)
 file(GLOB iconfiles CONFIGURE_DEPENDS RELATIVE ${projdir} icons/*.png icons/*.gif)
-message("icons ${qmlfiles}")
+# message("icons ${qmlfiles}")
 if(${ANDROID})
 qt_add_qml_module(helloworld
     URI mainqml
     VERSION 1.0
     # RESOURCE_PREFIX /my.company.com/imports
     RESOURCE_PREFIX /
+    DEPENDENCIES QtQuick QtQuickControls2
 )
 qt_target_qml_sources(helloworld
     QML_FILES main.qml
@@ -142,6 +150,15 @@ add_custom_target(showapk
     COMMAND ls -lh ${projdir}/build/android-build/helloworld.apk
 )
 add_dependencies(showapk helloworld)
+
+#####
+# qt_generate_deploy_qml_app_script(
+#     TARGET helloworld
+#     OUTPUT_SCRIPT deploy_script
+#     MACOS_BUNDLE_POST_BUILD
+#     NO_UNSUPPORTED_PLATFORM_ERROR
+#     DEPLOY_USER_QML_MODULES_ON_UNSUPPORTED_PLATFORM
+# )
 
 ### clean some
 add_custom_target(clngo rm -fv ${projdir}/libhellogo.h ${projdir}/jniLibs/libhellogo.h)

@@ -67,6 +67,21 @@ func mainorinit() {
 func bgproc() {
 	{
 
+		v := minqt.QVarintNew(12345)
+		// log.Println(v)
+		log.Println(v, v.Toint())
+		v.Dtor()
+		v = minqt.QVarintNew(int64(888))
+		log.Println(v, v.Toint64())
+		v.Dtor()
+
+		v = minqt.QVarintNew("abcde")
+		log.Println(v, v.Tostr())
+		v.Dtor()
+
+		var x = 123
+		v = minqt.QVarintNew((voidptr)(&x))
+		log.Println(v, v.Toptr(), &x)
 	}
 
 	for i := 0; ; i++ {

@@ -411,7 +411,7 @@ ScrollView {
                 itemx = mdl.get(pos);
                 if (item.Mtimems>=item0.Mtimems && item.Mtimems<=itemx.Mtimems) {
                     inspos = pos;
-                    Tspp.debug("find times:", i, cnt);
+                    // Tspp.debug("find times:", i, cnt);
                     break;
                 }else if (item.Mtimems<item0.Mtimems) {
                     end = pos;
