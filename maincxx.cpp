@@ -46,18 +46,18 @@ void onQmlAppEngineCreated(QObject *obj, const QUrl &objUrl) {
 }
 
 
+// itis cgofunc
+extern "C" QQmlApplicationEngine* qmlappenginenew(int step);
+
 extern "C"
 int maincxxqml(int argc, char**argv) {
     // QmlCppBridge::regist();
     QGuiApplication app (argc, argv, 0);
 
     // QT_DEBUG_PLUGINS=1 DYLD_PRINT_LIBRARIES=1 ./exe
-    QQmlApplicationEngine engine;
-    qmlapp = &engine;
-    // QQmlEngine::addImportPath();
-    // QQmlEngine::importPathList();
-    auto qmldirs = engine.importPathList();
-    qDebug()<<__FUNCTION__<<"():"<<"qmldirs:"<<qmldirs;
+    // QQmlApplicationEngine engine;
+    QQmlApplicationEngine *engine = qmlappenginenew(0) ;
+    qmlapp = engine;
 
     // engine.loadFromModule("QtQuick", "Rectangle"); //  No module named "QtQuick" found???
     // const QUrl url(u"qrc:/alarms/main.qml"_s);
@@ -68,19 +68,29 @@ int maincxxqml(int argc, char**argv) {
     const QUrl url("./main.qml");
     #endif
     qDebug()<<__FUNCTION__<<"():"<<"main.qml:"<<url;
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
+    QObject::connect(engine, &QQmlApplicationEngine::objectCreated, &app,
                      [url](QObject *obj, const QUrl &objUrl) {
                         onQmlAppEngineCreated(obj, objUrl);
                      },
                      Qt::QueuedConnection);
-    engine.load(url);
+
+    // run flow return back to go
+    qmlappenginenew(1);
+
+    // QQmlEngine::addImportPath();
+    // QQmlEngine::importPathList();
+    auto qmldirs = engine->importPathList();
+    qDebug()<<__FUNCTION__<<"():"<<"qmldirs:"<<qmldirs;
+
+    engine->load(url);
 
      // should be ApplicationWindow in main.qml
-    auto rootobj = engine.rootObjects().value(0);
+    auto rootobj = engine->rootObjects().value(0);
     // qDebug()<<rootobj;
     QmlCppBridge::setrootwin(rootobj);
     qtemitcallqmlcxx(QString("hello this c++, ")+QString(QT_VERSION_STR));
 
+    qmlappenginenew(2);
     return app.exec();
 }
 

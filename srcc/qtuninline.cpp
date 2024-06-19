@@ -50,8 +50,16 @@ QObject* QObjectFindChild1(QObject*obj, char*str) {
     auto rv = obj->findChild<QObject*>(str);
     return rv;
 }
+QVariant* QObjectProperty1(QObject*obj, char*str) {
+    auto rv = obj->property(str);
+    return new QVariant(rv);
+}
 
 // qml
+QQmlApplicationEngine* QQmlApplicationEngineNew() {
+    auto e = new QQmlApplicationEngine();
+    return e;
+}
 void QQmlApplicationEngineLoad1(QQmlApplicationEngine*e, char*str) {
     auto url = QUrl(str);
     e->load(url);

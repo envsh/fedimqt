@@ -20,6 +20,8 @@ Item {
     // 为什么在main.qml里可以初始化，在这就不行呢？
     // 在这需要import一下？？？
     Aboutuint{ id: uiofnt; objectName: "Aboutuint" }
+    property int passwd : 6789 // get property in c++ // works
+    objectName: "Aboutuiqml" // findChild in c++ // works
 
     width: 300
     height: 300

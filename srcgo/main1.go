@@ -130,7 +130,9 @@ var qtemitcallqmlfnptr = voidptr(nil)
 func callqml(jstr string) {
 	gopp.NilPrint(qtemitcallqmlfnptr, "fnptr nil")
 	// C.qtemitcallqml(C.CString(jstr))
-	var jstr4c = cgopp.StrtoCharpRef(&jstr)
+	// var jstr4c = cgopp.StrtoCharpRef(&jstr)
+	jstr4c := cgopp.CString(jstr)
+	defer cgopp.Cfree(jstr4c)
 	cgopp.Litfficallg(qtemitcallqmlfnptr, jstr4c)
 }
 

@@ -23,8 +23,10 @@ void* QVariantToptr(QVariant*p);
 // void* QVariantNewListstr();
 
 QObject* QObjectFindChild1(QObject*obj, char*str);
+QVariant* QObjectProperty1(QObject*obj, char*str);
 
 // qml
+QQmlApplicationEngine* QQmlApplicationEngineNew();
 void QQmlApplicationEngineLoad1(QQmlApplicationEngine*e, char*str);
 QObject* QQmlApplicationEngineRootObject1(QQmlApplicationEngine*e);
 
