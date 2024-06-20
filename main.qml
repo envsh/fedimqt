@@ -196,6 +196,22 @@ ApplicationWindow {
         }
     }
 
+    ListView {
+        width: parent.width
+        height: 200
+    model: ListModelBase {
+        clazz: "msglstmdl" // 用来选择 roleNames 列表
+    }
+    delegate: Rectangle {
+        width: 200
+        height: 50
+        color: Material.background
+        MyLabel {
+            text: value
+        }
+    }
+    }
+
     ///////// script
     property bool netreqbegin: false;
     property int netrequplen: 0;
@@ -205,6 +221,7 @@ ApplicationWindow {
     // Aboutuint{ id: uiofnt }
     // ShareState { id: Sss}
     // SingletonDemo { id: oneinst } // not work
+
 
     function invokebkd(cmd, ...args) {
         let req = {Cmd: cmd, Argv: args};

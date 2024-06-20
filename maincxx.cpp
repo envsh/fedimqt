@@ -6,6 +6,7 @@
 #include <QtQuick>
 
 #include "vlistview.h"
+// #include "srcc/modelbase.h"
 
 extern "C"
 int maincxxwgt(int argc, char**argv) {
@@ -46,6 +47,8 @@ void onQmlAppEngineCreated(QObject *obj, const QUrl &objUrl) {
     auto uiofnt = rootobj->findChild<QObject*>(QString("Aboutuint"));
     qDebug()<<__FUNCTION__<<uiofnt;
     qmlappenginenew(3);
+
+    // new ListModelBase();
 }
 
 

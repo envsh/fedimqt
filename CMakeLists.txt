@@ -32,6 +32,7 @@ qt_add_executable(helloworld
     # ./uis/vlistview.ui
 
     srcc/qtuninline.cpp
+    srcc/modelbase.cpp
     srcc/aboutui.cpp
     srcc/appwinui.cpp
     srcc/msgwinui.cpp
