@@ -20,12 +20,13 @@ void QmlCppBridge::setrootwin(QObject*rw) {
 }
 
 extern "C" { void qmlinvokenative(char*, uintptr_t, char**, uintptr_t*); }
+extern "C" { void qmlcalljsfunc(char*, uintptr_t, char**, uintptr_t*); }
 
 QString QmlCppBridge::invoke(QString jstr) {
         // qDebug()<<"hello invoked"<<jstr<<jstr.length();
         // note: jstr.length() != jstr.toUtf8().length() when have cjk chars
         auto bcc = jstr.toUtf8();
-        qDebug()<<__FUNCTION__<<"(): hello invoked"<<jstr<<bcc.length()<<jstr.length();
+        // qDebug()<<__FUNCTION__<<"(): hello invoked"<<jstr<<bcc.length()<<jstr.length();
 
         char* retstr = nullptr;
         uintptr_t retlen = 0;
@@ -35,6 +36,23 @@ QString QmlCppBridge::invoke(QString jstr) {
         delete(retstr);
         return rv;
 }
+
+QString QmlCppBridge::calljs(QString jstr) {
+        // qDebug()<<"hello invoked"<<jstr<<jstr.length();
+        // note: jstr.length() != jstr.toUtf8().length() when have cjk chars
+        auto bcc = jstr.toUtf8();
+        // qDebug()<<__FUNCTION__<<"(): hello invoked"<<jstr<<bcc.length()<<jstr.length();
+
+        char* retstr = nullptr;
+        uintptr_t retlen = 0;
+        qmlcalljsfunc(bcc.data(), bcc.length(), &retstr, &retlen);
+        // qDebug()<<__FUNCTION__<<"res"<<retlen;
+        auto rv = QString(retstr); // todo get the ownership of retstr
+        delete(retstr);
+        return rv;
+}
+
+
 
 // call qml slot/function
 void qtemitcallqmlcxx(QString str) {

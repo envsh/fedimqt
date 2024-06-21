@@ -14,6 +14,8 @@ import QtQuick.Window
 
 import "../qmlpp"
 
+import ListModelBase // C++/Go implmention
+
 // how singleton main.js???
 // import js now, from tspp/main.js
 // import "../main.js" as Lib;
@@ -66,8 +68,18 @@ ScrollView {
             MenuItem { text: "Copy" }
             MenuItem { text: "Paste" }
         }
+        // Rectangle {
+        //     width: 300
+        //     height: 50
+        //     MyLabel {color: "red"; text:"nocontent"; visible: msglstmdl.count<=0}
+        // }
 
-        model: HelloModel{id: msglstmdl}
+        // model: HelloModel{id: msglstmdl}
+    model: ListModelBase {
+        // clazz: "msglstmdl" // 用来选择 roleNames 列表
+        objectName: "msglstmdl" // 用来选择 roleNames 列表
+        id: msglstmdl
+    }
         delegate: Rectangle {
             id: grid
             // anchors.fill: parent
@@ -272,8 +284,8 @@ ScrollView {
             // Tspp.debug("drag end", listView.verticalOvershoot, listView.draggingVertically);
             // todo android 上，这个值很大，大概很容易达到 +-200
             if (listView.verticalOvershoot < -6.0) {
-                Tspp.info("fetch more triggered", listView.verticalOvershoot);
-                logui.addlog("fetch more triggered " + listView.verticalOvershoot);
+                Tspp.info("fetch more older triggered", listView.verticalOvershoot);
+                logui.addlog("fetch more older triggered " + listView.verticalOvershoot);
             } else if (listView.verticalOvershoot > 16.0) {
                 Tspp.info("refresh latest triggered", listView.verticalOvershoot);
             }

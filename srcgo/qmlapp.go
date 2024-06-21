@@ -5,8 +5,10 @@ package main
 */
 import "C"
 import (
+	"fmt"
 	"log"
 
+	"github.com/kitech/gopp"
 	"github.com/kitech/minqt"
 )
 
@@ -33,11 +35,43 @@ func qmlappenginenew(step int) voidptr {
 		robj := qmlape.RootObject()
 		qmlcpm = qmlcompmannew(robj)
 
+		if false {
+			tstadditems()
+		}
 	default:
 		log.Println("not expect", step)
 	}
 
 	return nil
+}
+
+func init() {
+	var roleNames = map[int]string{256: "Eventid", 257: "Content", 258: "Mtimems", 259: "Roomid", 260: "Roomname", 261: "Sender", 262: "Mtimemsui", 263: "Dtime"}
+	minqt.RegisterModelRoleNames("msglstmdl", gopp.MapValues(roleNames)...)
+}
+
+type tstdata struct {
+	seq int
+}
+
+func (me *tstdata) Data(name string) any {
+	return fmt.Sprintf("tstddd %d(%s)", me.seq, name)
+}
+func (me *tstdata) DedupKey() string {
+	return fmt.Sprintf("%d", me.seq)
+}
+func (me *tstdata) OrderKey() int64 {
+	return int64(me.seq)
+}
+
+func tstadditems() {
+	mdl := qmlcpm.msglstmdl
+	for i := range gopp.RangeA(13) {
+		d := &tstdata{}
+		d.seq = i
+		mdl.Add(d)
+	}
+
 }
 
 type qmlcompman struct {
@@ -52,6 +86,9 @@ type qmlcompman struct {
 	stbnetolnlb  minqt.QObject
 	stbnetbwlb   minqt.QObject
 	stbuptimelb  minqt.QObject
+
+	msglstmdlco minqt.QObject
+	msglstmdl   *minqt.ListModelBase
 
 	/////
 
@@ -79,6 +116,16 @@ func qmlcompmannew(rootobj minqt.QObject) *qmlcompman {
 
 	xobj = robj.FindChild("mainui.stb.uptimelb")
 	me.stbuptimelb = xobj
+
+	xobj = robj.FindChild("msglstmdl")
+	// mdl := (*minqt.ListModelBase)(xobj.Cthis)
+	goobjx := xobj.Property("goobj")
+	log.Println(goobjx, goobjx.Toint64())
+	goobj := minqt.ListModelBaseof(goobjx.Toint64())
+	log.Println(goobj)
+	log.Println(goobj.RowCount())
+	me.msglstmdlco = xobj
+	me.msglstmdl = goobj
 
 	log.Println(me)
 	return me

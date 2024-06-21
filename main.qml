@@ -82,8 +82,10 @@ ApplicationWindow {
             Action { text: qsTr("Scroll Top");
                 onTriggered: msglstwin.scrollvto(true);
                 icon.source: "icons/barbuttonicon_up_2x.png" }
-            Action { text: qsTr("&Copy") }
-            Action { text: qsTr("&Paste") }
+            Action { text: qsTr("&Test ListView");
+                onTriggered: tstlstwin.visible=!tstlstwin.visible}
+            Action { text: qsTr("&Paste"); 
+                onTriggered: calljs("menubar.paste.clicked")}
         }
         Menu {
             title: qsTr("&Help")
@@ -196,21 +198,24 @@ ApplicationWindow {
         }
     }
 
-    ListView {
-        width: parent.width
-        height: 200
-    model: ListModelBase {
-        clazz: "msglstmdl" // 用来选择 roleNames 列表
-    }
-    delegate: Rectangle {
-        width: 200
-        height: 50
-        color: Material.background
-        MyLabel {
-            text: value
-        }
-    }
-    }
+    // ListView {
+    //     visible: false
+    //     id: tstlstwin
+    //     width: parent.width
+    //     height: 200
+    // model: ListModelBase {
+    //     clazz: "msglstmdl" // 用来选择 roleNames 列表
+    //     objectName: "msglstmdl"
+    // }
+    // delegate: Rectangle {
+    //     width: 200
+    //     height: 50
+    //     color: Material.background
+    //     MyLabel {
+    //         text: Content
+    //     }
+    // }
+    // }
 
     ///////// script
     property bool netreqbegin: false;
@@ -226,6 +231,10 @@ ApplicationWindow {
     function invokebkd(cmd, ...args) {
         let req = {Cmd: cmd, Argv: args};
         return qcffi.invoke(Tspp.tojson(req));
+    }
+    function calljs(cmd, ...args) {
+        let req = {Cmd: cmd, Argv: args};
+        return qcffi.calljs(Tspp.tojson(req));
     }
     // all functions are qt slots   
     function oncallqml(jstr) {
