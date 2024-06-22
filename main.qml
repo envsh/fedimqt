@@ -54,7 +54,7 @@ ApplicationWindow {
                 icon.source: "icons/barbuttonicon_forward_gray64.png"}
             Action { text: qsTr("&Prev Page") ; onTriggered: switchpage(true) 
                 icon.source: "icons/barbuttonicon_back_gray64.png"}
-            Action { text: qsTr("Logui"); onTriggered: switchpageidx(3) }
+            Action { text: qsTr("Logui"); onTriggered: switchpageidx_3() }
             Action { text: qsTr("&Aboutui"); onTriggered: switchpageidx(4) }
             Action { text: qsTr("&Room List"); onTriggered: switchpageidx(1) }
             Action { text: qsTr("&Loginui"); onTriggered: switchpageidx(2) }
@@ -87,7 +87,7 @@ ApplicationWindow {
             Action { text: qsTr("&Paste"); 
                 onTriggered: calljs("menubar.paste.clicked")}
            Action { text: qsTr("&Paste2"); 
-                onTriggered: neslot1}
+                onTriggered: neslot1_1('hhh')}
         }
         Menu {
             title: qsTr("&Help")
@@ -125,6 +125,7 @@ ApplicationWindow {
     /// center content
     StackView {
         id: stackwin
+        objectName: "stackwin"
         // anchors.fill: parent
         width : parent.width
         height : parent.height-30
@@ -391,6 +392,8 @@ ApplicationWindow {
         }, StackView.DontLoad);
     }
     function switchpageidx(idx : int) {
+        // todo 未完成
+        // if (true) { calljs("switchpageidx", idx); return; }
         let stkwin = stackwin;
         let curitem = stkwin.currentItem;
         let nxtidx = idx;

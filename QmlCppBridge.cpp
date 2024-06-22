@@ -48,7 +48,7 @@ QString QmlCppBridge::calljs(QString jstr) {
         qmlcalljsfunc(bcc.data(), bcc.length(), &retstr, &retlen);
         // qDebug()<<__FUNCTION__<<"res"<<retlen;
         auto rv = QString(retstr); // todo get the ownership of retstr
-        delete(retstr);
+        // delete(retstr); // go auto free now
         return rv;
 }
 
@@ -63,6 +63,6 @@ extern "C"
 void qtemitcallqml(char* jstr) { 
     // qDebug()<<__FUNCTION__<<"emitqml"<<strlen(jstr)<<jstr;
     auto s = QString(jstr); // todo get the ownership of retstr
-    delete(jstr);
+    // delete(jstr); // go auto free now
     qtemitcallqmlcxx(s);
 }

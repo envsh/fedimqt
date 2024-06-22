@@ -87,6 +87,9 @@ type qmlcompman struct {
 	stbnetbwlb   minqt.QObject
 	stbuptimelb  minqt.QObject
 
+	stkwin   minqt.QObject
+	stkitems []minqt.QObject
+
 	msglstmdlco minqt.QObject
 	msglstmdl   *minqt.ListModelBase
 
@@ -127,6 +130,10 @@ func qmlcompmannew(rootobj minqt.QObject) *qmlcompman {
 	me.msglstmdlco = xobj
 	me.msglstmdl = goobj
 
+	xobj = robj.FindChild("stackwin")
+	me.stkwin = xobj
+	gopp.Info(xobj, "stackwin?")
+	me.stkitems = append(me.stkitems, me.aboutobj, me.aboutobj, me.aboutobj, me.aboutobj)
 	log.Println(me)
 	return me
 }

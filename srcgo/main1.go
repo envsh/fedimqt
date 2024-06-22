@@ -132,7 +132,7 @@ func startthinmtxproc() {
 }
 func onmtxevtcb(hkt *guiclish.Hooktaskqst, msgo *guiclish.Messagestable, isnew bool) {
 	mdl := qmlcpm.msglstmdl
-	log.Println(mdl, hkt, msgo, isnew)
+	// log.Println(mdl, hkt, msgo, isnew)
 	if hkt != nil {
 		// guiclish.EmitEventFront("loadmsgrt", isnew, hkt.Hki)
 		mdl.Add(hkt.Hki)
