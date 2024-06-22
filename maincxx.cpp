@@ -51,10 +51,25 @@ void onQmlAppEngineCreated(QObject *obj, const QUrl &objUrl) {
     // new ListModelBase();
 }
 
+// auto oldqtmsgoutfn = qInstallMessageHandler(nullptr);
+// extern "C" void qtMessageOutputGoimpl(int, const char*, const char*, const char*);
+// void qtMessageOutput(QtMsgType mtype, const QMessageLogContext& ctx, const QString& msg) {
+//     // auto oldfn = (DeclType(qInstallMessageHandler(nullptr)))oldqtmsgoutfn;
+//     // oldqtmsgoutfn(mtype, ctx, msg);
 
+//     int itype = int(mtype);
+//     const char* file = ctx.file;
+//     const char* funcname = ctx.function;
+//     QByteArray cmsg = msg.toUtf8();
+//     qtMessageOutputGoimpl(itype, file, funcname, cmsg.data());
+// }
+
+extern void initQtmsgout();
 
 extern "C"
 int maincxxqml(int argc, char**argv) {
+    initQtmsgout();
+    // oldqtmsgoutfn = qInstallMessageHandler(qtMessageOutput);
     // QmlCppBridge::regist();
     QGuiApplication app (argc, argv, 0);
 

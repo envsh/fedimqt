@@ -86,6 +86,8 @@ ApplicationWindow {
                 onTriggered: tstlstwin.visible=!tstlstwin.visible}
             Action { text: qsTr("&Paste"); 
                 onTriggered: calljs("menubar.paste.clicked")}
+           Action { text: qsTr("&Paste2"); 
+                onTriggered: neslot1}
         }
         Menu {
             title: qsTr("&Help")

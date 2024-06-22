@@ -1,0 +1,1 @@
+../../minqtgo/srcc/mainglob.cpp

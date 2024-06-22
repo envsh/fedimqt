@@ -31,6 +31,7 @@ qt_add_executable(helloworld
     ${UISRCS}
     # ./uis/vlistview.ui
 
+    srcc/mainglob.cpp
     srcc/qtuninline.cpp
     srcc/modelbase.cpp
     srcc/aboutui.cpp
