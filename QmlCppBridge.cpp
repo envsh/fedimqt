@@ -1,5 +1,6 @@
 
 
+
 #include <QtQml>
 
 #include "QmlCppBridge.h"
@@ -19,8 +20,10 @@ void QmlCppBridge::setrootwin(QObject*rw) {
     QObject::connect(QmlCppBridge::inst(), SIGNAL(callqml(QVariant)), rw, SLOT(oncallqml(QVariant)));
 }
 
-extern "C" { void qmlinvokenative(char*, uintptr_t, char**, uintptr_t*); }
-extern "C" { void qmlcalljsfunc(char*, uintptr_t, char**, uintptr_t*); }
+#include <dlfcn.h>
+// extern "C" { void qmlinvokenative(char*, uintptr_t, char**, uintptr_t*); }
+// extern "C" { void qmlcalljsfunc(char*, uintptr_t, char**, uintptr_t*); }
+
 
 QString QmlCppBridge::invoke(QString jstr) {
         // qDebug()<<"hello invoked"<<jstr<<jstr.length();
@@ -30,6 +33,11 @@ QString QmlCppBridge::invoke(QString jstr) {
 
         char* retstr = nullptr;
         uintptr_t retlen = 0;
+
+        typedef void (*fnty)(char*, uintptr_t, char**, uintptr_t*);
+        auto symx = dlsym(RTLD_DEFAULT, "qmlinvokenative");
+        fnty qmlinvokenative = (fnty)symx;
+
         qmlinvokenative(bcc.data(), bcc.length(), &retstr, &retlen);
         // qDebug()<<__FUNCTION__<<"res"<<retlen;
         auto rv = QString(retstr); // todo get the ownership of retstr
@@ -45,6 +53,11 @@ QString QmlCppBridge::calljs(QString jstr) {
 
         char* retstr = nullptr;
         uintptr_t retlen = 0;
+
+        typedef void (*fnty)(char*, uintptr_t, char**, uintptr_t*);
+        auto symx = dlsym(RTLD_DEFAULT, "qmlcalljsfunc");
+        fnty qmlcalljsfunc = (fnty)symx;
+
         qmlcalljsfunc(bcc.data(), bcc.length(), &retstr, &retlen);
         // qDebug()<<__FUNCTION__<<"res"<<retlen;
         auto rv = QString(retstr); // todo get the ownership of retstr

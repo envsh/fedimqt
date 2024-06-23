@@ -22,14 +22,15 @@ int maincxxwgt(int argc, char**argv) {
     return app.exec();
 }
 
-
+#include <dlfcn.h>
 #include "QmlCppBridge.h"
 
 QQmlApplicationEngine* qmlapp = nullptr;
 // itis cgofunc
-extern "C" QQmlApplicationEngine* qmlappenginenew(int step);
+// extern "C" QQmlApplicationEngine* qmlappenginenew(int step);
 
 void onQmlAppEngineCreated(QObject *obj, const QUrl &objUrl) {
+
     auto url = objUrl;
                         qDebug()<<__FUNCTION__<<"QmlAppEngine created";
                         QString resmsg = QString("QmlAppEngineOK %1").arg(objUrl.toString());
@@ -46,36 +47,34 @@ void onQmlAppEngineCreated(QObject *obj, const QUrl &objUrl) {
     auto rootobj = rootobjs.value(0); // it's main.qml
     auto uiofnt = rootobj->findChild<QObject*>(QString("Aboutuint"));
     qDebug()<<__FUNCTION__<<uiofnt;
+
+    typedef int (*fnty)(int);
+    auto symx = dlsym(RTLD_DEFAULT, "qmlappenginenew");
+    fnty qmlappenginenew = (fnty)symx;
+
     qmlappenginenew(3);
 
     // new ListModelBase();
 }
 
-// auto oldqtmsgoutfn = qInstallMessageHandler(nullptr);
-// extern "C" void qtMessageOutputGoimpl(int, const char*, const char*, const char*);
-// void qtMessageOutput(QtMsgType mtype, const QMessageLogContext& ctx, const QString& msg) {
-//     // auto oldfn = (DeclType(qInstallMessageHandler(nullptr)))oldqtmsgoutfn;
-//     // oldqtmsgoutfn(mtype, ctx, msg);
-
-//     int itype = int(mtype);
-//     const char* file = ctx.file;
-//     const char* funcname = ctx.function;
-//     QByteArray cmsg = msg.toUtf8();
-//     qtMessageOutputGoimpl(itype, file, funcname, cmsg.data());
-// }
-
+// impl in minqt/srcc/mainglob.cpp
 extern void initQtmsgout();
 
 extern "C"
 int maincxxqml(int argc, char**argv) {
     initQtmsgout();
+
     // oldqtmsgoutfn = qInstallMessageHandler(qtMessageOutput);
     // QmlCppBridge::regist();
     QGuiApplication app (argc, argv, 0);
 
+    typedef void* (*fnty)(int);
+    auto symx = dlsym(RTLD_DEFAULT, "qmlappenginenew");
+    fnty qmlappenginenew = (fnty)symx;
+
     // QT_DEBUG_PLUGINS=1 DYLD_PRINT_LIBRARIES=1 ./exe
     // QQmlApplicationEngine engine;
-    QQmlApplicationEngine *engine = qmlappenginenew(0) ;
+    QQmlApplicationEngine *engine = (QQmlApplicationEngine *)qmlappenginenew(0) ;
     qmlapp = engine;
 
     // engine.loadFromModule("QtQuick", "Rectangle"); //  No module named "QtQuick" found???
@@ -113,6 +112,15 @@ int maincxxqml(int argc, char**argv) {
     return app.exec();
 }
 
+    const char* argv[] = {
+        "./imqtexe", 0,
+    };
+
+extern "C"
+int maincxxqml0() {
+    int argc = 1;
+    return maincxxqml(argc, (char**)argv);
+}
 
 // QT_DEBUG_PLUGINS=1 DYLD_PRINT_LIBRARIES=1 ./exe
 

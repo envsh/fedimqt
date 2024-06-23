@@ -9,6 +9,7 @@ import (
 
 	"github.com/ebitengine/purego"
 	_ "github.com/ebitengine/purego"
+	"github.com/envsh/fedind/envcfg"
 	"github.com/envsh/fedind/guiclish"
 	"github.com/kitech/gopp"
 	"github.com/kitech/gopp/cgopp"
@@ -20,8 +21,13 @@ import (
 	_ "github.com/kitech/minqt"
 )
 
+// #cgo LDFLAGS: -L../ -lhelloworld
+
 /*
 // extern void qtemitcallqml(char*);
+
+
+
 */
 import "C"
 
@@ -31,16 +37,32 @@ var mainrun = false
 func main() {
 	//
 	mainrun = true
+	log.Println(envcfg.Exepath)
+
+	gomaininit()
+	gomainexe()
+}
+
+//extern gomainexe()
+func gomainexe() {
+	symx := cgopp.Dlsym0("maincxxqml0")
+	var fnaddr func() int
+	purego.RegisterFunc(&fnaddr, uintptr(symx))
+	log.Println(symx, fnaddr)
+	fnaddr() //
+
+	gopp.Forever()
 }
 
 // as main of sharedlib
 func init() {
-	if !mainrun {
-		mainorinit()
-	}
+	// mainbyinit()
 }
 
-func mainorinit() {
+// this nonblock
+
+//extern gomaininit
+func gomaininit() {
 	log.SetFlags(log.Flags() | log.Lshortfile ^ log.Ldate)
 	log.Println("mainorinit")
 	interopinit()

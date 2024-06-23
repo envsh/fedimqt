@@ -27,7 +27,7 @@ set(tgos ${CMAKE_SYSTEM_NAME})
 
 qt_wrap_ui(UISRCS vlistview.ui)
 
-qt_add_executable(helloworld
+set(MAINSRC
     ${UISRCS}
     # ./uis/vlistview.ui
 
@@ -47,6 +47,11 @@ qt_add_executable(helloworld
     maincxx.cpp
     mainc.c
 )
+if(${ANDROID})
+qt_add_executable(helloworld ${MAINSRC})
+else() ### ANDROI
+qt_add_library(helloworld SHARED ${MAINSRC})
+endif()
 
 # must before qt_add_qml_module
 set_source_files_properties(srcui/Sss.qml
@@ -83,9 +88,15 @@ qt_target_qml_sources(helloworld
 )
 endif()
 
-
-target_link_libraries(helloworld PRIVATE Qt6::Widgets Qt6::Qml Qt6::QmlIntegration Qt6::Quick Qt6::QuickControls2 hellogo)
-target_link_directories(helloworld PUBLIC ".")
+### android 上是 cppexe link golib
+### pc 上是 goexe link cpplib
+if(${ANDROID})
+set(GOLIB "hellogo")
+endif()
+target_link_libraries(helloworld PRIVATE Qt6::Widgets Qt6::Qml Qt6::QmlIntegration Qt6::Quick Qt6::QuickControls2
+    ${GOLIB}
+)
+target_link_directories(helloworld PUBLIC "./")
 
 set_target_properties(helloworld PROPERTIES
     WIN32_EXECUTABLE ON
@@ -116,7 +127,7 @@ if(${ANDROID})
 set(NDKSYSROOT "${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/darwin-x86_64/sysroot")
 set(CGO_CFLAGSx "-g -O0 -arch arm64 ")
 set(CGO_CCx "${NDKSYSROOT}/../bin/aarch64-linux-android21-clang")
-message("CGO_CFLAGS=${CGO_CFLAGSx}")
+# message("CGO_CFLAGS=${CGO_CFLAGSx}, CGO_LDFLAGS=${CGO_LDFLAGSx}")
 add_custom_command(OUTPUT ../jniLibs/libhellogo.h
     WORKING_DIRECTORY "${CMAKE_HOME_DIRECTORY}/srcgo"
     COMMAND pwd && go version
@@ -133,25 +144,43 @@ add_custom_command(OUTPUT ../jniLibs/libhellogo.h
     DEPENDS ${projdir}/srcgo/*.go ${projdir}/srcgo/go.mod
 )
 add_custom_target(gocc COMMENT "gocc222 for android" DEPENDS ../jniLibs/libhellogo.h)
+add_dependencies(helloworld gocc)
 else() #############
-add_custom_command(OUTPUT libhellogo.h COMMENT "gocc111"
+set(CGO_LDFLAGSx "-L../ -lhelloworld")
+# message("CGO_CFLAGS=${CGO_CFLAGSx}, CGO_LDFLAGS=${CGO_LDFLAGSx}")
+add_custom_command(OUTPUT ../hellogo COMMENT "gocc111"
     WORKING_DIRECTORY "${CMAKE_HOME_DIRECTORY}/srcgo"
     COMMAND pwd && go version
-    COMMAND go build -buildmode=c-shared -o ../libhellogo${shextsfx} ./
-    COMMAND ls -lh ../libhellogo${shextsfx} && file ../libhellogo${shextsfx}
-    DEPENDS ${projdir}/srcgo/*.go
+    # COMMAND go build -buildmode=c-shared -o ../libhellogo${shextsfx} ./
+    # COMMAND ls -lh ../libhellogo${shextsfx} && file ../libhellogo${shextsfx}
+    COMMAND XXX=5 CGO_LDFLAGS=${CGO_LDFLAGSx} CGO_ENABLED=1 go build -v -x -o ../hellogo ./
+    COMMAND ls -lh ../hellogo && file ../hellogo
+    DEPENDS ${projdir}/srcgo/*.go ${projdir}/srcgo/go.mod
     # COMMAND_EXPAND_LISTS
 )
-add_custom_target(gocc COMMENT "gocc222" DEPENDS libhellogo.h )
+add_custom_target(gocc COMMENT "gocc222" DEPENDS ../hellogo )
+add_dependencies(gocc helloworld)
 endif()
-add_dependencies(helloworld gocc)
+
 
 add_custom_target(showapk
     COMMAND pwd
     COMMAND ls -lh ${projdir}/build/android-build/build/outputs/apk/debug/android-build-debug.apk
     COMMAND ls -lh ${projdir}/build/android-build/helloworld.apk
 )
-add_dependencies(showapk helloworld)
+# add_dependencies(showapk helloworld)
+
+add_custom_target(chkldd 
+    COMMAND echo "checking android libhelloworld.so ...."
+    COMMAND objdump -x ${projdir}/build/libhelloworld_arm64-v8a.so|grep NEEDED
+    COMMAND echo "checking android libhellogo.so ...."
+    COMMAND objdump -x ${projdir}/build/libhellogo.so|grep NEEDED
+
+    # COMMAND echo "checking desktop libhellogo.so ...."
+    COMMAND otool -L ${projdir}/hellogo
+
+    COMMAND otool -L ${projdir}/libhelloworld.dylib
+)
 
 #####
 # qt_generate_deploy_qml_app_script(

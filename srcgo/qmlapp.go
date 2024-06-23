@@ -21,10 +21,14 @@ var qmlcpm *qmlcompman
 
 //export qmlappenginenew
 func qmlappenginenew(step int) voidptr {
+	gopp.Info(step)
 	switch step {
 	case 0:
+		gopp.Info(step)
 		e := minqt.QQmlApplicationEngineNew()
 		qmlape = e
+		gopp.Info(step)
+		// gopp.SleepSec(3)
 		return e.Cthis
 
 	case 1:

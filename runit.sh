@@ -24,7 +24,9 @@ export QML2_IMPORT_PATH=$PWD/
 export QT_QUICK_CONTROLS_STYLE=Material
 export QT_QUICK_CONTROLS_MATERIAL_THEME=Dark
 
-./helloworld.app/Contents/MacOS/helloworld
+set -x
+# ./helloworld.app/Contents/MacOS/helloworld
+./hellogo
 
 # the QML_IMPORT_PATH line works
 # or error like this: module "QtQuick.Controls" plugin "qtquickcontrols2plugin" not found
