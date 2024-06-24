@@ -5,6 +5,7 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/envsh/fedind/guiclish"
 	"github.com/kitech/gopp"
 	"github.com/kitech/gopp/cgopp"
 	"github.com/kitech/minqt"
@@ -77,14 +78,17 @@ type MsglstPage struct {
 // todo
 func (me *MsglstPage) Scrollvto(top bool) {
 	obj1 := qmlcpm.rootobj.FindChild("scroll1")
-	log.Println(obj1)
+	gopp.NilPrint(obj1.Cthis, "cannot get scroll1", qmlcpm.rootobj)
 	obj2 := obj1.Property("ScrollBar")
-	log.Println(obj2)
+	gopp.NilPrint(obj2.Cthis, "cannot get ScrollBar", obj1)
 	obj3 := obj1.Property("vertical")
-	log.Println(obj3)
+	gopp.NilPrint(obj3.Cthis, "cannot get vertical", obj1)
 
 	// defer obj2.Dtor()
 	// defer obj3.Dtor()
+
+	// since noway direct set position value, just callback qmljs
+	guiclish.EmitEventFront("msglst.scrollvto", top)
 
 	/*
 	   let sbv = scroll1.ScrollBar.vertical;

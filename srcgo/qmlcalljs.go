@@ -85,6 +85,8 @@ func cmdrun(cio *guiclish.Cmdinfo) {
 		msglstwin.Setccfmt(int(cio.Argv[0].(float64)))
 	case "msglst.sendmsg":
 		msglstwin.Sendmsg()
+	case "loadmsg":
+		mainui.onloadmsg()
 	}
 }
 

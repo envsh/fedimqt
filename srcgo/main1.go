@@ -126,19 +126,8 @@ func uptimebgproc() {
 			gopp.SleepSec(1)
 			continue
 		}
-		if true {
-			txt := fmt.Sprintf("%v", time.Since(gopp.StartTime))
-			// btime := time.Now()
-			// Updates can only be scheduled from GUI thread or from QQuickItem::updatePaintNode()
-			minqt.RunonUithread(func() {
-				qmlcpm.stbuptimelb.SetProperty("tiptext", txt)
-				qmlcpm.stbuptimelb.SetProperty("text", txt)
-			})
-			// qmlcpm.stbuptimelb.Property("tiptext")
-			// qmlcpm.stbuptimelb.Property("text")
 
-			// log.Println(time.Since(btime)) // 竟然有1-2ms!!!
-		}
+		mainui.uptimesetuit()
 		gopp.SleepSec(3)
 
 		// btime := time.Now()
@@ -158,23 +147,27 @@ func startthinmtxproc() {
 		log.Println("main.thinmtxproc done", mtxsrv, mtxusr, mtxacctk)
 	}()
 }
-func onmtxevtcb(hkt *guiclish.Hooktaskqst, msgo *guiclish.Messagestable, isnew bool) {
+
+func onmtxevtcb(hkt *guiclish.Hooktaskqst, msgo *guiclish.Messagestable, isnew bool) (added bool) {
 	mdl := qmlcpm.msglstmdl
 	// log.Println(mdl, hkt, msgo, isnew)
 	if hkt != nil {
 		// guiclish.EmitEventFront("loadmsgrt", isnew, hkt.Hki)
-		mdl.Add(hkt.Hki)
+		added = mdl.Add(hkt.Hki)
 	}
 	if msgo != nil {
 		// guiclish.EmitEventFront("loadmsgrt", isnew, msgo)
-		mdl.Add(msgo)
+		added = mdl.Add(msgo)
 	}
+	return
 }
 func onnetreqnotice(begin bool, len int) {
-	guiclish.EmitEventFront("netreqnote", begin, len)
+	// guiclish.EmitEventFront("netreqnote", begin, len)
+	mainui.onnetreqnote(begin, len)
 }
 func onnetonlinestatus(online bool, errmsg string) {
-	guiclish.EmitEventFront("netstatus", online, errmsg)
+	// guiclish.EmitEventFront("netstatus", online, errmsg)
+	mainui.onnetstatus(online, errmsg)
 }
 
 // /// ffi section

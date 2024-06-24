@@ -62,7 +62,10 @@ ApplicationWindow {
         }
         Menu {
             title: qsTr("&Dev")
-            Action { text: qsTr("&Load Message") ; onTriggered: onloadmsg() }
+            Action { text: qsTr("&Load Message") ;
+                onTriggered: calljs("loadmsg");
+                // onTriggered: onloadmsg()
+            }
             Action { text: qsTr("&Load More Older"); onTriggered: msglstwin.fetchmore() }
             Action { text: qsTr("&Load More Older Rt"); onTriggered: msglstwin.fetchmorert("") }
             Action { text: qsTr("&AutoText"); 
@@ -85,12 +88,12 @@ ApplicationWindow {
         Menu {
             title: qsTr("&Misc")
             Action { text: qsTr("Scroll Bottom"); 
-                onTriggered: msglstwin.scrollvto(false);
-                // onTriggered: calljs("msglst.scrollvto", false);
+                // onTriggered: msglstwin.scrollvto(false);
+                onTriggered: calljs("msglst.scrollvto", false);
                 icon.source: "icons/barbuttonicon_down_2x.png"}
             Action { text: qsTr("Scroll Top");
-                // onTriggered: calljs("msglst.scrollvto", true);
-                onTriggered: msglstwin.scrollvto(true);
+                onTriggered: calljs("msglst.scrollvto", true);
+                // onTriggered: msglstwin.scrollvto(true);
                 icon.source: "icons/barbuttonicon_up_2x.png" }
             Action { text: qsTr("&Test ListView");
                 onTriggered: tstlstwin.visible=!tstlstwin.visible}
@@ -182,6 +185,7 @@ ApplicationWindow {
             // icon.source:"icons/remove-symbol_gray64.png";
             // icon.color: "black"
             id: onlinest
+            objectName: "onlinest"
             tiptext: "net unknown"
             implicitWidth: 24;
             implicitHeight:24;
@@ -191,6 +195,7 @@ ApplicationWindow {
             visible: !netreqbegin
             icon.source: "icons/transfer.png";
             id: netreqst
+            objectName: "netreqstnorm"
             // tiptext: "ffff"
             tiptext: 'UP:'+netrequplen+", DL:"+netreqdownlen
             implicitWidth: 22;
@@ -199,6 +204,8 @@ ApplicationWindow {
             display: AbstractButton.IconOnly
             }
         AnimatedImage{
+            id: netreqstloading
+            objectName: "netreqstloading"
             visible: netreqbegin
             paused : !netreqbegin
             source: "icons/loadingsp.gif";
@@ -272,10 +279,14 @@ ApplicationWindow {
     function dispatchEvent(jso) {
         switch (jso.Cmd) {
             case "notice":
-                if (jso.Argv[0] == "olnchkerr") { upstatusll(Sss.onolnchkerr(jso.Argv)) }
-                else if (jso.Argv[0] == "rtqtver") { aboutui.setrtqtver(jso.Argv[1]) }
-                else if (jso.Argv[0] == "workdir") { aboutui.setworkdir(jso.Argv[1]) }
-                else if (jso.Argv[0] == "rtgover") { aboutui.setrtgover(jso.Argv[1]) }
+                // if (jso.Argv[0] == "olnchkerr") {upstatusll(Sss.onolnchkerr(jso.Argv)) }
+                // else if (jso.Argv[0] == "rtqtver") { aboutui.setrtqtver(jso.Argv[1]) }
+                // else if (jso.Argv[0] == "workdir") { aboutui.setworkdir(jso.Argv[1]) }
+                // else if (jso.Argv[0] == "rtgover") { aboutui.setrtgover(jso.Argv[1]) }
+                // else {Tspp.debug("oohwt", jso.Cmd, jso.Argv)}
+                break;
+            case "msglst.scrollvto":
+                msglstwin.scrollvto(jso.Argv[0]);
                 break;
             case "sendmsg":
                 msglstwin.sendmsgret(jso);

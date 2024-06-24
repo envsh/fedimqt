@@ -1,0 +1,159 @@
+package main
+
+import (
+	"fmt"
+	"log"
+	"time"
+
+	"github.com/envsh/fedind/guiclish"
+	"github.com/kitech/gopp"
+	"github.com/kitech/minqt"
+)
+
+var mainui = &mainuist{}
+
+type mainuist struct {
+}
+
+func (me *mainuist) uptimesetuit() {
+	minqt.RunonUithread(me.uptimeset)
+}
+func (me *mainuist) uptimeset() {
+
+	tm1 := gopp.TimeToFmt1(gopp.StartTime)
+	dur := time.Since(gopp.StartTime)
+	txt := fmt.Sprintf("%v", gopp.Dur2hum(dur))
+	// btime := time.Now()
+	// Updates can only be scheduled from GUI thread or from QQuickItem::updatePaintNode()
+
+	qmlcpm.stbuptimelb.SetProperty("text", txt)
+	qmlcpm.stbuptimelb.SetProperty("tiptext", txt+" "+tm1)
+
+	// qmlcpm.stbuptimelb.Property("tiptext")
+	// qmlcpm.stbuptimelb.Property("text")
+
+	// log.Println(time.Since(btime)) // 竟然有1-2ms!!!
+
+}
+
+func (me *mainuist) onloadmsg() {
+	cond := "1=1 limit 300"
+	locdb := guiclish.Locdb()
+	recs, err := locdb.Loadmsgs(cond)
+	gopp.ErrPrint(err, cond)
+	addcnt := 0
+	for _, rec := range recs {
+		added := onmtxevtcb(nil, rec, false)
+		addcnt += gopp.IfElse2(added, 1, 0)
+	}
+	gopp.Println("addcnt/total", addcnt, len(recs))
+
+	msglstwin.Scrollvto(true)
+
+	minqt.RunonUithread(me.upstatusmc)
+
+	/*
+		cio.Retful = true
+		cond := cio.Argv[0].(string)
+		locdb := Locdb()
+		recs, err := locdb.Loadmsgs(cond)
+		gopp.ErrPrint(err, cond)
+		for i, rec := range recs {
+			// bcc, err := json.Marshal(rec)
+			// gopp.ErrPrint(err, i)
+			// cio.Retv = append(cio.Retv, string(bcc))
+			cio.Retv = append(cio.Retv, rec)
+			gopp.GOUSED(i)
+		}
+	*/
+	/*
+		let req = Tspp.tojson({Cmd: "loadmsg", Argv:["1=1 limit 300"]});
+		let resp = qcffi.invoke(req);
+	*/
+}
+
+func (me *mainuist) upstatusmc() {
+	cnt := qmlcpm.msglstmdl.RowCount()
+	qmlcpm.stbmsgcntlb.SetProperty("text", fmt.Sprintf("MC: %d", cnt))
+}
+
+func (me *mainuist) onolnchkerr(msg string) string {
+	if msg == sss.olnchkerrmsg {
+		sss.olnchkerrcnt++
+	} else {
+		sss.olnchkerrmsg = msg
+		sss.olnchkerrcnt = 1
+	}
+
+	ret := fmt.Sprintf("%d %s", sss.olnchkerrcnt, msg)
+	// me.upstatusll(ret)
+	return ret
+	/*
+	   let msg = Argv[1];
+	   if (msg == Sss.olnchkerrmsg) {
+	       Sss.olnchkerrcnt += 1;
+	   }else{
+	       Sss.olnchkerrmsg = msg;
+	       Sss.olnchkerrcnt = 1;
+	   }
+	   // upstatusll(msg + ' ' + Sss.olnchkerrcnt);
+	   // Tspp.debug(msg, Sss.olnchkerrcnt);
+	   let ret = msg + ' ' + Sss.olnchkerrcnt;
+	   return ret;
+	*/
+
+}
+
+func (me *mainuist) onnetreqnote(begin bool, len int) {
+	if begin {
+		sss.netuplen += len
+	} else {
+		sss.netdllen += len
+	}
+
+	minqt.RunonUithread(func() {
+		me.upnetreqst(begin)
+	})
+}
+func (me *mainuist) onnetstatus(online bool, errmsg string) {
+	log.Println(online, errmsg)
+	stmsg := me.onolnchkerr(errmsg)
+
+	minqt.RunonUithread(func() {
+		me.upstatusll(stmsg)
+
+		tiptxt := gopp.IfElse2(errmsg != "", "Ok", errmsg) + " " + gopp.TimeToFmt1Now()
+		obj := qmlcpm.rootobj.FindChild("onlinest")
+		obj.SetProperty("tiptext", tiptxt)
+	})
+	/*
+	   let online = jso.Argv[0];
+	   // onlinest.icon.source = online?"icons/online_2x.png":"icons/offline_2x.png";
+	   onlinest.icon.color = online?"darkgreen":""
+	   let tmstr = Tspp.nowtmstrzh();
+	   onlinest.tiptext = (jso.Argv[1]==''?"Ok" : jso.Argv[1]) + ': ' + tmstr;
+	*/
+}
+
+func (me *mainuist) upstatusll(stlog string) {
+	// obj := qmlcpm.rootobj.FindChild("mainui.stb.lastloglb")
+	obj := qmlcpm.stblastloglb
+	obj.SetProperty("text", "LL:"+stlog)
+	stlog = stlog + ", " + gopp.TimeToFmt1Now()
+	obj.SetProperty("tiptext", "LL:"+stlog)
+	// lastlogst.text = 'LL:'+lastlog;
+	// lastlogst.tiptext = 'LL:'+lastlog;
+}
+
+func (me *mainuist) upnetreqst(begin bool) {
+	txt := fmt.Sprintf("UP: %d, DL: %d, TM: %s",
+		sss.netuplen, sss.netdllen, gopp.TimeToFmt1Now())
+	obj := qmlcpm.rootobj.FindChild("netreqstnorm")
+	obj.SetProperty("tiptext", txt)
+	obj.SetProperty("visible", !begin)
+	{
+		obj := qmlcpm.rootobj.FindChild("netreqstloading")
+		obj.SetProperty("visible", begin)
+	}
+	gopp.Info(begin, txt)
+}
