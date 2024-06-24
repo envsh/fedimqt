@@ -34,6 +34,7 @@ ScrollView {
     width: parent.width
     height: parent.height-msgsndbar.height
     id: scroll1
+    objectName: "scroll1"
 
     // color: "#010101"
 
@@ -326,6 +327,7 @@ ScrollView {
                 placeholderText: (!focus && text=='') ? qsTr("Enter message") : ''
                 // preeditText: qsTr("Enter message")
                 id: usriptmsg
+                objectName: "usriptmsg"
                 topPadding: 8
                 bottomPadding: 5
                 wrapMode: TextEdit.WrapAnywhere
@@ -348,7 +350,8 @@ ScrollView {
                         // Ctrl+Enter=Send
                         
                     }else if (ke.modifiers == Qt.MetaModifier) {
-                        sendmsg();
+                        // sendmsg();
+                        calljs("msglst.sendmsg");
                     }
 
                 }
@@ -358,7 +361,9 @@ ScrollView {
                 display: AbstractButton.IconOnly
                 tiptext: qsTr("Select Emoji(s)")
                 icon.source: "../icons/smile_gray64.png"}
-            MyButton{ text:"Sendit!!!"; onClicked: sendmsg();
+            MyButton{ text:"Sendit!!!"; 
+                // onClicked: sendmsg();
+                onClicked: calljs("msglst.sendmsg");
                 implicitWidth: 52;
                 tiptext: qsTr("Send Message!!!")
                 display: AbstractButton.IconOnly
@@ -366,6 +371,7 @@ ScrollView {
             // MyImage {source:"../icons/cursor_gray64.png"; height:26; width:26}
             MyComboBox {       
                 id: msgsndmode 
+                objectName: "msgsndmode"
                 model: ["dftim", "gptcf", "cmd", "misskey", "gptoa", "nostr"]
             }
         }
@@ -391,7 +397,7 @@ ScrollView {
         // Tspp.debug("m1", m1);
 
         // upstatusbar();
-        upstatusmc(msglstmdl.count);
+        // upstatusmc(msglstmdl.count);
     }
     //////
     // 二分查找add
@@ -538,7 +544,7 @@ ScrollView {
             // scrollvto(true);
              Tspp.runonce(286, scrollvto, true);
             //  upstatusbar();
-            upstatusmc(msglstmdl.count);
+            // upstatusmc(msglstmdl.count);
         }
         // Tspp.debug('itemcnt',  addcnt, listView.model.count);
     }

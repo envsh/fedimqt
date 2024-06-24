@@ -30,6 +30,7 @@ Item {
     // color: Material.background
 
     GridLayout {
+        anchors.fill : parent
         columns: 2
 
         MyText {text:"about"}
@@ -45,9 +46,10 @@ Item {
         MyLabel {text: "CompQtVer"}
         MyLabel {id:compqtver; text: uiofnt.qtctver}
         MyLabel {text: "RunQtVer"}
-        MyLabel {id:rtqtver; text: uiofnt.qtrtver}
+        // MyLabel {id:rtqtver; objectName:"rtqtver"; text: uiofnt.qtrtver}
+        MyLabel {id:rtqtver; objectName:"rtqtver"; text: "1.0.0"}
         MyLabel {text: "RunGoVer"}
-        MyLabel {id:rtgover; text: ""}
+        MyLabel {id:rtgover; objectName:"rtgover"; text: "1.0.0"}
 
         MyLabel {text: "AppVer"}
         MyLabel {text: Application.version}
@@ -56,10 +58,13 @@ Item {
         MyLabel {text: Application.arguments}
 
         MyLabel {text: "Workdir"}
-        MyLabel {id:workdir; text: ""}
+        MyLabel {id:workdir; objectName:"workdir"; text: "./"}
 
         MyLabel {text: "TestProp1"}
         MyLabel {id: testprop1; text: ""}
+
+        MyLabel {text: "Uname"}
+        MyLabel {id: unameinfo; objectName:"unameinfo";  text: ""}
     }
 
     /////

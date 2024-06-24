@@ -127,6 +127,7 @@ func qmlcompmannew(rootobj minqt.QObject) *qmlcompman {
 	xobj = robj.FindChild("msglstmdl")
 	// mdl := (*minqt.ListModelBase)(xobj.Cthis)
 	goobjx := xobj.Property("goobj")
+	// defer goobjx.Dtor()
 	log.Println(goobjx, goobjx.Toint64())
 	goobj := minqt.ListModelBaseof(goobjx.Toint64())
 	log.Println(goobj)

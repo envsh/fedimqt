@@ -17,6 +17,8 @@ find_package(Qt6 REQUIRED COMPONENTS Qml)
 find_package(Qt6 REQUIRED COMPONENTS QmlIntegration)
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
+find_package(Qt6 REQUIRED COMPONENTS QuickTemplates2)
+
 qt_standard_project_setup()
 # set(QT_DEBUG_FIND_PACKAGE ON)
 set(shextsfx ${CMAKE_SHARED_LIBRARY_SUFFIX})
@@ -93,7 +95,11 @@ endif()
 if(${ANDROID})
 set(GOLIB "hellogo")
 endif()
-target_link_libraries(helloworld PRIVATE Qt6::Widgets Qt6::Qml Qt6::QmlIntegration Qt6::Quick Qt6::QuickControls2
+target_link_libraries(helloworld PRIVATE
+    Qt6::Widgets Qt6::Qml Qt6::QmlIntegration Qt6::Quick
+    Qt6::QuickControls2 Qt6::QuickTemplates2
+    # 以下添加 private header
+    Qt6::QuickPrivate Qt6::QuickControls2Private Qt6::QuickTemplates2Private
     ${GOLIB}
 )
 target_link_directories(helloworld PUBLIC "./")
@@ -153,13 +159,13 @@ add_custom_command(OUTPUT ../hellogo COMMENT "gocc111"
     COMMAND pwd && go version
     # COMMAND go build -buildmode=c-shared -o ../libhellogo${shextsfx} ./
     # COMMAND ls -lh ../libhellogo${shextsfx} && file ../libhellogo${shextsfx}
-    COMMAND XXX=5 CGO_LDFLAGS=${CGO_LDFLAGSx} CGO_ENABLED=1 go build -v -x -o ../hellogo ./
+    COMMAND XXX=5 CGO_LDFLAGS=${CGO_LDFLAGSx} CGO_ENABLED=1 go build -v -o ../hellogo ./
     COMMAND ls -lh ../hellogo && file ../hellogo
     DEPENDS ${projdir}/srcgo/*.go ${projdir}/srcgo/go.mod
     # COMMAND_EXPAND_LISTS
 )
 add_custom_target(gocc COMMENT "gocc222" DEPENDS ../hellogo )
-add_dependencies(gocc helloworld)
+# add_dependencies(gocc helloworld)
 endif()
 
 

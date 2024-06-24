@@ -50,8 +50,9 @@ func gomainexe() {
 	purego.RegisterFunc(&fnaddr, uintptr(symx))
 	log.Println(symx, fnaddr)
 	fnaddr() //
-
-	gopp.Forever()
+	// cpp will run loop forever
+	// gopp.Forever()
+	gopp.Info("App exit...", time.Since(gopp.StartTime))
 }
 
 // as main of sharedlib
@@ -79,11 +80,16 @@ func gomaininit() {
 		qtver := minqt.QVersion()
 		// qtver := "2.3.4"
 		// log.Println(qtver)
-		guiclish.EmitEventFront("notice", "rtqtver", qtver)
-		dir, _ := os.Getwd()
-		guiclish.EmitEventFront("notice", "workdir", dir)
-		gover := runtime.Version()
-		guiclish.EmitEventFront("notice", "rtgover", gover)
+		if false {
+			guiclish.EmitEventFront("notice", "rtqtver", qtver)
+			dir, _ := os.Getwd()
+			guiclish.EmitEventFront("notice", "workdir", dir)
+			gover := runtime.Version()
+			guiclish.EmitEventFront("notice", "rtgover", gover)
+		}
+		if true {
+			(&aboutui{}).SetPairs()
+		}
 	})
 }
 
@@ -93,14 +99,14 @@ func bgproc() {
 		v := minqt.QVarintNew(12345)
 		// log.Println(v)
 		log.Println(v, v.Toint())
-		v.Dtor()
+		// v.Dtor()
 		v = minqt.QVarintNew(int64(888))
 		log.Println(v, v.Toint64())
-		v.Dtor()
+		// v.Dtor()
 
 		v = minqt.QVarintNew("abcde")
 		log.Println(v, v.Tostr())
-		v.Dtor()
+		// v.Dtor()
 
 		var x = 123
 		v = minqt.QVarintNew((voidptr)(&x))

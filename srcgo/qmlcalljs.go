@@ -79,6 +79,12 @@ func cmdrun(cio *guiclish.Cmdinfo) {
 	switch cio.Cmd {
 	case "switchpageidx":
 		switchpageidx(int(cio.Argv[0].(float64)))
+	case "msglst.scrollvto":
+		msglstwin.Scrollvto(cio.Argv[0].(bool))
+	case "msglst.setccfmt":
+		msglstwin.Setccfmt(int(cio.Argv[0].(float64)))
+	case "msglst.sendmsg":
+		msglstwin.Sendmsg()
 	}
 }
 
@@ -87,6 +93,7 @@ func switchpageidx(idx int) {
 	obj := qmlcpm.rootobj.FindChild("stackwin")
 	gopp.Info(obj)
 	vx := obj.Property("currentItem")
+	// defer vx.Dtor()
 	gopp.Info(vx)
 	gopp.Info(vx.Toptr())
 	curritemx := vx.Toptr() // QQuickItem*

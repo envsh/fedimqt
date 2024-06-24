@@ -66,20 +66,30 @@ ApplicationWindow {
             Action { text: qsTr("&Load More Older"); onTriggered: msglstwin.fetchmore() }
             Action { text: qsTr("&Load More Older Rt"); onTriggered: msglstwin.fetchmorert("") }
             Action { text: qsTr("&AutoText"); 
-                onTriggered: msglstwin.setccfmt(Text.AutoText) }
+                onTriggered: calljs("msglst.setccfmt", Text.AutoText);
+                // onTriggered: msglstwin.setccfmt(Text.AutoText) 
+                }
             Action { text: qsTr("&MarkdownText");
-                onTriggered: msglstwin.setccfmt(Text.MarkdownText) }
+                onTriggered: calljs("msglst.setccfmt", Text.MarkdownText);
+                // onTriggered: msglstwin.setccfmt(Text.MarkdownText);
+                }
             Action { text: qsTr("&RichText"); 
-                onTriggered: msglstwin.setccfmt(Text.RichText) }
+                onTriggered: calljs("msglst.setccfmt", Text.RichText);
+                // onTriggered: msglstwin.setccfmt(Text.RichText) 
+                }
             Action { text: qsTr("&PlainText"); 
-                onTriggered: msglstwin.setccfmt(Text.PlainText) }
+                onTriggered: calljs("msglst.setccfmt", Text.PlainText);
+                // onTriggered: msglstwin.setccfmt(Text.PlainText) 
+                }
         }
         Menu {
             title: qsTr("&Misc")
             Action { text: qsTr("Scroll Bottom"); 
                 onTriggered: msglstwin.scrollvto(false);
+                // onTriggered: calljs("msglst.scrollvto", false);
                 icon.source: "icons/barbuttonicon_down_2x.png"}
             Action { text: qsTr("Scroll Top");
+                // onTriggered: calljs("msglst.scrollvto", true);
                 onTriggered: msglstwin.scrollvto(true);
                 icon.source: "icons/barbuttonicon_up_2x.png" }
             Action { text: qsTr("&Test ListView");
@@ -139,7 +149,7 @@ ApplicationWindow {
         Logui {id: logui; visible: false}
         Loginui { id: loginui; visible: false }
         RoomListView { id: romlstwin ; visible: false}
-        MsgListView{id: msglstwin; visible: false}
+        MsgListView{id: msglstwin; objectName: "msglstwin"; visible: false}
         // Rectangle { anchors.fill : parent;  color: "red" } // clear
 
         Component.onCompleted: {
@@ -401,6 +411,14 @@ ApplicationWindow {
         stkwin.curidx = nxtidx;
         Tspp.debug(idx, "curitem", curitem, "nxtitem", nxtitem);
         stkwin.replace(curitem, nxtitem);
+    }
+
+    function switchpageto(nxtidx: int) {
+        let curitem = stkwin.currentItem;
+        let nxtitem = stkwin.childs[nxtidx];
+        // 这个 get 好像是按照 push 的index,而不是创建的index
+        // let nxtitem = stkwin.get(nxtidx);
+        stkwin.replace(curitem, nxtitem); // 这个replace函数还没法在C++/go里实现.
     }
 
     function  onloadmsg () {
