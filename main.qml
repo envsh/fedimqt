@@ -50,11 +50,15 @@ ApplicationWindow {
         }
         Menu {
             title: qsTr("&Wndo")
-            Action { text: qsTr("&Next Page") ; onTriggered: switchpage(false)
+            Action { text: qsTr("&Next Page") ; 
+                onTriggered: calljs("switchpage", false)
+                // onTriggered: switchpage(false)
                 icon.source: "icons/barbuttonicon_forward_gray64.png"}
-            Action { text: qsTr("&Prev Page") ; onTriggered: switchpage(true) 
+            Action { text: qsTr("&Prev Page") ;
+                onTriggered: calljs("switchpage", true)
+                // onTriggered: switchpage(true) 
                 icon.source: "icons/barbuttonicon_back_gray64.png"}
-            Action { text: qsTr("Logui"); onTriggered: switchpageidx_3() }
+            Action { text: qsTr("Logui"); onTriggered: switchpageidx(3) }
             Action { text: qsTr("&Aboutui"); onTriggered: switchpageidx(4) }
             Action { text: qsTr("&Room List"); onTriggered: switchpageidx(1) }
             Action { text: qsTr("&Loginui"); onTriggered: switchpageidx(2) }
@@ -285,6 +289,9 @@ ApplicationWindow {
                 // else if (jso.Argv[0] == "rtgover") { aboutui.setrtgover(jso.Argv[1]) }
                 // else {Tspp.debug("oohwt", jso.Cmd, jso.Argv)}
                 break;
+            case "switchpageidx":
+                switchpageidx(jso.Argv[0]);
+                break;
             case "msglst.scrollvto":
                 msglstwin.scrollvto(jso.Argv[0]);
                 break;
@@ -327,26 +334,7 @@ ApplicationWindow {
                 // todo check result
                 switchpageidx(0);
                 break;
-            case "netreqnote":
-                let isbegin = jso.Argv[0];
-                netreqbegin = isbegin;
-                if (isbegin) {
-                    netrequplen = jso.Argv[1]
-                    MySingleton.netuplen += netrequplen;
-                }
-                else {
-                    netreqdownlen = jso.Argv[1] 
-                    MySingleton.netuplen += netreqdownlen;
-                }
-                // netreqst.tiptext = 'UP:'+netrequplen+",DL:"+netreqdownlen;
-                break;
-            case "netstatus":
-                let online = jso.Argv[0];
-                // onlinest.icon.source = online?"icons/online_2x.png":"icons/offline_2x.png";
-                onlinest.icon.color = online?"darkgreen":""
-                let tmstr = Tspp.nowtmstrzh();
-                onlinest.tiptext = (jso.Argv[1]==''?"Ok" : jso.Argv[1]) + ': ' + tmstr;
-                break;
+
             case 'qmlAppEngineCreated':
                 // that's ok
                 break;
@@ -424,49 +412,11 @@ ApplicationWindow {
         stkwin.replace(curitem, nxtitem);
     }
 
-    function switchpageto(nxtidx: int) {
-        let curitem = stkwin.currentItem;
-        let nxtitem = stkwin.childs[nxtidx];
-        // 这个 get 好像是按照 push 的index,而不是创建的index
-        // let nxtitem = stkwin.get(nxtidx);
-        stkwin.replace(curitem, nxtitem); // 这个replace函数还没法在C++/go里实现.
-    }
-
-    function  onloadmsg () {
-        msglstwin.onloadmsg();
-    }
-
-    function upstatusbar() {
-        msgcntst.text = 'MC:'+Sss.msgs.size;
-    }
-    function upstatusmc(cnt) {
-        msgcntst.text = 'MC:'+cnt;
-    }
     function upstatusrc(cnt) {
         grpcntst.text = 'RC:'+cnt;
     }
     function upstatuscp(pagename) {
         curwinst.text = 'CP:'+pagename;
-    }
-    function upstatusll(lastlog) {
-        lastlogst.text = 'LL:'+lastlog;
-        lastlogst.tiptext = 'LL:'+lastlog;
-    }
-    function upstatusuptime() {
-        // Tspp.debug('tm', Sss.starttime);
-        let nowtm = new Date();
-        let uptm = Tspp.datesubmsui(nowtm, MySingleton.starttime);
-        uptimest.text = 'UT:'+uptm;
-        uptimest.tiptext = 'UT:'+uptm;
-    }
-
-    // 这个Timer 好像在 android 上没有执行
-    Timer {
-        interval: 3456
-        repeat: true
-        running: true
-        triggeredOnStart: true
-        // onTriggered: { upstatusuptime() }
     }
 
     /////

@@ -13,7 +13,6 @@ import (
 	"github.com/envsh/fedind/guiclish"
 	"github.com/kitech/gopp"
 	"github.com/kitech/gopp/cgopp"
-	"github.com/kitech/minqt"
 )
 
 //export qmlcalljsfunc
@@ -46,7 +45,9 @@ func asyncInvokeProcessor(reqdata string) (string, bool) {
 	cio.Retc = len(cio.Retv)
 	resp, err := json.Marshal(cio)
 	gopp.ErrPrint(err, cio)
-	log.Println("resp ready", len(resp), gopp.SubStr(string(resp), 66))
+	if cio.Retful {
+		log.Println("resp ready", len(resp), gopp.SubStr(string(resp), 66))
+	}
 	// v.resp = C.CString(string(resp))
 	// v.len2 = usize(len(resp))
 	return string(resp), cio.Retful
@@ -79,6 +80,8 @@ func cmdrun(cio *guiclish.Cmdinfo) {
 	switch cio.Cmd {
 	case "switchpageidx":
 		switchpageidx(int(cio.Argv[0].(float64)))
+	case "switchpage":
+		mainui.switchpage(cio.Argv[0].(bool))
 	case "msglst.scrollvto":
 		msglstwin.Scrollvto(cio.Argv[0].(bool))
 	case "msglst.setccfmt":
@@ -88,30 +91,4 @@ func cmdrun(cio *guiclish.Cmdinfo) {
 	case "loadmsg":
 		mainui.onloadmsg()
 	}
-}
-
-func switchpageidx(idx int) {
-	gopp.Info(idx)
-	obj := qmlcpm.rootobj.FindChild("stackwin")
-	gopp.Info(obj)
-	vx := obj.Property("currentItem")
-	// defer vx.Dtor()
-	gopp.Info(vx)
-	gopp.Info(vx.Toptr())
-	curritemx := vx.Toptr() // QQuickItem*
-	nxtidx := idx
-	nextitem := qmlcpm.stkitems[nxtidx] // todo not complete, crash
-	stkwin := minqt.QStackViewof(qmlcpm.stkwin.Cthis)
-	// qmlcpm.stkwin.Replace(curritemx, nextitem)
-	stkwin.Replace(minqt.QQuickItemof(curritemx), minqt.QQuickItemof(nextitem.Cthis))
-
-	/*
-	   let stkwin = stackwin;
-	   let curitem = stkwin.currentItem;
-	   let nxtidx = idx;
-	   let nxtitem = stkwin.childs[nxtidx];
-	   stkwin.curidx = nxtidx;
-	   Tspp.debug(idx, "curitem", curitem, "nxtitem", nxtitem);
-	   stkwin.replace(curitem, nxtitem);
-	*/
 }

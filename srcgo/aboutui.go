@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"runtime"
+	"strings"
+	"time"
 
 	"github.com/envsh/fedind/guiclish"
 	"github.com/kitech/gopp"
@@ -113,17 +116,21 @@ var sndmsgpfxs = map[string]string{"dftim": "dftimpfx： ", "gptcf": "请使用�
 func (me *MsglstPage) Sendmsg() {
 	obj1 := qmlcpm.rootobj.FindChild("msgsndmode")
 	obj2 := qmlcpm.rootobj.FindChild("usriptmsg")
-	sndmode := obj1.Property("currentValue")
-	iptmsg := obj2.Property("text")
+	sndmodex := obj1.Property("currentValue")
+	sndmode := sndmodex.Tostr()
+	iptmsgx := obj2.Property("text")
+	iptmsg := iptmsgx.Tostr()
 	log.Println(sndmode, iptmsg)
-	log.Println(sndmode.Tostr(), iptmsg.Tostr())
+	log.Println(sndmodex.Tostr(), iptmsgx.Tostr())
 	// defer sndmode.Dtor()
 	// defer iptmsg.Dtor()
 
-	msgpfx := sndmsgpfxs[sndmode.Tostr()]
-	outmsg := msgpfx + iptmsg.Tostr()
+	msgpfx := sndmsgpfxs[sndmode]
+	outmsg := msgpfx + iptmsg
 
-	log.Println("outmsg...", outmsg)
+	log.Println("outmsg...", sndmode, outmsg)
+
+	go me.implSendmsg(sndmode, outmsg)
 
 	/*
 	   let sndmode = msgsndmode.currentValue;
@@ -131,5 +138,131 @@ func (me *MsglstPage) Sendmsg() {
 	   let msg = usriptmsg.text;
 	   msg = msgpfx + msg;
 	   Tspp.debug("usriptmsg", msg.length, sndmode, msg);
+	*/
+}
+func (me *MsglstPage) implSendmsg(sndmode string, outmsg string) {
+	// todo and sending msg to ui/db???
+	jso, err := guiclish.SendmsgGptcf(sndmode, outmsg)
+	gopp.ErrPrint(err, sndmode, outmsg)
+	// msg.Dtime = "0s0ms"
+
+	var addok bool
+	if err == nil {
+		msgo := &guiclish.Messagestable{}
+		msgo.Content = jso.Get("Content").MustString()
+		msgo.Sender = "gptcfai"
+		msgo.Feditype = "gptcf"
+		// msgo.Fedisite
+		msgo.Roomid = "mainline@cf"
+		msgo.Roomname = "mainline"
+		nowt := time.Now()
+		msgo.Eventid = fmt.Sprintf("$%d", nowt.UnixMicro())
+		msgo.Mtimems = nowt.UnixMilli()
+		msgo.Ctimems = nowt.UnixMilli()
+		// msgo.Mtimemsui = guiclish.TimeToHhmm(nowt)
+
+		addok = qmlcpm.msglstmdl.Add(msgo)
+	}
+
+	if err != nil {
+		logui.Addlog(err.Error())
+	}
+	minqt.RunonUithread(func() {
+		if err != nil {
+			// some notify info???
+			mainui.upstatusll(err.Error())
+			return
+		}
+		if addok {
+			mainui.upstatusmc()
+		}
+	})
+}
+
+func (me *MsglstPage) trimsndmsgpfx(modename string, msg string) string {
+	pfx := sndmsgpfxs[modename]
+	if pfx != "" && strings.HasPrefix(msg, pfx) {
+		return msg[len(pfx):]
+	}
+	return msg
+	/*
+	   let pfx = vss.sndmsgpfxs[name];
+	   if (pfx != '' && msg.startsWith(pfx)) {
+	       return msg.substring(pfx.length);
+	   }
+	   return msg;
+	*/
+}
+
+// //////////
+var logui = &loguist{}
+
+type loguist struct {
+}
+
+func init() {
+	// roleNames := []string{"Index", "Content", "Ctimems", "Ctimemsui"}
+	// namesx := gopp.Mapdo(logrow{}, func(i int, kx, vx any) any {
+	// 	return kx //[]any{vx}
+	// })
+	// names := gopp.ToStrs(namesx.([]any)...)
+	// roleNames := append(names, "Ctimemsui")
+	// log.Println(roleNames)
+	// minqt.RegisterModelRoleNames("loglstmdl", roleNames...)
+	minqt.RegisterModelRoleNames2("loglstmdl", logrow{}, "Ctimemsui")
+}
+
+type logrow struct {
+	Index   int
+	Content string
+	Ctimems int64
+	Mtimems int64
+	Dupcnt  int
+}
+
+func (me *logrow) Data(name string) any {
+	switch name {
+	case "Index":
+		return me.Index
+	case "Content":
+		return me.Content
+	case "Ctimems":
+		return me.Ctimems
+	case "Ctimemsui":
+		return gopp.TimeToFmt1(time.UnixMilli(me.Ctimems))
+	}
+	return fmt.Sprintf("unkname %s", name)
+}
+func (me *logrow) DedupKey() string {
+	return fmt.Sprintf("%d", me.Ctimems)
+}
+func (me *logrow) OrderKey() int64 {
+	return me.Ctimems
+}
+
+// todo
+func (me *loguist) Addlog(logstr string) {
+	xobj := qmlcpm.rootobj.FindChild("loglstmdl")
+	goobjx := xobj.Property("goobj")
+	goobj := minqt.ListModelBaseof(goobjx.Toint64())
+	log.Println(goobj)
+
+	nowt := time.Now()
+	item := &logrow{}
+	item.Content = logstr
+	item.Index = goobj.RowCount()
+	item.Ctimems = nowt.UnixMilli()
+
+	addok := goobj.Add(item)
+	if addok {
+		// scroll
+	}
+
+	/*
+		let item = {};
+		item.number = item.Content = logstr;
+		listView.model.append(item);
+
+		scroll1.ScrollBar.vertical.position = 1.0 - scroll1.ScrollBar.vertical.size;
 	*/
 }

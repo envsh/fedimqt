@@ -8,6 +8,8 @@ import QtQuick.Layouts
 
 import "../qmlpp"
 
+import ListModelBase
+
 // Rectangle {}
 // Text 
 // Button
@@ -46,26 +48,34 @@ ScrollView {
         width : parent.width
         anchors.leftMargin: 5
 
-        model: ListModel{
-            ListElement {
-        name: "Bill Smith"
-        number: "555 3264loggg"
-        Content: ""
-        Roomid: ""
-        Roomname: ""
-        Feditype: ""
-        Eventid: ""
-        Sender: ""
-        Mtimems: 0
-            }
+        // model: ListModel{
+        //     ListElement {
+        // name: "Bill Smith"
+        // number: "555 3264loggg"
+        // Content: ""
+        // Roomid: ""
+        // Roomname: ""
+        // Feditype: ""
+        // Eventid: ""
+        // Sender: ""
+        // Mtimems: 0
+        //     }
+        // }
+        model: ListModelBase {
+            id: loglstmdl
+            objectName: "loglstmdl"
         }
 
         delegate: Rectangle {
             color: Material.background
+            // color: "red"
             width: topwin.width
-            height: topwin.height
-            MyText {
-                text: name + " : " + number
+            // height: topwin.height
+            height: 32
+            MyLabel {
+                text: Index + " : " + Content
+                width: topwin.width
+                tiptext: Index + " : " + Ctimemsui + " "  + Content
             }
         }
 

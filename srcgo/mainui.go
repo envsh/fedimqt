@@ -155,5 +155,46 @@ func (me *mainuist) upnetreqst(begin bool) {
 		obj := qmlcpm.rootobj.FindChild("netreqstloading")
 		obj.SetProperty("visible", begin)
 	}
-	gopp.Info(begin, txt)
+	// gopp.Info(begin, txt)
+}
+
+func (me *mainuist) switchpage(prev bool) {
+	const pcnt = 5 // todo auto get the value
+	stkw := qmlcpm.stkwin
+	curidx := stkw.Property("curidx").Toint()
+
+	nxtidx := curidx + gopp.IfElse2(prev, -1, 1)
+	if nxtidx < 0 {
+		nxtidx = pcnt - 1
+	} else if nxtidx >= pcnt {
+		nxtidx = 0
+	}
+	guiclish.EmitEventFront("switchpageidx", nxtidx)
+}
+
+// todooooo
+func switchpageidx(idx int) {
+	gopp.Info(idx)
+	obj := qmlcpm.rootobj.FindChild("stackwin")
+	gopp.Info(obj)
+	vx := obj.Property("currentItem")
+	// defer vx.Dtor()
+	gopp.Info(vx)
+	gopp.Info(vx.Toptr())
+	curritemx := vx.Toptr() // QQuickItem*
+	nxtidx := idx
+	nextitem := qmlcpm.stkitems[nxtidx] // todo not complete, crash
+	stkwin := minqt.QStackViewof(qmlcpm.stkwin.Cthis)
+	// qmlcpm.stkwin.Replace(curritemx, nextitem)
+	stkwin.Replace(minqt.QQuickItemof(curritemx), minqt.QQuickItemof(nextitem.Cthis))
+
+	/*
+	   let stkwin = stackwin;
+	   let curitem = stkwin.currentItem;
+	   let nxtidx = idx;
+	   let nxtitem = stkwin.childs[nxtidx];
+	   stkwin.curidx = nxtidx;
+	   Tspp.debug(idx, "curitem", curitem, "nxtitem", nxtitem);
+	   stkwin.replace(curitem, nxtitem);
+	*/
 }

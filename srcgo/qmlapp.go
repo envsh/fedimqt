@@ -7,6 +7,7 @@ import "C"
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/kitech/gopp"
 	"github.com/kitech/minqt"
@@ -42,6 +43,7 @@ func qmlappenginenew(step int) voidptr {
 		if false {
 			tstadditems()
 		}
+		time.AfterFunc(gopp.DurandSec(1, 2), testqmlop2)
 	default:
 		log.Println("not expect", step)
 	}
@@ -76,6 +78,21 @@ func tstadditems() {
 		mdl.Add(d)
 	}
 
+}
+func testqmlop2() {
+	log.Println("hehehe")
+	// robj := qmlcpm.rootobj
+	stkwx := qmlcpm.stkwin
+	stkw := minqt.QStackViewof(stkwx.Cthis)
+	depthx := stkwx.Property("depth")
+	depth := depthx.Toint()
+	for i := range gopp.RangeA(depth + 1) {
+		item := stkw.Get(i)
+		log.Println(i, item, depth)
+		if item.Cthis == nil {
+			break
+		}
+	}
 }
 
 type qmlcompman struct {

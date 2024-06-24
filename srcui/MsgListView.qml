@@ -400,88 +400,7 @@ ScrollView {
         // upstatusmc(msglstmdl.count);
     }
     //////
-    // 二分查找add
-    function msgaddinorder(mdl, item) {
-        let cnt = mdl.count;
-        let inspos = -1;
-        // Tspp.debug("addio", item.Mtimems, cnt);
 
-        if (cnt == 0) {
-            mdl.append(item);
-            return;
-        }
-
-        let item0 = mdl.get(0);
-        let itemx = mdl.get(cnt-1);
-        if (item.Mtimems <= item0.Mtimems) {
-            inspos = 0;
-        }else if (item.Mtimems >= itemx.Mtimems) {
-            inspos = cnt;
-            // mdl.append(item);
-            // return;
-        }else{
-            let start = 0;
-            let end = cnt;
-            for (let i=0; i < 10000; i++) {
-                let pos = Math.floor((start+end)/2);
-                // Tspp.debug('pos', pos, i);
-                item0 = mdl.get(pos-1);
-                itemx = mdl.get(pos);
-                if (item.Mtimems>=item0.Mtimems && item.Mtimems<=itemx.Mtimems) {
-                    inspos = pos;
-                    // Tspp.debug("find times:", i, cnt);
-                    break;
-                }else if (item.Mtimems<item0.Mtimems) {
-                    end = pos;
-                }else if (item.Mtimems>itemx.Mtimems) {
-                    start = pos;
-                } else {
-                    Tspp.debug("how to do then", pos, cnt, item.Mtimems, item0.Mtimems, itemx.Mtimems);
-                }
-            }
-        }
-        // Tspp.debug("found inspos", inspos, cnt);
-        mdl.insert(inspos, item);
-
-            // if (prepend) {
-            //     listView.model.insert(0, item);
-            // }else{
-            //     listView.model.append(item);
-            // }
-
-    }
-    function msgaddnodup(item, prepend) {
-        let has = Sss.msgs.has(item.Eventid);
-        if (!has) {
-            Sss.msgs.set(item.Eventid, true);
-            msgaddinorder(listView.model, item);
-            return true;
-        }
-        // Tspp.debug('item', !has, item.Eventid, Sss.msgs.size, listView.model.count);
-        return false;
-    }
-    function  onloadmsg () {
-            Tspp.debug('clicked');
-            let req = Tspp.tojson({Cmd: "loadmsg", Argv:["1=1 limit 300"]});
-            let resp = qcffi.invoke(req);
-            Tspp.debug('resplen', resp.length);
-            // let jso = JSON.parse(resp);
-            // Tspp.debug("rowcnt", jso.Retc, jso.Retv.length);
-            // for (let i=0; i < jso.Retc; i++) {
-            //     let rv = jso.Retv[i];
-            //     // let item = {name:"", number: ""};
-            //     let item = rv;
-            //     item.name = rv.Sender;
-            //     item.number = rv.Roomid;
-            //     listView.model.insert(0, item);
-            //     for (let j=0;j < 30; j++) {
-            //         // listView.model.insert(0, item);
-            //     }
-            //     // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
-            //     // Tspp.debug('typeof', typeof rv.Sender)
-            // }
-            Tspp.debug('itemcnt', listView.model.count);
-    }
     function fetchmore() {
         let fmcond = Sss.fetchmore_condstr();
             Tspp.debug('...', Sss.fmnext_batch, fmcond);
@@ -507,92 +426,10 @@ ScrollView {
             // }
             // Tspp.debug('itemcnt', listView.model.count);
     }
-    function loadmsgret(retv) {
-        // Tspp.debug("...rowcnt", retv.length);
-        let oldcnt = listView.model.count;
-        let isnew = retv[0]
-        for (let i=1; i < retv.length; i++) {
-            let rv = retv[i];
-            // let item = {name:"", number: ""};
-            let item = Sss.newFediRecord();
-            item.Dtime = rv.Dtime == '' ? rv.dtime : rv.Dtime;
-            item.name = item.Sender = "gptcfai"
-            item.Feditype = "gptcf"
-            item.Roomid = "mainline@cf"
-            item.Roomname = "mainline"
-            item.Eventid = "$ifsf"
-            item.name = rv.Sender;
-            item.number = rv.Roomid;
-            item.Eventid = rv.Eventid;
-            item = rv;
-            item.Dtime = '0s0ms';
-            item.Mtimemsui = Tspp.objtmstrmin(new Date(item.Mtimems))
-            for (let j=0;j < 30; j++) {
-                // listView.model.insert(0, item);
-            }
-            // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
-            // Tspp.debug('typeof', typeof rv.Sender)
 
-            // listView.model.insert(0, item);
-            let prepend = !isnew;
-            let ok = msgaddnodup(item, prepend);
-            Sss.setnextbatch(item.Mtimems);
-            // Tspp.debug(i, ok, item.Eventid);
-        }
-        let addcnt = listView.model.count - oldcnt;
-        if (addcnt>0) {
-            // scrollvto(true);
-             Tspp.runonce(286, scrollvto, true);
-            //  upstatusbar();
-            // upstatusmc(msglstmdl.count);
-        }
-        // Tspp.debug('itemcnt',  addcnt, listView.model.count);
-    }
     function fetchmorert(roomid) {
         invokebkd("loadmorert", roomid);
     }
-
-    function sendmsg() {
-        // Tspp.debug("Sss", Sss.foo, Sss.getsndmsgpfx("dftim"), JSON.stringify(Sss.barz));
-        // return;
-
-        let sndmode = msgsndmode.currentValue;
-        let msgpfx = Sss.getsndmsgpfx(sndmode);
-        let msg = usriptmsg.text;
-        msg = msgpfx + msg;
-        Tspp.debug("usriptmsg", msg.length, sndmode, msg);
-
-        let req = Tspp.tojson({Cmd: "sendmsg", Argv:[sndmode, msg]});
-        let resp = qcffi.invoke(req); // todo: will freeze ui
-        Tspp.debug("resp", resp);
-        if (false) { // async mode, no result data here
-            let jso = JSON.parse(resp);
-            let item = {Content: jso.Retv[0]};
-            listView.model.insert(0, item);
-        }
-    }
-    function sendmsgret(cmdo) {
-        let item = Sss.newFediRecord();
-        item.Content = cmdo.Retv[0].content;
-        item.Dtime = cmdo.Dtime// rv.Dtime == '' ? rv.dtime : rv.Dtime;
-        item.name = item.Sender = "gptcfai";
-        item.Feditype = "gptcf";
-        item.Roomid = "mainline@cf";
-        item.Roomname = "mainline";
-        item.Eventid = '' //rv.Eventid!=''? rv.Eventid : "$ifsf";
-        let nowt = new Date();
-        item.Eventid = '$'+nowt.valueOf();
-        // item.Mtimems = (new Date()).tohhmm();
-        item.Mtimems = nowt.valueOf();
-        item.Mtimemsui = Tspp.objtmstrmin(nowt);
-        // item = rv;
-
-        // listView.model.insert(0, item);
-        msgaddnodup(item, false);
-        // scrollvto(false);
-        Tspp.runonce(286, scrollvto, false);
-    }
-
 
     function scrollvto(top : bool) {
         // Tspp.debug("top=", top);
@@ -608,7 +445,7 @@ ScrollView {
     }
 
     property int txtccfmt: Text.MarkdownText
-    function setccfmt(f) { txtccfmt  = f }
+    // function setccfmt(f) { txtccfmt  = f }
 
     // async function dummy() {} // not work syntax error
 }

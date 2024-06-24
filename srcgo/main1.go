@@ -90,6 +90,7 @@ func gomaininit() {
 		if true {
 			(&aboutui{}).SetPairs()
 		}
+
 	})
 }
 
@@ -176,7 +177,10 @@ func onnetonlinestatus(online bool, errmsg string) {
 func qmlinvokenative(jstr *C.char, n usize, retstr *voidptr, retlen *usize) *C.char {
 	retstr2 := guiclish.InvokeProcessor(voidptr(jstr), n)
 	*retlen = usize(len(retstr2))
-	*retstr = voidptr(C.CString(retstr2))
+	// *retstr = voidptr(C.CString(retstr2))
+	ret4c := cgopp.CStringaf(retstr2)
+	*retstr = ret4c
+
 	return nil
 }
 
@@ -186,8 +190,8 @@ func callqml(jstr string) {
 	gopp.NilPrint(qtemitcallqmlfnptr, "fnptr nil")
 	// C.qtemitcallqml(C.CString(jstr))
 	// var jstr4c = cgopp.StrtoCharpRef(&jstr)
-	jstr4c := cgopp.CString(jstr)
-	defer cgopp.Cfree(jstr4c)
+	jstr4c := cgopp.CStringaf(jstr)
+	// defer cgopp.Cfree(jstr4c)
 	cgopp.Litfficallg(qtemitcallqmlfnptr, jstr4c)
 }
 

@@ -41,7 +41,7 @@ QString QmlCppBridge::invoke(QString jstr) {
         qmlinvokenative(bcc.data(), bcc.length(), &retstr, &retlen);
         // qDebug()<<__FUNCTION__<<"res"<<retlen;
         auto rv = QString(retstr); // todo get the ownership of retstr
-        delete(retstr);
+        // delete(retstr); // go auto free
         return rv;
 }
 
