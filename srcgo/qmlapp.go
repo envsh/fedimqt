@@ -112,6 +112,7 @@ type qmlcompman struct {
 	/////
 	stbmsgcntlb  minqt.QObject
 	stbgrpcntlb  minqt.QObject
+	stbcurwinlb  minqt.QObject
 	stblastloglb minqt.QObject
 	stbnetolnlb  minqt.QObject
 	stbnetbwlb   minqt.QObject
@@ -150,6 +151,9 @@ func qmlcompmannew(rootobj minqt.QObject) *qmlcompman {
 
 	xobj = robj.FindChild("mainui.stb.grpcntlb")
 	me.stbgrpcntlb = xobj
+
+	xobj = robj.FindChild("mainui.stb.curwinlb")
+	me.stbcurwinlb = xobj
 
 	xobj = robj.FindChild("mainui.stb.lastloglb")
 	me.stblastloglb = xobj

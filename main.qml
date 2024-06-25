@@ -58,11 +58,26 @@ ApplicationWindow {
                 onTriggered: calljs("switchpage", true)
                 // onTriggered: switchpage(true) 
                 icon.source: "icons/barbuttonicon_back_gray64.png"}
-            Action { text: qsTr("Logui"); onTriggered: switchpageidx(3) }
-            Action { text: qsTr("&Aboutui"); onTriggered: switchpageidx(4) }
-            Action { text: qsTr("&Room List"); onTriggered: switchpageidx(1) }
-            Action { text: qsTr("&Loginui"); onTriggered: switchpageidx(2) }
-            Action { text: qsTr("&Message List"); onTriggered: switchpageidx(0) }
+            Action { text: qsTr("Logui"); 
+                onTriggered: calljs("switchpageidx", 3)
+                // onTriggered: switchpageidx(3)
+                }
+            Action { text: qsTr("&Aboutui");
+                onTriggered: calljs("switchpageidx", 4)
+                // onTriggered: switchpageidx(4)
+                }
+            Action { text: qsTr("&Room List");
+                onTriggered: calljs("switchpageidx", 1)
+                // onTriggered: switchpageidx(1)
+                }
+            Action { text: qsTr("&Loginui"); 
+                onTriggered: calljs("switchpageidx", 2)
+                // onTriggered: switchpageidx(2)
+                }
+            Action { text: qsTr("&Message List"); 
+                onTriggered: calljs("switchpageidx", 0)
+                // onTriggered: switchpageidx(0)
+                }
         }
         Menu {
             title: qsTr("&Dev")
@@ -70,8 +85,14 @@ ApplicationWindow {
                 onTriggered: calljs("loadmsg");
                 // onTriggered: onloadmsg()
             }
-            Action { text: qsTr("&Load More Older"); onTriggered: msglstwin.fetchmore() }
-            Action { text: qsTr("&Load More Older Rt"); onTriggered: msglstwin.fetchmorert("") }
+            Action { text: qsTr("&Load More Older"); 
+                onTriggered: calljs("fetchmore", "")
+                // onTriggered: msglstwin.fetchmore()
+                }
+            Action { text: qsTr("&Load More Older Rt");
+                onTriggered: calljs("fetchmorert", "")
+                // onTriggered: msglstwin.fetchmorert("")
+                }
             Action { text: qsTr("&AutoText"); 
                 onTriggered: calljs("msglst.setccfmt", Text.AutoText);
                 // onTriggered: msglstwin.setccfmt(Text.AutoText) 
@@ -109,10 +130,14 @@ ApplicationWindow {
         Menu {
             title: qsTr("&Help")
             // .svg not work???
-            Action { text: qsTr("&About"); onTriggered: switchpageidx(4) 
+            Action { text: qsTr("&About");
+                onTriggered: calljs("switchpageidx", 4)
+                // onTriggered: switchpageidx(4) 
                 // icon.source: "icons/help.svg"
             }
-            Action { text: qsTr("&Settings"); onTriggered: switchpageidx(4)
+            Action { text: qsTr("&Settings");
+                onTriggered: calljs("switchpageidx", 4)
+                // onTriggered: switchpageidx(4)
                 icon.source: "icons/barbuttonicon_set.png"}
         }
     }
@@ -148,9 +173,8 @@ ApplicationWindow {
         height : parent.height-30
 
         initialItem: msglstwin
-        property list<Item> childs: [msglstwin, romlstwin, loginui, logui, aboutui]
-        property int curidx : 0
-        
+        // property list<Item> childs: [msglstwin, romlstwin, loginui, logui, aboutui]
+        // property int curidx : 0
 
         Aboutui{ id: aboutui ; objectName:"aboutui"; visible: false }
         Logui {id: logui; objectName: "logui";  visible: false}
@@ -180,7 +204,7 @@ ApplicationWindow {
         // MyLabel { tiptext:"hehehhehehe" }
         MyLabel{ id: msgcntst; objectName:"mainui.stb.msgcntlb"; text: 'MC:'+999}
         MyLabel{ id: grpcntst; objectName:"mainui.stb.grpcntlb"; text: 'RC:'+99}
-        MyLabel{id: curwinst; text: 'CP:'+'MSGWIN'}
+        MyLabel{id: curwinst; objectName:"mainui.stb.curwinlb"; text: 'CP:'+'MSGWIN'}
         MyLabel{id: lastlogst; objectName:"mainui.stb.lastloglb" ; text: 'Ready. wwwweeeeeeeeeeee';
             Layout.fillWidth: true}
         MyButton{
@@ -314,7 +338,8 @@ ApplicationWindow {
             case "listcfg":
                 if (jso.Argv[0] == "accountline") {
                     loginui.onGotAccounts(jso.Retv);
-                    switchpageidx(2);
+                    // switchpageidx(2);
+                    calljs("switchpageidx", 2);
                 }
                 break;
             case "getcfg":
@@ -328,7 +353,8 @@ ApplicationWindow {
                 break;
             case "loginaccountline":
                 // todo check result
-                switchpageidx(0);
+                // switchpageidx(0);
+                calljs("switchpageidx", 0);
                 break;
 
             case 'qmlAppEngineCreated':
@@ -366,7 +392,7 @@ ApplicationWindow {
     // uifullloaded now
     function onQmlAppEngineCreated(msg) {
         // init some here
-        Tspp.debug("wtodo", msg, Sss.bkdretpromis);
+        // Tspp.debug("wtodo", msg, Sss.bkdretpromis);
         // Tspp.debug("uiofnt.qtrtver", uiofnt.qtrtver);
         let rv = invokebkd("qmlAppEngineCreated"); // notify go
         // check account exists, and login default one
@@ -376,24 +402,24 @@ ApplicationWindow {
         // let rv3 = invokebkd("loadroom", "1=1 limit 99");
     }
     //////
-    function switchpageidx(idx : int) {
-        // todo 未完成
-        // if (true) { calljs(" `", idx); return; }
-        let stkwin = stackwin;
-        let curitem = stkwin.currentItem;
-        let nxtidx = idx;
-        let nxtitem = stkwin.childs[nxtidx];
-        stkwin.curidx = nxtidx;
-        // Tspp.debug(idx, "curitem", curitem, "nxtitem", nxtitem);
-        stkwin.replace(curitem, nxtitem);
-    }
+    // function switchpageidx(idx : int) {
+    //     // todo 未完成
+    //     // if (true) { calljs(" `", idx); return; }
+    //     let stkwin = stackwin;
+    //     let curitem = stkwin.currentItem;
+    //     let nxtidx = idx;
+    //     let nxtitem = stkwin.childs[nxtidx];
+    //     stkwin.curidx = nxtidx;
+    //     // Tspp.debug(idx, "curitem", curitem, "nxtitem", nxtitem);
+    //     stkwin.replace(curitem, nxtitem);
+    // }
 
-    function upstatusrc(cnt) {
-        grpcntst.text = 'RC:'+cnt;
-    }
-    function upstatuscp(pagename) {
-        curwinst.text = 'CP:'+pagename;
-    }
+    // function upstatusrc(cnt) {
+    //     grpcntst.text = 'RC:'+cnt;
+    // }
+    // function upstatuscp(pagename) {
+    //     curwinst.text = 'CP:'+pagename;
+    // }
 
     // general, for msglst and loglst
     function scrollvto(name: string, top : bool) {

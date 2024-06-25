@@ -16,13 +16,13 @@ import (
 )
 
 //export qmlcalljsfunc
-func qmlcalljsfunc(jstr charptr, jstrlen usize, retaddr *charptr, retlen *usize) {
-	log.Println(jstr, jstrlen)
-	qmlcalljsfuncimpl(cgopp.GoStringN(voidptr(jstr), jstrlen), retaddr, retlen)
+func qmlcalljsfunc(jstr voidptr, jstrlen usize, retaddr *charptr, retlen *usize) {
+	// log.Println(jstr, jstrlen)
+	qmlcalljsfuncimpl(cgopp.GoStringN(jstr, jstrlen), retaddr, retlen)
 }
 
 func qmlcalljsfuncimpl(jstr string, retaddr *charptr, retlen *usize) {
-	log.Println(jstr)
+	log.Println(len(jstr), jstr)
 	res, ok := asyncInvokeProcessor(jstr)
 	if ok {
 		*retaddr = (charptr)(cgopp.CStringaf(res))
@@ -90,5 +90,15 @@ func cmdrun(cio *guiclish.Cmdinfo) {
 		msglstwin.Sendmsg()
 	case "loadmsg":
 		mainui.onloadmsg()
+
+	case "fetchmore":
+
+	case "fetchmorert":
+		msglder := guiclish.Msglder()
+		err := msglder.More(cio.Argv[0].(string))
+		gopp.ErrPrint(err)
+		if err != nil {
+			cio.Errmsg = err.Error()
+		}
 	}
 }

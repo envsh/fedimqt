@@ -85,12 +85,12 @@ ScrollView {
 
     // script
     Component.onCompleted:{}
-    function addlog(logstr) {
-        let item = {};
-        item.number = item.Content = logstr;
-        listView.model.append(item);
+    // function addlog(logstr) {
+    //     let item = {};
+    //     item.number = item.Content = logstr;
+    //     listView.model.append(item);
 
-        scroll1.ScrollBar.vertical.position = 1.0 - scroll1.ScrollBar.vertical.size;
-    }
+    //     scroll1.ScrollBar.vertical.position = 1.0 - scroll1.ScrollBar.vertical.size;
+    // }
 
 }

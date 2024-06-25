@@ -78,6 +78,24 @@ func (me *mainuist) upstatusmc() {
 	qmlcpm.stbmsgcntlb.SetProperty("text", fmt.Sprintf("MC: %d", cnt))
 }
 
+func (me *mainuist) upstatusrc() {
+	cnt := qmlcpm.grplstmdl.RowCount()
+	qmlcpm.stbgrpcntlb.SetProperty("text", fmt.Sprintf("RC: %d", cnt))
+}
+
+func (me *mainuist) upstatuscp() {
+	qmlcpm.stbcurwinlb.SetProperty("text", fmt.Sprintf("CP: P%d", me.stkcuridx))
+}
+
+/*
+   function upstatusrc(cnt) {
+       grpcntst.text = 'RC:'+cnt;
+   }
+   function upstatuscp(pagename) {
+       curwinst.text = 'CP:'+pagename;
+   }
+*/
+
 func (me *mainuist) onolnchkerr(msg string) string {
 	if msg == sss.olnchkerrmsg {
 		sss.olnchkerrcnt++
@@ -117,7 +135,7 @@ func (me *mainuist) onnetreqnote(begin bool, len int) {
 	})
 }
 func (me *mainuist) onnetstatus(online bool, errmsg string) {
-	gopp.Println(online, errmsg)
+	// gopp.Println(online, errmsg)
 	stmsg := me.onolnchkerr(errmsg)
 
 	minqt.RunonUithread(func() {

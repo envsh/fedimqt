@@ -286,7 +286,6 @@ ScrollView {
             // todo android 上，这个值很大，大概很容易达到 +-200
             if (listView.verticalOvershoot < -6.0) {
                 Tspp.info("fetch more older triggered", listView.verticalOvershoot);
-                logui.addlog("fetch more older triggered " + listView.verticalOvershoot);
             } else if (listView.verticalOvershoot > 16.0) {
                 Tspp.info("refresh latest triggered", listView.verticalOvershoot);
             }
