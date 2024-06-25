@@ -79,7 +79,7 @@ func cmdrun(cio *guiclish.Cmdinfo) {
 	_ = nowt
 	switch cio.Cmd {
 	case "switchpageidx":
-		switchpageidx(int(cio.Argv[0].(float64)))
+		mainui.switchpageidx(int(cio.Argv[0].(float64)))
 	case "switchpage":
 		mainui.switchpage(cio.Argv[0].(bool))
 	case "msglst.scrollvto":

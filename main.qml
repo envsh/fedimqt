@@ -152,10 +152,10 @@ ApplicationWindow {
         property int curidx : 0
         
 
-        Aboutui{ id: aboutui ; visible: false }
-        Logui {id: logui; visible: false}
-        Loginui { id: loginui; visible: false }
-        RoomListView { id: romlstwin ; visible: false}
+        Aboutui{ id: aboutui ; objectName:"aboutui"; visible: false }
+        Logui {id: logui; objectName: "logui";  visible: false}
+        Loginui { id: loginui; objectName: "loginui";  visible: false }
+        RoomListView { id: romlstwin ; objectName: "romlstwin";  visible: false}
         MsgListView{id: msglstwin; objectName: "msglstwin"; visible: false}
         // Rectangle { anchors.fill : parent;  color: "red" } // clear
 

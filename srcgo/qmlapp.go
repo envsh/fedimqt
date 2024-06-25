@@ -97,8 +97,12 @@ func testqmlop2() {
 
 type qmlcompman struct {
 	/////
-	rootobj  minqt.QObject
-	aboutobj minqt.QObject
+	rootobj   minqt.QObject
+	aboutobj  minqt.QObject
+	msglstwin minqt.QObject
+	romlstwin minqt.QObject
+	loginui   minqt.QObject
+	logui     minqt.QObject
 
 	/////
 	stbmsgcntlb  minqt.QObject
@@ -125,9 +129,14 @@ func qmlcompmannew(rootobj minqt.QObject) *qmlcompman {
 	me.rootobj = rootobj
 	robj := rootobj
 
-	xobj := robj.FindChild("Aboutuiqml")
+	xobj := robj.FindChild("aboutui")
 	// log.Println(aboutobj)
 	me.aboutobj = xobj
+
+	me.msglstwin = robj.FindChild("msglstwin")
+	me.romlstwin = robj.FindChild("romlstwin")
+	me.loginui = robj.FindChild("loginui")
+	me.logui = robj.FindChild("logui")
 
 	xobj = robj.FindChild("mainui.stb.msgcntlb")
 	me.stbmsgcntlb = xobj
@@ -147,15 +156,19 @@ func qmlcompmannew(rootobj minqt.QObject) *qmlcompman {
 	// defer goobjx.Dtor()
 	log.Println(goobjx, goobjx.Toint64())
 	goobj := minqt.ListModelBaseof(goobjx.Toint64())
-	log.Println(goobj)
-	log.Println(goobj.RowCount())
+	// log.Println(goobj)
+	// log.Println(goobj.RowCount())
+	if goobj.RowCount() > 0 {
+	}
 	me.msglstmdlco = xobj
 	me.msglstmdl = goobj
 
 	xobj = robj.FindChild("stackwin")
 	me.stkwin = xobj
-	gopp.Info(xobj, "stackwin?")
-	me.stkitems = append(me.stkitems, me.aboutobj, me.aboutobj, me.aboutobj, me.aboutobj)
+	// gopp.Info(xobj, "stackwin?") // nice works
+	me.stkitems = append(me.stkitems, me.msglstwin, me.romlstwin, me.loginui, me.logui, me.aboutobj)
+	// log.Println(me.stkitems)
+
 	log.Println(me)
 	return me
 }

@@ -13,6 +13,7 @@ import (
 var mainui = &mainuist{}
 
 type mainuist struct {
+	stkcuridx int
 }
 
 func (me *mainuist) uptimesetuit() {
@@ -160,9 +161,11 @@ func (me *mainuist) upnetreqst(begin bool) {
 }
 
 func (me *mainuist) switchpage(prev bool) {
-	const pcnt = 5 // todo auto get the value
-	stkw := qmlcpm.stkwin
-	curidx := stkw.Property("curidx").Toint()
+	// const pcnt = 5 // todo auto get the value
+	var pcnt = len(qmlcpm.stkitems)
+	// stkw := qmlcpm.stkwin
+	// curidx := stkw.Property("curidx").Toint()
+	curidx := me.stkcuridx
 
 	nxtidx := curidx + gopp.IfElse2(prev, -1, 1)
 	if nxtidx < 0 {
@@ -170,24 +173,30 @@ func (me *mainuist) switchpage(prev bool) {
 	} else if nxtidx >= pcnt {
 		nxtidx = 0
 	}
+
 	guiclish.EmitEventFront("switchpageidx", nxtidx)
+	// minqt.RunonUithread(func() { me.switchpageidx(nxtidx) })
 }
 
 // todooooo
-func switchpageidx(idx int) {
+func (me *mainuist) switchpageidx(idx int) {
 	gopp.Info(idx)
-	obj := qmlcpm.rootobj.FindChild("stackwin")
-	gopp.Info(obj)
-	vx := obj.Property("currentItem")
+	stkw := qmlcpm.rootobj.FindChild("stackwin")
+	gopp.Info(stkw)
+	// vx := obj.Property("currentItem")
 	// defer vx.Dtor()
-	gopp.Info(vx)
-	gopp.Info(vx.Toptr())
-	curritemx := vx.Toptr() // QQuickItem*
+	// gopp.Info(vx)
+	// gopp.Info(vx.Toptr())
+	// curritemx := vx.Toptr() // QQuickItem*
 	nxtidx := idx
 	nextitem := qmlcpm.stkitems[nxtidx] // todo not complete, crash
 	stkwin := minqt.QStackViewof(qmlcpm.stkwin.Cthis)
 	// qmlcpm.stkwin.Replace(curritemx, nextitem)
-	stkwin.Replace(minqt.QQuickItemof(curritemx), minqt.QQuickItemof(nextitem.Cthis))
+	// stkwin.Replace(minqt.QQuickItemof(curritemx), minqt.QQuickItemof(nextitem.Cthis))
+	olditem := stkwin.ReplaceCurrentItem(minqt.QQuickItemof(nextitem.Cthis))
+	log.Println(olditem, "=>", idx)
+	// stkw.SetProperty("curidx", idx)
+	me.stkcuridx = idx
 
 	/*
 	   let stkwin = stackwin;
