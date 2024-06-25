@@ -8,6 +8,8 @@ import QtQuick.Layouts
 
 import "../qmlpp"
 
+import ListModelBase
+
 // import js now, from tspp/main.js
 // import "../main.js" as Lib;
 
@@ -57,20 +59,24 @@ ScrollView {
             MenuItem { text: "Paste" }
         }
 
-        model: ListModel{
+        // model: ListModel{
+        //     id: grplstmdl
+        //     ListElement {
+        // name: "Bill Smith"
+        // number: "555 3264romlst"
+        // Content: ""
+        // Roomid: "Roomid"
+        // Roomname: "Roomname"
+        // Feditype: ""
+        // Eventid: ""
+        // Sender: ""
+        // Mtimems: 0
+        // Mtimemsui: ''
+        //     }
+        // }
+        model : ListModelBase {
             id: grplstmdl
-            ListElement {
-        name: "Bill Smith"
-        number: "555 3264romlst"
-        Content: ""
-        Roomid: "Roomid"
-        Roomname: "Roomname"
-        Feditype: ""
-        Eventid: ""
-        Sender: ""
-        Mtimems: 0
-        Mtimemsui: ''
-            }
+            objectName: "grplstmdl"
         }
 
         delegate: Rectangle {

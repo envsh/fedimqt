@@ -57,14 +57,21 @@ Item {
         MyLabel {text: "AppArg"}
         MyLabel {text: Application.arguments}
 
+        MyLabel {text: "AppExe"}
+        MyLabel {objectName: "appexe"; text: ""}
+
         MyLabel {text: "Workdir"}
         MyLabel {id:workdir; objectName:"workdir"; text: "./"}
 
-        MyLabel {text: "TestProp1"}
-        MyLabel {id: testprop1; text: ""}
+        MyLabel {text: "Archinfo"}
+        MyLabel {id: archinfo; objectName: "archinfo"; text: ""}
 
         MyLabel {text: "Uname"}
         MyLabel {id: unameinfo; objectName:"unameinfo";  text: ""}
+
+        MyLabel {text: "TestProp1"}
+        MyLabel {id: testprop1; objectName: "testprop1"; text: ""}
+
     }
 
     /////

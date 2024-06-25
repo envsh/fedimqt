@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/envsh/fedind/envcfg"
 	"github.com/envsh/fedind/guiclish"
 	"github.com/kitech/gopp"
 	"github.com/kitech/gopp/cgopp"
@@ -48,6 +49,12 @@ func (me *aboutui) implSetPairs() {
 		obj.SetProperty("text", gover)
 		// guiclish.EmitEventFront("notice", "rtgover", gover)
 	}
+	{
+		gover := envcfg.Exepath
+		obj := qmlcpm.rootobj.FindChild("appexe")
+		obj.SetProperty("text", gover)
+		// guiclish.EmitEventFront("notice", "rtgover", gover)
+	}
 	if true {
 		v := unix.Utsname{}
 		err := unix.Uname(&v)
@@ -59,6 +66,12 @@ func (me *aboutui) implSetPairs() {
 		// gopp.Debug(gover, len(strings.TrimRight(string(v.Sysname[:]), "0")))
 		obj := qmlcpm.rootobj.FindChild("unameinfo")
 		obj.SetProperty("text", gover)
+
+		{
+			gover := unameline2(&v)
+			obj := qmlcpm.rootobj.FindChild("archinfo")
+			obj.SetProperty("text", gover)
+		}
 	}
 }
 
@@ -71,8 +84,29 @@ func unameline(o *unix.Utsname) string {
 	}
 	_ = zerofn
 	var s string
-	s += cgopp.GoString(cgopp.CStringaf(string(o.Sysname[:])))
+	// s += cgopp.GoString(cgopp.CStringaf(string(o.Sysname[:])))
 	s += cgopp.GoString(cgopp.CStringaf(string(o.Version[:])))
+	// s = s[15:]
+	s = gopp.Lastof(strings.Split(s, ": ")).Str()
+
+	return s
+}
+
+// arch
+func unameline2(o *unix.Utsname) string {
+	var zerofn = func(r rune) bool {
+		if r == 0 {
+			return false
+		}
+		return true
+	}
+	_ = zerofn
+	var s string
+	s += cgopp.GoString(cgopp.CStringaf(string(o.Sysname[:])))
+	s += " "
+	s += cgopp.GoString(cgopp.CStringaf(string(o.Machine[:])))
+	s += " Kernel Version "
+	s += cgopp.GoString(cgopp.CStringaf(string(o.Release[:])))
 
 	return s
 }
@@ -200,6 +234,50 @@ func (me *MsglstPage) trimsndmsgpfx(modename string, msg string) string {
 }
 
 // //////////
+var romlstui = &RomlstPage{}
+
+type RomlstPage struct {
+}
+
+func init() {
+	// roleNames := []string{"Index", "Content", "Ctimems", "Ctimemsui"}
+	// namesx := gopp.Mapdo(logrow{}, func(i int, kx, vx any) any {
+	// 	return kx //[]any{vx}
+	// })
+	// names := gopp.ToStrs(namesx.([]any)...)
+	// roleNames := append(names, "Ctimemsui")
+	// log.Println(roleNames)
+	// minqt.RegisterModelRoleNames("loglstmdl", roleNames...)
+	minqt.RegisterModelRoleNames2("grplstmdl", guiclish.RoomsTable{},
+		"Ctimemsui", "Mtimemsui", "Lastmsui", "Content", "Lastmsui")
+}
+
+type romrow struct {
+	guiclish.RoomsTable
+	Content string // last msg
+	Lastms  int64  // last msg
+}
+
+func (me *romrow) Data(name string) any {
+	switch name {
+	case "Content":
+		return name + ".unimpl"
+	case "Lastmsui":
+		return "Lastmsui" + ".umimpl"
+	case "Lastms":
+		return me.Lastms
+	default:
+		return me.RoomsTable.Data(name)
+	}
+}
+func (me *romrow) DedupKey() string {
+	return me.RoomsTable.DedupKey()
+}
+func (me *romrow) OrderKey() int64 {
+	return me.RoomsTable.OrderKey()
+}
+
+// //////////
 var logui = &loguist{}
 
 type loguist struct {
@@ -242,7 +320,7 @@ func (me *logrow) DedupKey() string {
 	return fmt.Sprintf("%d", me.Ctimems)
 }
 func (me *logrow) OrderKey() int64 {
-	return me.Ctimems
+	return -1 // me.Ctimems
 }
 
 // todo

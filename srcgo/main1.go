@@ -157,6 +157,8 @@ func startthinmtxproc() {
 
 func onmtxevtcb(hkt *guiclish.Hooktaskqst, msgo *guiclish.Messagestable, isnew bool) (added bool) {
 	mdl := qmlcpm.msglstmdl
+	mdl2 := qmlcpm.grplstmdl
+
 	// log.Println(mdl, hkt, msgo, isnew)
 	if hkt != nil {
 		// guiclish.EmitEventFront("loadmsgrt", isnew, hkt.Hki)
@@ -165,6 +167,17 @@ func onmtxevtcb(hkt *guiclish.Hooktaskqst, msgo *guiclish.Messagestable, isnew b
 	if msgo != nil {
 		// guiclish.EmitEventFront("loadmsgrt", isnew, msgo)
 		added = mdl.Add(msgo)
+
+		romrec := &romrow{}
+		romrec.Feditype = msgo.Feditype
+		romrec.Fedisite = msgo.Fedisite
+		romrec.Roomid = msgo.Roomid
+		romrec.Roomname = msgo.Roomname
+		romrec.Ctimems = msgo.Ctimems
+		romrec.Mtimems = msgo.Mtimems
+		romrec.Creator = msgo.Sender
+
+		mdl2.Add(romrec)
 	}
 	return
 }

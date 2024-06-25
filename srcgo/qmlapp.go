@@ -117,6 +117,8 @@ type qmlcompman struct {
 
 	msglstmdlco minqt.QObject
 	msglstmdl   *minqt.ListModelBase
+	grplstmdlco minqt.QObject
+	grplstmdl   *minqt.ListModelBase
 
 	/////
 
@@ -162,6 +164,14 @@ func qmlcompmannew(rootobj minqt.QObject) *qmlcompman {
 	}
 	me.msglstmdlco = xobj
 	me.msglstmdl = goobj
+
+	{
+		xobj := robj.FindChild("grplstmdl")
+		goobjx := xobj.Property("goobj")
+		goobj := minqt.ListModelBaseof(goobjx.Toint64())
+		me.grplstmdlco = xobj
+		me.grplstmdl = goobj
+	}
 
 	xobj = robj.FindChild("stackwin")
 	me.stkwin = xobj

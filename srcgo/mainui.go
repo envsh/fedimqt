@@ -117,7 +117,7 @@ func (me *mainuist) onnetreqnote(begin bool, len int) {
 	})
 }
 func (me *mainuist) onnetstatus(online bool, errmsg string) {
-	log.Println(online, errmsg)
+	gopp.Println(online, errmsg)
 	stmsg := me.onolnchkerr(errmsg)
 
 	minqt.RunonUithread(func() {
@@ -174,6 +174,8 @@ func (me *mainuist) switchpage(prev bool) {
 		nxtidx = 0
 	}
 
+	log.Println(curidx, nxtidx)
+	me.stkcuridx = nxtidx
 	guiclish.EmitEventFront("switchpageidx", nxtidx)
 	// minqt.RunonUithread(func() { me.switchpageidx(nxtidx) })
 }
