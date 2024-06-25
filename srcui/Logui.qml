@@ -40,7 +40,7 @@ ScrollView {
         anchors.leftMargin: 5
         anchors.top : ptitle.bottom
         height: parent.height-30
-        id: scroll1
+        id: scroll2
 
     ListView {
         id: listView

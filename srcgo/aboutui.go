@@ -25,7 +25,12 @@ func (me *aboutui) SetPairs() {
 }
 func (me *aboutui) implSetPairs() {
 	{
-		qtver := minqt.QVersion()
+		qtver := minqt.QCompVersion()
+		obj := qmlcpm.rootobj.FindChild("compqtver")
+		obj.SetProperty("text", qtver)
+	}
+	{
+		qtver := minqt.QRuntimeVersion()
 		obj := qmlcpm.rootobj.FindChild("rtqtver")
 		obj.SetProperty("text", qtver)
 		// guiclish.EmitEventFront("notice", "rtqtver", qtver)

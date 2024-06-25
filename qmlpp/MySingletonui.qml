@@ -112,4 +112,41 @@ QtObject {
         return false;
     }
 
+    // general, for msglst and loglst
+    function scrollvto(scrobj, top : bool, dirvert: bool) {
+        // Tspp.debug("top=", top);
+        // 0.0 - 1.0
+        let sbv = scrobj.ScrollBar.vertical;
+        if (top) {
+            sbv.position = 0.0;
+        }else{
+            // Tspp.debug("nowpos", sbv.position);
+            sbv.position = 1.0 - sbv.size // scroll1.contentHeight - scroll1.height;
+            // Tspp.debug("cch", scroll1.contentHeight, "winh", scroll1.height);
+        }
+    }
+
+    /////
+    function qmlTimer() {
+        // return Qt.createComponent("import QtQuick; Timer{}", appwin);
+        return Qt.createQmlObject("import QtQuick; Timer{}", appwin);
+    }
+    function qmlSetTimeout(cbfn, delay, ...args) {
+        // console.log(cbfn, delay, ...args);
+        let tmer = qmlTimer();
+        tmer.interval = delay;
+        tmer.repeat = true; // like origin setTimeout
+        let cb = () => { cbfn(...args); };
+        tmer.triggered.connect(cb);
+        // tmer.running = true;
+        tmer.start();
+        return tmer
+    }
+    function qmlClearTimeout(tmer) {
+        // console.log("clrtmer", tmer);
+        // tmer.running = false;
+        tmer.stop();
+        // tmer.disconnect(); // not work
+        tmer.destroy();
+    }
 }

@@ -196,12 +196,12 @@ ApplicationWindow {
             flat: true
             display: AbstractButton.IconOnly}
         MyButton{
-            visible: !netreqbegin
+            visible: true
             icon.source: "icons/transfer.png";
             id: netreqst
             objectName: "netreqstnorm"
             // tiptext: "ffff"
-            tiptext: 'UP:'+netrequplen+", DL:"+netreqdownlen
+            tiptext: 'UP: -1, DL -1'
             implicitWidth: 22;
             implicitHeight:24;
             flat: true
@@ -210,8 +210,8 @@ ApplicationWindow {
         AnimatedImage{
             id: netreqstloading
             objectName: "netreqstloading"
-            visible: netreqbegin
-            paused : !netreqbegin
+            visible: false
+            paused : true
             source: "icons/loadingsp.gif";
             // implicitWidth: 22
             // implicitHeight: 24
@@ -242,10 +242,6 @@ ApplicationWindow {
     // }
 
     ///////// script
-    property bool netreqbegin: false;
-    property int netrequplen: 0;
-    property int netreqdownlen: 0;
-
     QmlCppBridge {    id : qcffi }
     // Aboutuint{ id: uiofnt }
     // ShareState { id: Sss}
@@ -267,7 +263,7 @@ ApplicationWindow {
             onQmlAppEngineCreated(jstr);
         } else if (jstr.startsWith('hello this c++')){
             // just a debug msg and compqtver
-            aboutui.setcompqtver(jstr.substring(15));
+            // aboutui.setcompqtver(jstr.substring(15));
         }else{
         // Tspp.info("lstcnt", listView.count);  // print ui object property
         // try {
@@ -347,7 +343,7 @@ ApplicationWindow {
     Component.onCompleted: {
         Tspp.debug("");
         Qmlpp.qmlppinit(appwin);
-        Tspp.settimeoutfuncs(qmlSetTimeout, qmlClearTimeout);
+        // Tspp.settimeoutfuncs(qmlSetTimeout, qmlClearTimeout);
         // Tspp.debug("oneinst", MySingleton, MySingleton.pt1, MySingleton.dummy);
         // Tspp.debug("oneinstui", MySingletonui, MySingletonui.objs);
         // Tspp.debug("Sss",  Sss);
@@ -380,35 +376,15 @@ ApplicationWindow {
         // let rv3 = invokebkd("loadroom", "1=1 limit 99");
     }
     //////
-    // var pageitems = [aboutui,msglstwin];
-    function switchpage(prev : bool) {
-        let stkwin = stackwin;
-        // Tspp.debug("prev", prev, stkwin.depth, stkwin.curidx, stkwin.childs.length);
-        // stackwin.index = -1; // non-exist???
-        let nxtidx = stkwin.curidx + ( prev ? -1: 1);
-        if (nxtidx < 0) nxtidx = stkwin.childs.length-1;
-        if (nxtidx >= stkwin.childs.length) nxtidx = 0;
-        Tspp.debug("switpage", stkwin.curidx, "=>", nxtidx);
-        stkwin.curidx = nxtidx;
-
-        let curitem = stkwin.currentItem;
-        stkwin.replace(curitem, stkwin.childs[nxtidx]);
-        
-        stkwin.find(function(item, index) {
-            Tspp.debug('idx', index);
-            // return item.isTheOne
-            return false;
-        }, StackView.DontLoad);
-    }
     function switchpageidx(idx : int) {
         // todo 未完成
-        // if (true) { calljs("switchpageidx", idx); return; }
+        // if (true) { calljs(" `", idx); return; }
         let stkwin = stackwin;
         let curitem = stkwin.currentItem;
         let nxtidx = idx;
         let nxtitem = stkwin.childs[nxtidx];
         stkwin.curidx = nxtidx;
-        Tspp.debug(idx, "curitem", curitem, "nxtitem", nxtitem);
+        // Tspp.debug(idx, "curitem", curitem, "nxtitem", nxtitem);
         stkwin.replace(curitem, nxtitem);
     }
 
@@ -419,27 +395,28 @@ ApplicationWindow {
         curwinst.text = 'CP:'+pagename;
     }
 
-    /////
-    function qmlTimer() {
-        // return Qt.createComponent("import QtQuick; Timer{}", appwin);
-        return Qt.createQmlObject("import QtQuick; Timer{}", appwin);
+    // general, for msglst and loglst
+    function scrollvto(name: string, top : bool) {
+        // Tspp.debug("top=", top);
+        // 0.0 - 1.0
+        let sbv = scroll1.ScrollBar.vertical;
+        switch (name) {
+            case "scroll1":
+            break;
+            case "scroll2":
+            sbv = scroll2.ScrollBar.vertical;
+            break;
+            default:
+            Tspp.info('noimpl', name, top);
+        }
+        if (top) {
+            sbv.position = 0.0;
+        }else{
+            // Tspp.debug("nowpos", sbv.position);
+            sbv.position = 1.0 - sbv.size // scroll1.contentHeight - scroll1.height;
+            // Tspp.debug("cch", scroll1.contentHeight, "winh", scroll1.height);
+        }
     }
-    function qmlSetTimeout(cbfn, delay, ...args) {
-        // console.log(cbfn, delay, ...args);
-        let tmer = qmlTimer();
-        tmer.interval = delay;
-        tmer.repeat = true; // like origin setTimeout
-        let cb = () => { cbfn(...args); };
-        tmer.triggered.connect(cb);
-        // tmer.running = true;
-        tmer.start();
-        return tmer
-    }
-    function qmlClearTimeout(tmer) {
-        // console.log("clrtmer", tmer);
-        // tmer.running = false;
-        tmer.stop();
-        // tmer.disconnect(); // not work
-        tmer.destroy();
-    }
+
+
 }

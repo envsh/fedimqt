@@ -37,27 +37,32 @@ var mainrun = false
 func main() {
 	//
 	mainrun = true
-	log.Println(envcfg.Exepath)
+	// log.Println(envcfg.Exepath)
 
-	gomaininit()
+	// gomaininit() // called in main.init()
 	gomainexe()
 }
 
 //extern gomainexe()
 func gomainexe() {
 	symx := cgopp.Dlsym0("maincxxqml0")
-	var fnaddr func() int
-	purego.RegisterFunc(&fnaddr, uintptr(symx))
-	log.Println(symx, fnaddr)
-	fnaddr() //
+	var maincxxqml0 func() int
+	purego.RegisterFunc(&maincxxqml0, uintptr(symx))
+	log.Println("Running... maincxxqml0,", symx, maincxxqml0)
+	rv := maincxxqml0() //
 	// cpp will run loop forever
 	// gopp.Forever()
-	gopp.Info("App exit...", time.Since(gopp.StartTime))
+	gopp.Info("App exit...", rv, time.Since(gopp.StartTime))
 }
 
 // as main of sharedlib
 func init() {
-	// mainbyinit()
+	gopp.Info("", runtime.GOOS, envcfg.Mynode, envcfg.Exepath)
+	gomaininit()
+	if runtime.GOOS == "android" {
+		// gomainexe()
+	}
+
 }
 
 // this nonblock
@@ -77,10 +82,11 @@ func gomaininit() {
 	// startthinmtxproc()
 
 	time.AfterFunc(gopp.DurandMs(999, 999), func() {
-		qtver := minqt.QVersion()
-		// qtver := "2.3.4"
-		// log.Println(qtver)
+
 		if false {
+			qtver := minqt.QRuntimeVersion()
+			// qtver := "2.3.4"
+			// log.Println(qtver)
 			guiclish.EmitEventFront("notice", "rtqtver", qtver)
 			dir, _ := os.Getwd()
 			guiclish.EmitEventFront("notice", "workdir", dir)
@@ -88,7 +94,7 @@ func gomaininit() {
 			guiclish.EmitEventFront("notice", "rtgover", gover)
 		}
 		if true {
-			(&aboutui{}).SetPairs()
+			abtui.SetPairs()
 		}
 
 	})

@@ -80,7 +80,7 @@ func tstadditems() {
 
 }
 func testqmlop2() {
-	log.Println("hehehe")
+	// log.Println("hehehe")
 	// robj := qmlcpm.rootobj
 	stkwx := qmlcpm.stkwin
 	stkw := minqt.QStackViewof(stkwx.Cthis)

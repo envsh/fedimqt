@@ -44,7 +44,7 @@ Item {
         MyLabel {text: JSON.stringify(Qt.platform)}
 
         MyLabel {text: "CompQtVer"}
-        MyLabel {id:compqtver; text: uiofnt.qtctver}
+        MyLabel {id:compqtver; objectName: "compqtver"; text: "1.0.0"}
         MyLabel {text: "RunQtVer"}
         // MyLabel {id:rtqtver; objectName:"rtqtver"; text: uiofnt.qtrtver}
         MyLabel {id:rtqtver; objectName:"rtqtver"; text: "1.0.0"}

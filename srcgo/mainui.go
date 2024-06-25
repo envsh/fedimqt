@@ -154,6 +154,7 @@ func (me *mainuist) upnetreqst(begin bool) {
 	{
 		obj := qmlcpm.rootobj.FindChild("netreqstloading")
 		obj.SetProperty("visible", begin)
+		obj.SetProperty("paused", !begin)
 	}
 	// gopp.Info(begin, txt)
 }
