@@ -129,7 +129,7 @@ add_custom_target(tscc COMMENT "tscc {tspp,Qmlpp}.ts 222"
 add_dependencies(helloworld tscc)
 
 if(${ANDROID})
-# message(${ANDROID_NDK_ROOT})
+# message("ANDROID_NDK_ROOT=${ANDROID_NDK_ROOT}")
 set(NDKSYSROOT "${ANDROID_NDK_ROOT}/toolchains/llvm/prebuilt/darwin-x86_64/sysroot")
 set(CGO_CFLAGSx "-g -O0 -arch arm64 ")
 set(CGO_CCx "${NDKSYSROOT}/../bin/aarch64-linux-android21-clang")
