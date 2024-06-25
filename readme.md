@@ -7,6 +7,15 @@
 // https://github.com/OlivierLDff/MaterialDesignSvgo
 ```
 
+### 遇到的一些问题
+
+- 为什么切换到 qtsdk 6.7 for android, apk 启动变卡了???
+    https://codereview.qt-project.org/c/qt/qtbase/+/546260
+    06-25 18:29:30.651 16636 16636 W Activity: PerfMonitor: Slow Operation: Activity org.qtproject.example.helloworld/org.qtproject.qt.android.bindings.QtAc
+tivity onCreate took 3152ms
+    06-25 18:33:20.872 17803 17803 I QtLoader: Sleeping for 3000ms, helping the native debugger to settle. Use the env QT_ANDROID_DEBUGGER_MAIN_THREAD_SLEEP_MS variable to change this value.
+    需要在java里设置...值为ms数,QT_ANDROID_DEBUGGER_MAIN_THREAD_SLEEP_MS=1
+
 ### 编译android初始化
 
 [todotodototodo](https://doc.qt.io/Qt-6/android-building-projects-from-commandline.html#:~:text=The%20command%20below%20shows%20the%20easiest%20way%20to,~%2FQt%2F%3Cqt_version%3E%2Fandroid_%3Cabi%3E%2Fbin%2Fqt-cmake%20%20-DQT_ANDROID_BUILD_ALL_ABIS%3DTRUE%20%20-DANDROID_SDK_ROOT%3D~%2FAndroid%2FSdk%20%20-DANDROID_NDK_ROOT%3D~%2FAndroid%2FSdk%2Fndk%2F26.1.10909125%20%5C)

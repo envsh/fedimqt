@@ -62,6 +62,8 @@ extern void initQtmsgout();
 
 extern "C"
 int maincxxqml(int argc, char**argv) {
+    // 需要在 java 里设置...
+    setenv("QT_ANDROID_DEBUGGER_MAIN_THREAD_SLEEP_MS", "123", 1);
     initQtmsgout();
 
     // oldqtmsgoutfn = qInstallMessageHandler(qtMessageOutput);

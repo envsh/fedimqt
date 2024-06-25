@@ -174,17 +174,19 @@ func (me *mainuist) switchpage(prev bool) {
 		nxtidx = 0
 	}
 
-	log.Println(curidx, nxtidx)
-	me.stkcuridx = nxtidx
-	guiclish.EmitEventFront("switchpageidx", nxtidx)
-	// minqt.RunonUithread(func() { me.switchpageidx(nxtidx) })
+	// log.Println(curidx, nxtidx)
+	{
+		// me.stkcuridx = nxtidx
+		// guiclish.EmitEventFront("switchpageidx", nxtidx)
+	}
+	minqt.RunonUithread(func() { me.switchpageidx(nxtidx) })
 }
 
 // todooooo
 func (me *mainuist) switchpageidx(idx int) {
-	gopp.Info(idx)
-	stkw := qmlcpm.rootobj.FindChild("stackwin")
-	gopp.Info(stkw)
+	// gopp.Info(idx)
+	// stkw := qmlcpm.rootobj.FindChild("stackwin")
+	// gopp.Info(stkw)
 	// vx := obj.Property("currentItem")
 	// defer vx.Dtor()
 	// gopp.Info(vx)
@@ -196,7 +198,7 @@ func (me *mainuist) switchpageidx(idx int) {
 	// qmlcpm.stkwin.Replace(curritemx, nextitem)
 	// stkwin.Replace(minqt.QQuickItemof(curritemx), minqt.QQuickItemof(nextitem.Cthis))
 	olditem := stkwin.ReplaceCurrentItem(minqt.QQuickItemof(nextitem.Cthis))
-	log.Println(olditem, "=>", idx)
+	log.Println(olditem, me.stkcuridx, "=>", idx)
 	// stkw.SetProperty("curidx", idx)
 	me.stkcuridx = idx
 

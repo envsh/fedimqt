@@ -57,11 +57,18 @@ func gomainexe() {
 
 // as main of sharedlib
 func init() {
+	cgopp.JNI_OnLoad_Callback = android_javajni_onload
 	gopp.Info("", runtime.GOOS, envcfg.Mynode, envcfg.Exepath)
 	gomaininit()
 	if runtime.GOOS == "android" {
 		// gomainexe()
 	}
+
+}
+
+func android_javajni_onload() {
+	gopp.Println("hehhehe")
+	os.Setenv("QT_ANDROID_DEBUGGER_MAIN_THREAD_SLEEP_MS", "123")
 
 }
 

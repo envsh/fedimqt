@@ -49,10 +49,29 @@ set(MAINSRC
     maincxx.cpp
     mainc.c
 )
+# not work
+# set(ANDROID_JAVA_SOURCE_DIR "${projdir}/adjava")
+# set(ANDROID_PACKAGE_SOURCE_DIR "${projdir}/adjava")
+
 if(${ANDROID})
 qt_add_executable(helloworld ${MAINSRC})
+# set_property(TARGET helloworld PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#           "${projdir}/adjava")
 else() ### ANDROI
 qt_add_library(helloworld SHARED ${MAINSRC})
+endif()
+if(ANDROID)
+    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/adjava")
+    set_property(TARGET helloworld PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR ${ANDROID_PACKAGE_SOURCE_DIR})
+    # add_custom_target(cmake_android_package
+    #     SOURCES
+    #     ${ANDROID_PACKAGE_SOURCE_DIR}/AndroidManifest.xml
+    #     ${ANDROID_PACKAGE_SOURCE_DIR}/build.gradle
+    #     ${ANDROID_PACKAGE_SOURCE_DIR}/grable.properties
+    #     ${ANDROID_PACKAGE_SOURCE_DIR}/res/values/libs.xml
+    # )
+
+    # include(D:/Dev/Dev/android_openssl/CMakeLists.txt)
 endif()
 
 # must before qt_add_qml_module
@@ -137,7 +156,7 @@ set(CGO_CCx "${NDKSYSROOT}/../bin/aarch64-linux-android21-clang")
 add_custom_command(OUTPUT ../jniLibs/libhellogo.h
     WORKING_DIRECTORY "${CMAKE_HOME_DIRECTORY}/srcgo"
     COMMAND pwd && go version
-    COMMAND GOOS=android GOARCH=arm64 CC="${CGO_CCx}" CGO_CFLAGS="\"${CGO_CFLAGSx}\"" CGO_LDFLAGS="\"-arch arm64\"" CGO_ENABLED=1 go build -buildmode=c-shared -o ../jniLIbs/libhellogo${shextsfx} ./
+    COMMAND GOOS=android GOARCH=arm64 CC="${CGO_CCx}" CGO_CFLAGS="\"${CGO_CFLAGSx}\"" CGO_LDFLAGS="\"-arch arm64\"" CGO_ENABLED=1 go build -tags usejni -buildmode=c-shared -o ../jniLIbs/libhellogo${shextsfx} ./
     COMMAND ls -lh ../jniLibs/libhellogo${shextsfx} && file ../jniLibs/libhellogo${shextsfx}
     # 好像这个没有什么用
     COMMAND cp ../jniLibs/libhellogo${shextsfx} ../build/
@@ -204,6 +223,9 @@ add_custom_target(clnts rm -fv qmlpp/tspp.js qmlpp/tspp.js.map qmlpp/tspp.d.ts q
 
 add_custom_target(clnapk WORKING_DIRECTORY "${projdir}/build"
     COMMAND rm -fv build/android-build/helloworld.apk build/android-build/build/outputs/apk/debug/android-build-debug.apk android-build/helloworld.apk android-build/build/outputs/apk/debug/android-build-debug.apk)
+add_custom_target(decapk WORKING_DIRECTORY "${projdir}/build"
+    COMMAND apktool d -f -o pkgapk android-build/helloworld.apk
+)
 
 add_custom_target(instapk WORKING_DIRECTORY "${projdir}/build"
     COMMAND /opt/android-sdk/adbtools/adb install  android-build/helloworld.apk )

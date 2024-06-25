@@ -22,7 +22,10 @@ var qmlcpm *qmlcompman
 
 //export qmlappenginenew
 func qmlappenginenew(step int) voidptr {
+	nowt := time.Now()
+	defer gopp.Println(step, time.Since(nowt))
 	gopp.Info(step)
+
 	switch step {
 	case 0:
 		gopp.Info(step)
@@ -37,6 +40,7 @@ func qmlappenginenew(step int) voidptr {
 	case 2:
 
 	case 3:
+		// time.AfterFunc(gopp.DurandSec(1, 2), func() {
 		robj := qmlape.RootObject()
 		qmlcpm = qmlcompmannew(robj)
 
@@ -44,6 +48,7 @@ func qmlappenginenew(step int) voidptr {
 			tstadditems()
 		}
 		time.AfterFunc(gopp.DurandSec(1, 2), testqmlop2)
+		// })
 	default:
 		log.Println("not expect", step)
 	}
