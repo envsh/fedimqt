@@ -89,22 +89,22 @@ QtObject {
 
     // type or class not work
     //class FediRecord {}; //
-    function newFediRecord () {
-        let obj = {
-            name: "Bill Smith",
-            number: "555 3264",
-            Content: "",
-            Roomid: "",
-            Roomname: "",
-            Feditype: "",
-            Eventid: "",
-            Sender: "",
-            Mtimems: 0,
-            Mtimemsui: '',
-            Dtime: "0s0ms",
-        };
-        return obj;
-    }
+    // function newFediRecord () {
+    //     let obj = {
+    //         name: "Bill Smith",
+    //         number: "555 3264",
+    //         Content: "",
+    //         Roomid: "",
+    //         Roomname: "",
+    //         Feditype: "",
+    //         Eventid: "",
+    //         Sender: "",
+    //         Mtimems: 0,
+    //         Mtimemsui: '',
+    //         Dtime: "0s0ms",
+    //     };
+    //     return obj;
+    // }
 
     // function onolnchkerr(Argv) {
     //     let msg = Argv[1];

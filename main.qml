@@ -315,26 +315,29 @@ ApplicationWindow {
             case "msglst.scrollvto":
                 msglstwin.scrollvto(jso.Argv[0]);
                 break;
-            case "sendmsg":
-                msglstwin.sendmsgret(jso);
+            case "seticoncolor":
+                seticoncolor(jso.Argv[0], jso.Argv[1]);
                 break;
-            case "loadmsg":
-                msglstwin.loadmsgret(jso.Retv);
-                romlstwin.loadmsgret(jso.Retv);
-                break;
-            case "loadmsgrt":
-                msglstwin.loadmsgret(jso.Argv);
-                romlstwin.loadmsgret(jso.Argv);
-                break;
-            case "loadmorert":
-                Tspp.info("todoooo", jso.Cmd, jso);
-                break;
-            case "loadroom":
-                romlstwin.onGotRooms(jso.Retv);
-                break;
-            case "loadroomrt":
-                romlstwin.onGotRooms(jso.Argv);
-                break;
+            // case "sendmsg":
+            //     msglstwin.sendmsgret(jso);
+            //     break;
+            // case "loadmsg":
+            //     msglstwin.loadmsgret(jso.Retv);
+            //     romlstwin.loadmsgret(jso.Retv);
+            //     break;
+            // case "loadmsgrt":
+            //     msglstwin.loadmsgret(jso.Argv);
+            //     romlstwin.loadmsgret(jso.Argv);
+            //     break;
+            // case "loadmorert":
+            //     Tspp.info("todoooo", jso.Cmd, jso);
+            //     break;
+            // case "loadroom":
+            //     romlstwin.onGotRooms(jso.Retv);
+            //     break;
+            // case "loadroomrt":
+            //     romlstwin.onGotRooms(jso.Argv);
+            //     break;
             case "listcfg":
                 if (jso.Argv[0] == "accountline") {
                     loginui.onGotAccounts(jso.Retv);
@@ -402,47 +405,18 @@ ApplicationWindow {
         // let rv3 = invokebkd("loadroom", "1=1 limit 99");
     }
     //////
-    // function switchpageidx(idx : int) {
-    //     // todo 未完成
-    //     // if (true) { calljs(" `", idx); return; }
-    //     let stkwin = stackwin;
-    //     let curitem = stkwin.currentItem;
-    //     let nxtidx = idx;
-    //     let nxtitem = stkwin.childs[nxtidx];
-    //     stkwin.curidx = nxtidx;
-    //     // Tspp.debug(idx, "curitem", curitem, "nxtitem", nxtitem);
-    //     stkwin.replace(curitem, nxtitem);
-    // }
-
-    // function upstatusrc(cnt) {
-    //     grpcntst.text = 'RC:'+cnt;
-    // }
-    // function upstatuscp(pagename) {
-    //     curwinst.text = 'CP:'+pagename;
-    // }
 
     // general, for msglst and loglst
     function scrollvto(name: string, top : bool) {
-        // Tspp.debug("top=", top);
-        // 0.0 - 1.0
-        let sbv = scroll1.ScrollBar.vertical;
-        switch (name) {
-            case "scroll1":
-            break;
-            case "scroll2":
-            sbv = scroll2.ScrollBar.vertical;
-            break;
-            default:
-            Tspp.info('noimpl', name, top);
-        }
-        if (top) {
-            sbv.position = 0.0;
-        }else{
-            // Tspp.debug("nowpos", sbv.position);
-            sbv.position = 1.0 - sbv.size // scroll1.contentHeight - scroll1.height;
-            // Tspp.debug("cch", scroll1.contentHeight, "winh", scroll1.height);
-        }
+        // Tspp.debug("top=", top, name);
+        let scrobjs = {"scroll1": scroll1, "scroll2": scroll2};
+        Qmlpp.scrollvto(scrobjs[name], top);
     }
 
+    function seticoncolor(name: string, color: string) {
+        // Tspp.debug(name, color);
+        let objs = {"onlinest": onlinest};
+        objs[name].icon.color = color;
+    }
 
 }

@@ -45,12 +45,12 @@ func asyncInvokeProcessor(reqdata string) (string, bool) {
 	cio.Retc = len(cio.Retv)
 	resp, err := json.Marshal(cio)
 	gopp.ErrPrint(err, cio)
-	if cio.Retful {
+	if cio.Retful() {
 		log.Println("resp ready", len(resp), gopp.SubStr(string(resp), 66))
 	}
 	// v.resp = C.CString(string(resp))
 	// v.len2 = usize(len(resp))
-	return string(resp), cio.Retful
+	return string(resp), cio.Retful()
 
 	// log.Println("respobj", v)
 }

@@ -138,6 +138,7 @@ func (me *mainuist) onnetstatus(online bool, errmsg string) {
 	// gopp.Println(online, errmsg)
 	stmsg := me.onolnchkerr(errmsg)
 
+	guiclish.EmitEventFront("seticoncolor", "onlinest", gopp.IfElse2(online, "darkgreen", ""))
 	minqt.RunonUithread(func() {
 		me.upstatusll(stmsg)
 

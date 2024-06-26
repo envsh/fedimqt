@@ -22,16 +22,16 @@ var qmlcpm *qmlcompman
 
 //export qmlappenginenew
 func qmlappenginenew(step int) voidptr {
-	nowt := time.Now()
-	defer gopp.Println(step, time.Since(nowt))
-	gopp.Info(step)
+	// nowt := time.Now()
+	// defer gopp.Println(step, time.Since(nowt))
+	// gopp.Info(step)
 
 	switch step {
 	case 0:
-		gopp.Info(step)
+		// gopp.Info(step)
 		e := minqt.QQmlApplicationEngineNew()
 		qmlape = e
-		gopp.Info(step)
+		// gopp.Info(step)
 		// gopp.SleepSec(3)
 		return e.Cthis
 
@@ -39,21 +39,29 @@ func qmlappenginenew(step int) voidptr {
 
 	case 2:
 
-	case 3:
-		// time.AfterFunc(gopp.DurandSec(1, 2), func() {
-		robj := qmlape.RootObject()
-		qmlcpm = qmlcompmannew(robj)
+	case 3: // qmlApplicationEngineCreated
+		onQmlAppEngineCreated()
 
-		if false {
-			tstadditems()
-		}
-		time.AfterFunc(gopp.DurandSec(1, 2), testqmlop2)
-		// })
 	default:
-		log.Println("not expect", step)
+		gopp.Println("not expect", step)
 	}
 
 	return nil
+}
+
+func onQmlAppEngineCreated() {
+	gopp.Println("hereee")
+	// time.AfterFunc(gopp.DurandSec(1, 2), func() {
+	robj := qmlape.RootObject()
+	qmlcpm = qmlcompmannew(robj)
+
+	if false {
+		tstadditems()
+	}
+	time.AfterFunc(gopp.DurandSec(1, 2), testqmlop2)
+	// })
+
+	//
 }
 
 func init() {

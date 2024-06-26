@@ -202,62 +202,62 @@ ScrollView {
 
     ///// script
     Component.onCompleted : {
-        Tspp.debug("hehhe",grplstmdl.count);
-        upstatusrc(grplstmdl.count);
+        // Tspp.debug("hehhe",grplstmdl.count);
+        // upstatusrc(grplstmdl.count);
     }
 
-    function grpaddnodup(item, prepend) {
-        let has = Sss.grps.has(item.Roomid);
-        if (!has) {
-            Sss.grps.set(item.Roomid, item);
-            if (prepend) {
-                listView.model.insert(0, item);
-            }else{
-                listView.model.append(item);
-            }
-            return true;
-        }
-        // Tspp.debug('item', !has, item.Eventid, Sss.msgs.size, listView.model.count);
-        return false;
-    }
-    function loadmsgret(retv) {
-        // Tspp.debug("...rowcnt", retv.length);
-        let oldcnt = listView.model.count;
-        let isnew = retv[0]
-        for (let i=1; i < retv.length; i++) {
-            let rv = retv[i];
-            // let item = {name:"", number: ""};
-            let item = Sss.newFediRecord();
-            item.Dtime = rv.Dtime == '' ? rv.dtime : rv.Dtime;
-            item.name = item.Sender = "gptcfai"
-            item.Feditype = "gptcf"
-            item.Roomid = "mainline@cf"
-            item.Roomname = "mainline"
-            item.Eventid = "$ifsf"
-            item.name = rv.Sender;
-            item.number = rv.Roomid;
-            item.Eventid = rv.Eventid;
-            item = rv;
-            item.Dtime = '0s0ms';
-            item.Mtimemsui = Tspp.objtmstrmin(new Date(item.Mtimems))
-            for (let j=0;j < 30; j++) {
-                // listView.model.insert(0, item);
-            }
-            // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
-            // Tspp.debug('typeof', typeof rv.Sender)
+    // function grpaddnodup(item, prepend) {
+    //     let has = Sss.grps.has(item.Roomid);
+    //     if (!has) {
+    //         Sss.grps.set(item.Roomid, item);
+    //         if (prepend) {
+    //             listView.model.insert(0, item);
+    //         }else{
+    //             listView.model.append(item);
+    //         }
+    //         return true;
+    //     }
+    //     // Tspp.debug('item', !has, item.Eventid, Sss.msgs.size, listView.model.count);
+    //     return false;
+    // }
+    // function loadmsgret(retv) {
+    //     // Tspp.debug("...rowcnt", retv.length);
+    //     let oldcnt = listView.model.count;
+    //     let isnew = retv[0]
+    //     for (let i=1; i < retv.length; i++) {
+    //         let rv = retv[i];
+    //         // let item = {name:"", number: ""};
+    //         let item = Sss.newFediRecord();
+    //         item.Dtime = rv.Dtime == '' ? rv.dtime : rv.Dtime;
+    //         item.name = item.Sender = "gptcfai"
+    //         item.Feditype = "gptcf"
+    //         item.Roomid = "mainline@cf"
+    //         item.Roomname = "mainline"
+    //         item.Eventid = "$ifsf"
+    //         item.name = rv.Sender;
+    //         item.number = rv.Roomid;
+    //         item.Eventid = rv.Eventid;
+    //         item = rv;
+    //         item.Dtime = '0s0ms';
+    //         item.Mtimemsui = Tspp.objtmstrmin(new Date(item.Mtimems))
+    //         for (let j=0;j < 30; j++) {
+    //             // listView.model.insert(0, item);
+    //         }
+    //         // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
+    //         // Tspp.debug('typeof', typeof rv.Sender)
 
-            // listView.model.insert(0, item);
-            let ok = grpaddnodup(item, true);
-            // Tspp.debug(i, ok, item.Eventid);
-        }
-        let addcnt = listView.model.count - oldcnt;
-        if (addcnt>0) {
-            // scrollvto(true);
-            //  Tspp.runonce(286, scrollvto, true);
-            upstatusrc(grplstmdl.count);
-        }
-        // Tspp.debug('grpcnt',  addcnt, listView.model.count);
-    }
+    //         // listView.model.insert(0, item);
+    //         let ok = grpaddnodup(item, true);
+    //         // Tspp.debug(i, ok, item.Eventid);
+    //     }
+    //     let addcnt = listView.model.count - oldcnt;
+    //     if (addcnt>0) {
+    //         // scrollvto(true);
+    //         //  Tspp.runonce(286, scrollvto, true);
+    //         upstatusrc(grplstmdl.count);
+    //     }
+    //     // Tspp.debug('grpcnt',  addcnt, listView.model.count);
+    // }
 
     function onGotRooms(retv) {
         let oldcnt = listView.model.count;
