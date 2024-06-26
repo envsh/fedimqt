@@ -32,6 +32,9 @@ ApplicationWindow {
     // Material.foreground : "red"
 
     /////
+    // todo how direct trigger c++/go function???
+    // todo 顶层菜单来回下拉多次,内存能够涨60M???
+    // 虽然还能降低内存,但不知道能不能完全降回来原来的水平???
     menuBar: MenuBar {
         Menu {
             title: qsTr("&File")
@@ -318,6 +321,9 @@ ApplicationWindow {
             case "seticoncolor":
                 seticoncolor(jso.Argv[0], jso.Argv[1]);
                 break;
+            case "setloginline":
+                loginui.addloginline(jso.Argv[0]);
+                break;
             // case "sendmsg":
             //     msglstwin.sendmsgret(jso);
             //     break;
@@ -338,31 +344,31 @@ ApplicationWindow {
             // case "loadroomrt":
             //     romlstwin.onGotRooms(jso.Argv);
             //     break;
-            case "listcfg":
-                if (jso.Argv[0] == "accountline") {
-                    loginui.onGotAccounts(jso.Retv);
-                    // switchpageidx(2);
-                    calljs("switchpageidx", 2);
-                }
-                break;
-            case "getcfg":
-                if (jso.Argv[1] == 'lastaccountline') {
-                    if (jso.Retc == 2) {
-                        invokebkd('loginaccountline', jso.Retv[0]);
-                    }else {
-                        invokebkd('listcfg', 'accountline');
-                    }
-                }
-                break;
-            case "loginaccountline":
-                // todo check result
-                // switchpageidx(0);
-                calljs("switchpageidx", 0);
-                break;
+            // case "listcfg":
+            //     if (jso.Argv[0] == "accountline") {
+            //         loginui.onGotAccounts(jso.Retv);
+            //         // switchpageidx(2);
+            //         calljs("switchpageidx", 2);
+            //     }
+            //     break;
+            // case "getcfg":
+            //     if (jso.Argv[1] == 'lastaccountline') {
+            //         if (jso.Retc == 2) {
+            //             invokebkd('loginaccountline', jso.Retv[0]);
+            //         }else {
+            //             invokebkd('listcfg', 'accountline');
+            //         }
+            //     }
+            //     break;
+            // case "loginaccountline":
+            //     // todo check result
+            //     // switchpageidx(0);
+            //     calljs("switchpageidx", 0);
+            //     break;
 
-            case 'qmlAppEngineCreated':
-                // that's ok
-                break;
+            // case 'qmlAppEngineCreated':
+            //     // that's ok
+            //     break;
             default:
                 Tspp.info('Not catched case:', jso.Cmd, jso);
                 break;
@@ -370,8 +376,8 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        Tspp.debug("");
-        Qmlpp.qmlppinit(appwin);
+        
+        
         // Tspp.settimeoutfuncs(qmlSetTimeout, qmlClearTimeout);
         // Tspp.debug("oneinst", MySingleton, MySingleton.pt1, MySingleton.dummy);
         // Tspp.debug("oneinstui", MySingletonui, MySingletonui.objs);
@@ -394,14 +400,16 @@ ApplicationWindow {
     }
     // uifullloaded now
     function onQmlAppEngineCreated(msg) {
+        Tspp.debug("");
+        Qmlpp.qmlppinit(appwin);
         // init some here
         // Tspp.debug("wtodo", msg, Sss.bkdretpromis);
         // Tspp.debug("uiofnt.qtrtver", uiofnt.qtrtver);
-        let rv = invokebkd("qmlAppEngineCreated"); // notify go
+        // let rv = invokebkd("qmlAppEngineCreated"); // notify go
         // check account exists, and login default one
         // if no account, switch to login page
         // let rv = invokebkd("listcfg", "accountline");
-        let rv2 = invokebkd("getcfg", "", "lastaccountline");
+        // let rv2 = invokebkd("getcfg", "", "lastaccountline");
         // let rv3 = invokebkd("loadroom", "1=1 limit 99");
     }
     //////

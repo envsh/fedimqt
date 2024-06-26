@@ -21,7 +21,8 @@ Rectangle {
     color: Material.background
 
     ComboBox {
-                id: acclst 
+                id: acclst
+                objectName: "acclst" 
                 model: []
                 // model: ListModel{}
                 width: parent.width
@@ -51,26 +52,30 @@ Rectangle {
         MyButton {
             text: "&Login"
             onClicked: {
-                invokebkd('loginaccountline', acclst.currentValue);
+                // invokebkd('loginaccountline', acclst.currentValue);
+                calljs("loginaccountline");
             }
         }
 
     }
 
     ///// script
-    function onGotAccounts(acclines) {
-        for (let i=0;i < acclines.length; i++) {
-            let item = acclines[i];
-            // acclst.model.insert(0,item);
-            acclst.model.push(item);
-        }
+    function addloginline(line) {
+        acclst.model.push(line);
     }
+    // function onGotAccounts(acclines) {
+    //     for (let i=0;i < acclines.length; i++) {
+    //         let item = acclines[i];
+    //         // acclst.model.insert(0,item);
+    //         acclst.model.push(item);
+    //     }
+    // }
 
-    function onLoginAccoutine(line) {
+    // function onLoginAccoutine(line) {
         
-    }
-    function onLogin(srv, usr, acctk) {
+    // }
+    // function onLogin(srv, usr, acctk) {
 
-    }
+    // }
 
 }

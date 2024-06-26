@@ -16,6 +16,7 @@ import Aboutuint
 // QtObject { }
 
 // Rectangle {
+    // color: Material.background
 Item {
     // 为什么在main.qml里可以初始化，在这就不行呢？
     // 在这需要import一下？？？
@@ -26,8 +27,6 @@ Item {
 
     width: 300
     height: 300
-
-    // color: Material.background
 
     GridLayout {
         anchors.fill : parent
@@ -75,16 +74,16 @@ Item {
     }
 
     /////
-    function setcompqtver(val) {
-        // compqtver.text = val;
-    }
-    function setrtqtver(val) {
-        // rtqtver.text = val;
-    }
-    function setworkdir(val) {
-        workdir.text = val;
-    }
-    function setrtgover(val) {
-        rtgover.text = val;
-    }
+    // function setcompqtver(val) {
+    //     compqtver.text = val;
+    // }
+    // function setrtqtver(val) {
+    //     rtqtver.text = val;
+    // }
+    // function setworkdir(val) {
+    //     workdir.text = val;
+    // }
+    // function setrtgover(val) {
+    //     rtgover.text = val;
+    // }
 }

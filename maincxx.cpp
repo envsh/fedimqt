@@ -114,9 +114,9 @@ int maincxxqml(int argc, char**argv) {
     return app.exec();
 }
 
-    const char* argv[] = {
-        "./imqtexe", 0,
-    };
+const char* argv[] = {
+    "./qtimntexe", 0,
+};
 
 extern "C"
 int maincxxqml0() {

@@ -100,5 +100,23 @@ func cmdrun(cio *guiclish.Cmdinfo) {
 		if err != nil {
 			cio.Errmsg = err.Error()
 		}
+	case "loginaccountline":
+		objx := qmlcpm.rootobj.FindChild("acclst")
+		curvalx := objx.Property("currentValue")
+		// log.Println(curvalx)
+		if curvalx.Cthis == nil {
+			gopp.Warn("cannot get account")
+			break
+		}
+		rv := curvalx.Tostr()
+		log.Println(rv)
+		ok := guiclish.OnFrontuiLoginAccountline(rv)
+		gopp.FalsePrint(ok, "login failed", rv)
+		if ok {
+			mainui.switchpageidx(0)
+		}
+	default:
+		gopp.Warn(cio.Cmd, cio.Argv)
 	}
+
 }

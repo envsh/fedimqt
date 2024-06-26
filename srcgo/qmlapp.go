@@ -9,6 +9,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/envsh/fedind/guiclish"
 	"github.com/kitech/gopp"
 	"github.com/kitech/minqt"
 )
@@ -62,6 +63,32 @@ func onQmlAppEngineCreated() {
 	// })
 
 	//
+	guiclish.OnFrontuiCreated()
+	{
+		// let rv2 = invokebkd("getcfg", "", "lastaccountline");
+		rv := guiclish.OnFrontuiGetcfg("", "lastaccountline")
+		if true { // for test login flow
+			rv = ""
+		}
+		if rv == "" {
+			// invokebkd('listcfg', 'accountline');
+			lines := guiclish.OnFrontuiListcfg("accountline")
+			// todo set loginui accout list
+			gopp.GOUSED(lines)
+			// loginui.onGotAccounts(jso.Retv);
+			for _, line := range lines {
+				guiclish.EmitEventFront("setloginline", line)
+			}
+			// calljs("switchpageidx", 2);
+			mainui.switchpageidx(2)
+		} else {
+			ok := guiclish.OnFrontuiLoginAccountline(rv)
+			gopp.FalsePrint(ok, "login failed", rv)
+			if ok {
+				mainui.switchpageidx(0)
+			}
+		}
+	}
 }
 
 func init() {

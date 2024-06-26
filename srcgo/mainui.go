@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/envsh/fedind/guiclish"
@@ -203,6 +202,9 @@ func (me *mainuist) switchpage(prev bool) {
 
 // todooooo
 func (me *mainuist) switchpageidx(idx int) {
+	if idx == me.stkcuridx {
+	}
+
 	// gopp.Info(idx)
 	// stkw := qmlcpm.rootobj.FindChild("stackwin")
 	// gopp.Info(stkw)
@@ -217,7 +219,8 @@ func (me *mainuist) switchpageidx(idx int) {
 	// qmlcpm.stkwin.Replace(curritemx, nextitem)
 	// stkwin.Replace(minqt.QQuickItemof(curritemx), minqt.QQuickItemof(nextitem.Cthis))
 	olditem := stkwin.ReplaceCurrentItem(minqt.QQuickItemof(nextitem.Cthis))
-	log.Println(olditem, me.stkcuridx, "=>", idx)
+	// log.Println(olditem, me.stkcuridx, "=>", idx)
+	gopp.GOUSED(olditem)
 	// stkw.SetProperty("curidx", idx)
 	me.stkcuridx = idx
 
