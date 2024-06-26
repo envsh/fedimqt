@@ -8,8 +8,6 @@ import QtQuick.Layouts
 
 import "../qmlpp"
 
-import Aboutuint
-
 // Rectangle {}
 // Text 
 // Button
@@ -18,10 +16,6 @@ import Aboutuint
 // Rectangle {
     // color: Material.background
 Item {
-    // 为什么在main.qml里可以初始化，在这就不行呢？
-    // 在这需要import一下？？？
-    Aboutuint{ id: uiofnt; objectName: "Aboutuint" }
-    property int passwd : 6789 // get property in c++ // works
     // objectName: "Aboutuiqml" // findChild in c++ // works
     // id: aboutuiqml
 

@@ -33,7 +33,7 @@ mkdir build && cd build
 
 ```
 
-如果不是使用aqtinstall安装的desktop包,需要额外设置这两个值,
+如果不是使用aqtinstall安装的desktop包,需要额外设置这两个值,(好像安装了也需要???)
 
 ```
 -DQT_HOST_PATH

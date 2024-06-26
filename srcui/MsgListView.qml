@@ -381,7 +381,8 @@ ScrollView {
     // all functions are qt slots   
     // 子组件比main组件onCompleted更迟一些，要做初始化加载就在子组件中
     Component.onCompleted: {
-        Tspp.debug("");
+        console.log("Component.onCompleted.MsgListView.qml");
+        // Tspp.debug("");
         // Tspp.settimeoutfuncs(qmlSetTimeout, qmlClearTimeout);
 
         // let rv = qcffi.invoke("thisqml");

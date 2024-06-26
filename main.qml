@@ -55,31 +55,24 @@ ApplicationWindow {
             title: qsTr("&Wndo")
             Action { text: qsTr("&Next Page") ; 
                 onTriggered: calljs("switchpage", false)
-                // onTriggered: switchpage(false)
                 icon.source: "icons/barbuttonicon_forward_gray64.png"}
             Action { text: qsTr("&Prev Page") ;
                 onTriggered: calljs("switchpage", true)
-                // onTriggered: switchpage(true) 
                 icon.source: "icons/barbuttonicon_back_gray64.png"}
             Action { text: qsTr("Logui"); 
                 onTriggered: calljs("switchpageidx", 3)
-                // onTriggered: switchpageidx(3)
                 }
             Action { text: qsTr("&Aboutui");
                 onTriggered: calljs("switchpageidx", 4)
-                // onTriggered: switchpageidx(4)
                 }
             Action { text: qsTr("&Room List");
                 onTriggered: calljs("switchpageidx", 1)
-                // onTriggered: switchpageidx(1)
                 }
             Action { text: qsTr("&Loginui"); 
                 onTriggered: calljs("switchpageidx", 2)
-                // onTriggered: switchpageidx(2)
                 }
             Action { text: qsTr("&Message List"); 
                 onTriggered: calljs("switchpageidx", 0)
-                // onTriggered: switchpageidx(0)
                 }
         }
         Menu {
@@ -116,12 +109,10 @@ ApplicationWindow {
         Menu {
             title: qsTr("&Misc")
             Action { text: qsTr("Scroll Bottom"); 
-                // onTriggered: msglstwin.scrollvto(false);
                 onTriggered: calljs("msglst.scrollvto", false);
                 icon.source: "icons/barbuttonicon_down_2x.png"}
             Action { text: qsTr("Scroll Top");
                 onTriggered: calljs("msglst.scrollvto", true);
-                // onTriggered: msglstwin.scrollvto(true);
                 icon.source: "icons/barbuttonicon_up_2x.png" }
             Action { text: qsTr("&Test ListView");
                 onTriggered: tstlstwin.visible=!tstlstwin.visible}
@@ -135,12 +126,10 @@ ApplicationWindow {
             // .svg not work???
             Action { text: qsTr("&About");
                 onTriggered: calljs("switchpageidx", 4)
-                // onTriggered: switchpageidx(4) 
                 // icon.source: "icons/help.svg"
             }
             Action { text: qsTr("&Settings");
                 onTriggered: calljs("switchpageidx", 4)
-                // onTriggered: switchpageidx(4)
                 icon.source: "icons/barbuttonicon_set.png"}
         }
     }
@@ -270,18 +259,16 @@ ApplicationWindow {
 
     ///////// script
     QmlCppBridge {    id : qcffi }
-    // Aboutuint{ id: uiofnt }
-    // ShareState { id: Sss}
-    // SingletonDemo { id: oneinst } // not work
-
 
     function invokebkd(cmd, ...args) {
         let req = {Cmd: cmd, Argv: args};
-        return qcffi.invoke(Tspp.tojson(req));
+        let data = JSON.stringify(req);
+        return qcffi.invoke(data);
     }
     function calljs(cmd, ...args) {
         let req = {Cmd: cmd, Argv: args};
-        return qcffi.calljs(Tspp.tojson(req));
+        let data = JSON.stringify(req);
+        return qcffi.calljs(data);
     }
     // all functions are qt slots   
     function oncallqml(jstr) {
@@ -376,35 +363,21 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-        
-        
-        // Tspp.settimeoutfuncs(qmlSetTimeout, qmlClearTimeout);
-        // Tspp.debug("oneinst", MySingleton, MySingleton.pt1, MySingleton.dummy);
-        // Tspp.debug("oneinstui", MySingletonui, MySingletonui.objs);
-        // Tspp.debug("Sss",  Sss);
 
         // let rv = qcffi.invoke("thisqml");
         // Tspp.debug(rv);
         // listView.model.dummy()
         // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
 
-        // Tspp.dummy('wt')
-        // Tspp.util.dummy();
-        // JTspp.default.dummy(); // TypeError: Cannot call method 'dummy' of undefined
         // dummymix.dummymix();
-        // Tspp.debug(Dmymix, Dmymix.exports.dummymix);
-        // Tspp.debug(Dmymix.dmymixfn, Dmymix.dummymix);
-        // Tspp.debug(Qmlppx.qmlTimer2(appwin));
     }
     function onCompleted2 () {
     }
     // uifullloaded now
     function onQmlAppEngineCreated(msg) {
-        Tspp.debug("");
+        console.log("onQmlAppEngineCreated");
         Qmlpp.qmlppinit(appwin);
         // init some here
-        // Tspp.debug("wtodo", msg, Sss.bkdretpromis);
-        // Tspp.debug("uiofnt.qtrtver", uiofnt.qtrtver);
         // let rv = invokebkd("qmlAppEngineCreated"); // notify go
         // check account exists, and login default one
         // if no account, switch to login page
@@ -416,13 +389,13 @@ ApplicationWindow {
 
     // general, for msglst and loglst
     function scrollvto(name: string, top : bool) {
-        // Tspp.debug("top=", top, name);
+        // console.log("top=", top, name);
         let scrobjs = {"scroll1": scroll1, "scroll2": scroll2};
         Qmlpp.scrollvto(scrobjs[name], top);
     }
 
     function seticoncolor(name: string, color: string) {
-        // Tspp.debug(name, color);
+        // console.log(name, color);
         let objs = {"onlinest": onlinest};
         objs[name].icon.color = color;
     }

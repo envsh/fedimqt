@@ -36,12 +36,6 @@ set(MAINSRC
     srcc/mainglob.cpp
     srcc/qtuninline.cpp
     srcc/modelbase.cpp
-    srcc/aboutui.cpp
-    srcc/appwinui.cpp
-    srcc/msgwinui.cpp
-    srcc/roomwinui.cpp
-    srcc/msgmodel.cpp
-    srcc/roommodel.cpp
     QmlCppBridge.cpp
     myitemdg.cpp
     myview.cpp
@@ -134,16 +128,16 @@ set_target_properties(helloworld PROPERTIES
 # add_custom_command(OUTPUT out1 COMMAND "tsc -v")
 # message("${out1}")
 
-add_custom_command(OUTPUT ${projdir}/qmlpp/Tspp.js ${projdir}/qmlpp/Qmlpp.js
+add_custom_command(OUTPUT ${projdir}/qmlpp/Qmlpp.js
     COMMENT "tscc {tspp,Qmlpp}.ts 111"
     # COMMAND "tsc" "-v"
-    COMMAND tsc --pretty --sourceMap --declaration --module commonjs --lib es6,es2020,dom --esModuleInterop --types "Qt" "${projdir}/qmlpp/Tspp.ts" "${projdir}/qmlpp/Qmlpp.ts"
+    COMMAND tsc --pretty --sourceMap --declaration --module commonjs --lib es6,es2020,dom --esModuleInterop --types "Qt" "${projdir}/qmlpp/Qmlpp.ts"
     # fix https://stackoverflow.com/questions/43042889/typescript-referenceerror-exports-is-not-defined
-    COMMAND "sed" "-i" ".bak" "'s/^\"use strict\";/.pragma library\\n\\nvar exports = {};\\n\\n\"use strict\";/g'" "${projdir}/qmlpp/Tspp.js"
+    # COMMAND "sed" "-i" ".bak" "'s/^\"use strict\";/.pragma library\\n\\nvar exports = {};\\n\\n\"use strict\";/g'" "${projdir}/qmlpp/Tspp.js"
     COMMAND "sed" "-i" ".bak" "'s/^\"use strict\";/.pragma library\\n\\nvar exports = {};\\n\\n\"use strict\";/g'" "${projdir}/qmlpp/Qmlpp.js"
-    DEPENDS ${projdir}/qmlpp/Tspp.ts ${projdir}/qmlpp/Qmlpp.ts)
+    DEPENDS ${projdir}/qmlpp/Qmlpp.ts)
 add_custom_target(tscc COMMENT "tscc {tspp,Qmlpp}.ts 222"
-    DEPENDS ${projdir}/qmlpp/Tspp.js ${projdir}/qmlpp/Qmlpp.js
+    DEPENDS ${projdir}/qmlpp/Qmlpp.js
 )
 add_dependencies(helloworld tscc)
 
@@ -171,6 +165,8 @@ add_custom_command(OUTPUT ../jniLibs/libhellogo.h
 add_custom_target(gocc COMMENT "gocc222 for android" DEPENDS ../jniLibs/libhellogo.h)
 add_dependencies(helloworld gocc)
 else() #############
+# 二进制减小1/3,内存减少3,4M,基本没变化.
+# set(CGO_LDFLAGSx "-L../ -lhelloworld -w -s")
 set(CGO_LDFLAGSx "-L../ -lhelloworld")
 # message("CGO_CFLAGS=${CGO_CFLAGSx}, CGO_LDFLAGS=${CGO_LDFLAGSx}")
 add_custom_command(OUTPUT ../hellogo COMMENT "gocc111"
