@@ -162,7 +162,7 @@ func startthinmtxproc() {
 	}()
 }
 
-func onmtxevtcb(hkt *guiclish.Hooktaskqst, msgo *guiclish.Messagestable, isnew bool) (added bool) {
+func onmtxevtcb(hkt *guiclish.Hooktaskqst, msgo *guiclish.Messagestable, isnew bool, hasmore bool) (added bool) {
 	mdl := qmlcpm.msglstmdl
 	mdl2 := qmlcpm.grplstmdl
 
@@ -185,6 +185,12 @@ func onmtxevtcb(hkt *guiclish.Hooktaskqst, msgo *guiclish.Messagestable, isnew b
 		romrec.Creator = msgo.Sender
 
 		mdl2.Add(romrec)
+	}
+	if !hasmore {
+		minqt.RunonUithread(func() {
+			mainui.upstatusmc()
+			mainui.upstatusrc()
+		})
 	}
 	return
 }

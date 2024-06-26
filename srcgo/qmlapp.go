@@ -92,7 +92,7 @@ func onQmlAppEngineCreated() {
 }
 
 func init() {
-	var roleNames = map[int]string{256: "Eventid", 257: "Content", 258: "Mtimems", 259: "Roomid", 260: "Roomname", 261: "Sender", 262: "Mtimemsui", 263: "Dtime"}
+	var roleNames = map[int]string{256: "Eventid", 257: "Content", 258: "Mtimems", 259: "Roomid", 260: "Roomname", 261: "Sender", 262: "Mtimemsui", 263: "Dtime", 264: "Mtimemsuitip"}
 	minqt.RegisterModelRoleNames("msglstmdl", gopp.MapValues(roleNames)...)
 }
 

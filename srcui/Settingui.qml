@@ -13,5 +13,7 @@ import QtQuick.Layouts
 // QtObject { }
 
 Item {
+    width: parent.width
+    height: parent.height
 
 }

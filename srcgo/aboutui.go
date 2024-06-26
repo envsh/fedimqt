@@ -249,7 +249,7 @@ func init() {
 	// log.Println(roleNames)
 	// minqt.RegisterModelRoleNames("loglstmdl", roleNames...)
 	minqt.RegisterModelRoleNames2("grplstmdl", guiclish.RoomsTable{},
-		"Ctimemsui", "Mtimemsui", "Lastmsui", "Content", "Lastmsui")
+		"Ctimemsui", "Mtimemsui", "Mtimemsuitip", "Lastmsui", "Content", "Lastmsui")
 }
 
 type romrow struct {

@@ -18,15 +18,17 @@ import ListModelBase
 // Button
 // QtObject { }
 
-Rectangle {
-
+// Rectangle {
+    // color: Material.background
+Item {
     ////////////
     id: topwin
     // width: 500
+    // height: 500
     width: parent.width
-    height: 500
+    height: parent.height
     visible: true
-    color: Material.background
+
 
     // Material.theme: Material.Dark
 

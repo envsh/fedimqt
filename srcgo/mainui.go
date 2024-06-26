@@ -42,8 +42,8 @@ func (me *mainuist) onloadmsg() {
 	recs, err := locdb.Loadmsgs(cond)
 	gopp.ErrPrint(err, cond)
 	addcnt := 0
-	for _, rec := range recs {
-		added := onmtxevtcb(nil, rec, false)
+	for i, rec := range recs {
+		added := onmtxevtcb(nil, rec, false, i < len(recs)-1)
 		addcnt += gopp.IfElse2(added, 1, 0)
 	}
 	gopp.Println("addcnt/total", addcnt, len(recs))
@@ -222,6 +222,8 @@ func (me *mainuist) switchpageidx(idx int) {
 	olditem := stkwin.ReplaceCurrentItem(minqt.QQuickItemof(nextitem.Cthis))
 	// log.Println(olditem, me.stkcuridx, "=>", idx)
 	gopp.GOUSED(olditem)
+	olditem.SetProperty("visible", false)
+	nextitem.SetProperty("visible", true)
 	// stkw.SetProperty("curidx", idx)
 	me.stkcuridx = idx
 

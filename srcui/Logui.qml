@@ -22,7 +22,9 @@ Item {
     id: topwin
     // width: 500
     // height: 500
-    anchors.fill: parent
+    // anchors.fill: parent
+    width: parent.width
+    height: parent.height
     visible: true
 
     // Rectangle {

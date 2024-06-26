@@ -7,12 +7,14 @@ import "C"
 import (
 	"encoding/json"
 	"log"
+	"sync/atomic"
 	"time"
 
 	spjson "github.com/bitly/go-simplejson"
 	"github.com/envsh/fedind/guiclish"
 	"github.com/kitech/gopp"
 	"github.com/kitech/gopp/cgopp"
+	"github.com/kitech/minqt"
 )
 
 //export qmlcalljsfunc
@@ -23,13 +25,70 @@ func qmlcalljsfunc(jstr voidptr, jstrlen usize, retaddr *charptr, retlen *usize)
 
 func qmlcalljsfuncimpl(jstr string, retaddr *charptr, retlen *usize) {
 	log.Println(len(jstr), jstr)
-	res, ok := asyncInvokeProcessor(jstr)
-	if ok {
-		*retaddr = (charptr)(cgopp.CStringaf(res))
-		*retlen = usize(len(res))
-		*retaddr = nil
-		*retlen = 0
+
+	if false {
+		res, ok := asyncInvokeProcessor(jstr)
+		if false && ok {
+			*retaddr = (charptr)(cgopp.CStringaf(res))
+			*retlen = usize(len(res))
+			*retaddr = nil
+			*retlen = 0
+		}
 	}
+
+	qcnr.enqueue(jstr)
+
+	*retlen = 0
+	*retaddr = nil
+}
+
+// ////////////
+// 使用最多一个runner goroutine
+// 在没有任务的时候退出,有任务的时候启动,但不会同时启动多个
+var qcnr = qmlcalljsrunnernew()
+
+func qmlcalljsrunnernew() *qmlcalljsrunner {
+	me := &qmlcalljsrunner{}
+	me.qc = make(chan string, 286)
+
+	return me
+}
+
+type qmlcalljsrunner struct {
+	qc      chan string
+	running int32
+	runcnt  int32
+}
+
+func (me *qmlcalljsrunner) enqueue(jstr string) {
+	me.qc <- jstr
+	if atomic.LoadInt32(&me.running) == 0 {
+		go me.start()
+	}
+}
+
+func (me *qmlcalljsrunner) start() {
+	runcnt := atomic.AddInt32(&me.running, 1)
+	defer atomic.AddInt32(&me.running, -1)
+	if runcnt != 1 {
+		gopp.Warn("duprun", runcnt, me.runcnt)
+		return
+	}
+	atomic.AddInt32(&me.runcnt, 1)
+	qmlcalljsproc(me.qc)
+}
+
+func qmlcalljsproc(qc chan string) {
+	for {
+		select {
+		case jstr, ok := <-qc:
+			if !ok {
+				goto endfor
+			}
+			asyncInvokeProcessor(jstr)
+		}
+	}
+endfor:
 }
 
 func asyncInvokeProcessor(reqdata string) (string, bool) {
@@ -79,13 +138,21 @@ func cmdrun(cio *guiclish.Cmdinfo) {
 	_ = nowt
 	switch cio.Cmd {
 	case "switchpageidx":
-		mainui.switchpageidx(int(cio.Argv[0].(float64)))
+		minqt.RunonUithread(func() {
+			mainui.switchpageidx(int(cio.Argv[0].(float64)))
+		})
 	case "switchpage":
-		mainui.switchpage(cio.Argv[0].(bool))
+		minqt.RunonUithread(func() {
+			mainui.switchpage(cio.Argv[0].(bool))
+		})
 	case "msglst.scrollvto":
-		msglstwin.Scrollvto(cio.Argv[0].(bool))
+		minqt.RunonUithread(func() {
+			msglstwin.Scrollvto(cio.Argv[0].(bool))
+		})
 	case "msglst.setccfmt":
-		msglstwin.Setccfmt(int(cio.Argv[0].(float64)))
+		minqt.RunonUithread(func() {
+			msglstwin.Setccfmt(int(cio.Argv[0].(float64)))
+		})
 	case "msglst.sendmsg":
 		msglstwin.Sendmsg()
 	case "loadmsg":
@@ -100,6 +167,7 @@ func cmdrun(cio *guiclish.Cmdinfo) {
 		if err != nil {
 			cio.Errmsg = err.Error()
 		}
+		minqt.RunonUithread(mainui.upstatusmc)
 	case "loginaccountline":
 		objx := qmlcpm.rootobj.FindChild("acclst")
 		curvalx := objx.Property("currentValue")
@@ -113,7 +181,9 @@ func cmdrun(cio *guiclish.Cmdinfo) {
 		ok := guiclish.OnFrontuiLoginAccountline(rv)
 		gopp.FalsePrint(ok, "login failed", rv)
 		if ok {
-			mainui.switchpageidx(0)
+			minqt.RunonUithread(func() {
+				mainui.switchpageidx(0)
+			})
 		}
 	default:
 		gopp.Warn(cio.Cmd, cio.Argv)

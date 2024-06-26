@@ -21,7 +21,9 @@ Item {
 
     // width: 300
     // height: 300
-    anchors.fill: parent
+    // anchors.fill: parent
+    width: parent.width
+    height: parent.height
 
     GridLayout {
         anchors.fill : parent

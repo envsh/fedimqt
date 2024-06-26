@@ -18,6 +18,9 @@ Label{
                 
     elide: Text.ElideRight
     maximumLineCount: 1
+    wrapMode: Text.WrapAnywhere
+    clip: true
+    textFormat : Text.PlainText
 
     property string tiptext//: qsTr("Save the active project")
     ToolTip{ 

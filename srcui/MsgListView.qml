@@ -83,6 +83,9 @@ ScrollView {
         objectName: "msglstmdl" // 用来选择 roleNames 列表
         id: msglstmdl
     }
+
+    // 这个必须用Rectangle,不然没法在选中时设置高亮背景
+    // 内部子组件不使用 Rectangle,似乎滚动时的CPU减小了,40-50% 降低到 30-40%
         delegate: Rectangle {
             id: grid
             // anchors.fill: parent
@@ -100,6 +103,7 @@ ScrollView {
                     anchors.fill: parent
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
                     onClicked: (evt) => {
+                        // console.log("ma", evt);
                         let oldidx = listView.currentIndex;
                         if (evt.button === Qt.RightButton) {
                             contextMenu.popup();
@@ -130,7 +134,7 @@ ScrollView {
                 // }
                 MyImage {source:"../icons/icon_avatar.png"; 
                     width:22; height:22; }
-                Rectangle{
+                Item {
                     width: 120
                     opacity: 0.8
                     
@@ -153,7 +157,7 @@ ScrollView {
                 //     color: "gray"
                 //     height: 1
                 // }
-                Rectangle{
+                Item {
                     width: 120
                     opacity: 0.65
 
@@ -164,17 +168,19 @@ ScrollView {
                     width: 120
                     
                 }} 
-                Rectangle{
+                Item {
                     Layout.fillWidth: true
                     opacity: 0.65
-
                 MyText {
                     id: lbroomid
+                    // opacity: 0.65
                     text: Roomid==''?'Roomid':Roomid
                     tiptext: 'roomid:'+Roomid
-                    width: 120
-                    
+                    // width: 120
+                    width: parent.width
+                    // Layout.fillWidth: false
                 }}
+                // }
 
                 // Button {
                 //     id: inbtn2
@@ -182,22 +188,23 @@ ScrollView {
                 //     height: 15
                 //     flat: true
                 // }
-                Rectangle{
-                    width: 120
+                Item {
+                    width: 60
                     opacity: 0.5
 
-                MyText {
+                MyLabel {
                     id: inbtn3
                     text: Mtimemsui==''?'Mtimems':Mtimemsui
-                    tiptext: 'mtimems:'+Mtimems
+                    tiptext: Mtimemsuitip
                     // flat: true
-                    width: 120
+                    width: parent.width
                     horizontalAlignment: Text.Right
                 }
                 }
                 }
 
-                    Rectangle {
+                    // Rectangle {
+                    Item {
                         Layout.fillWidth: true
                         anchors.top : msgrow1.bottom
                         // width:350
@@ -206,7 +213,7 @@ ScrollView {
                         // color: "#505050"
                         // color: window.color
                         // color: Material.background
-                        color: grid.bgcolor
+                        // color: grid.bgcolor
                         // border.width: 3
                         // border.color: "#999"
                         id: txtcc2
@@ -227,7 +234,7 @@ ScrollView {
                     anchors.top : txtcc2.bottom
                     width: parent.width
                     height: 30
-                    Rectangle{
+                    Item {
                         width:120
                         opacity: 0.5
                     // height: 30
@@ -237,7 +244,7 @@ ScrollView {
                         text: "fedisite link"
                         tiptext: "full fedisite link"
                     }  }
-                Rectangle{
+                Item {
                     width:90
                     opacity: 0.5
                     Layout.fillWidth: true
@@ -253,7 +260,7 @@ ScrollView {
                     anchors.left : parent.left
                 }}
                 // Dtime
-                Rectangle{
+                Item {
                     width:120
                     opacity: 0.5
                     // height: 30
@@ -307,11 +314,13 @@ ScrollView {
 }
     // msgsendbar
     Rectangle {
+        color: Material.background
+        // color: "blue"
+    // Item {
         id: msgsndbar
         width: parent.width
         height: 60
-        // color: "blue"
-        color: Material.background
+
         anchors.top : scroll1.bottom
 
         RowLayout {
