@@ -162,6 +162,7 @@ func (me *mainuist) upstatusll(stlog string) {
 	obj.SetProperty("tiptext", "LL:"+stlog)
 	// lastlogst.text = 'LL:'+lastlog;
 	// lastlogst.tiptext = 'LL:'+lastlog;
+	logui.Addlog(stlog)
 }
 
 func (me *mainuist) upnetreqst(begin bool) {

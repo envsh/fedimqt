@@ -22,8 +22,14 @@ ApplicationWindow {
 
     ////////////
     id: appwin
-    width: 500
-    height: 650
+    // minimumWidth: 300
+    // minimumHeight: parent.height
+    // width: 500
+    // height: 650
+    width: Qt.platform.os=='android' ? parent.width : 500;
+    height: Qt.platform.os=='android' ? parent.height : 650;
+    // maximumHeight: 3800
+    // height: parent.height // not work
     visible: true
     // color: "#010101"
 
@@ -162,7 +168,8 @@ ApplicationWindow {
         objectName: "stackwin"
         // anchors.fill: parent
         width : parent.width
-        height : parent.height-30
+        // height : parent.height-30
+        height : parent.height
 
         initialItem: msglstwin
         // property list<Item> childs: [msglstwin, romlstwin, loginui, logui, aboutui]
@@ -182,12 +189,12 @@ ApplicationWindow {
         }
     }
 
-    Rectangle {
+    footer: Rectangle {
         color: "darkblue"
         // height: inbtn.height
-        height: 38
+        height: 24
         width: parent.width
-        anchors.top: stackwin.bottom// + 3
+        // anchors.top: stackwin.bottom// + 3
         RowLayout{
             // verticalAlignment: Text.Center
             anchors.left : parent.left

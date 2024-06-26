@@ -21,12 +21,13 @@ import ListModelBase // C++/Go implmention
 // import "../main.js" as Lib;
 
 // ApplicationWindow {
-Rectangle {
+Item {
     id: topwin
     // width: 500
+    // height: 580
     width: parent.width
-    height: 580
-    color: Material.background
+    height: parent.height
+    // color: Material.background
 
 ScrollView {
     ////////////
@@ -60,6 +61,7 @@ ScrollView {
         width : parent.width
         anchors.leftMargin: 5
         currentIndex: -1
+        cacheBuffer: 0 // 好像没啥用
 
         // context menu
         // 如果放在 delegate中，这种用法会生成很多 Menu 实例？？？
@@ -285,9 +287,9 @@ ScrollView {
             // Tspp.debug("drag end", listView.verticalOvershoot, listView.draggingVertically);
             // todo android 上，这个值很大，大概很容易达到 +-200
             if (listView.verticalOvershoot < -6.0) {
-                Tspp.info("fetch more older triggered", listView.verticalOvershoot);
+                console.info("fetch more older triggered", listView.verticalOvershoot);
             } else if (listView.verticalOvershoot > 16.0) {
-                Tspp.info("refresh latest triggered", listView.verticalOvershoot);
+                console.info("refresh latest triggered", listView.verticalOvershoot);
             }
 
         }

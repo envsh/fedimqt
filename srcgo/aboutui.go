@@ -323,7 +323,9 @@ func (me *logrow) OrderKey() int64 {
 	return -1 // me.Ctimems
 }
 
-// todo
+const maxlogcnt = 200
+
+// todo 最多保留200条,如果多于200则删除旧的
 func (me *loguist) Addlog(logstr string) {
 	xobj := qmlcpm.rootobj.FindChild("loglstmdl")
 	goobjx := xobj.Property("goobj")

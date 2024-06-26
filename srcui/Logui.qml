@@ -15,16 +15,15 @@ import ListModelBase
 // Button
 // QtObject { }
 
-Rectangle {
-
+// Rectangle {
+//     color: Material.background
+Item {
     ////////////
     id: topwin
-    width: 500
-    height: 500
+    // width: 500
+    // height: 500
+    anchors.fill: parent
     visible: true
-    color: Material.background
-
-    // Material.theme: Material.Dark
 
     // Rectangle {
     MyText {
@@ -66,8 +65,8 @@ ScrollView {
             objectName: "loglstmdl"
         }
 
-        delegate: Rectangle {
-            color: Material.background
+        delegate: Item {
+            // color: Material.background
             // color: "red"
             width: topwin.width
             // height: topwin.height

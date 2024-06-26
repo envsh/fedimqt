@@ -19,8 +19,9 @@ Item {
     // objectName: "Aboutuiqml" // findChild in c++ // works
     // id: aboutuiqml
 
-    width: 300
-    height: 300
+    // width: 300
+    // height: 300
+    anchors.fill: parent
 
     GridLayout {
         anchors.fill : parent

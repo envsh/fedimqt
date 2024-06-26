@@ -32,14 +32,15 @@ QQmlApplicationEngine* qmlapp = nullptr;
 void onQmlAppEngineCreated(QObject *obj, const QUrl &objUrl) {
 
     auto url = objUrl;
-                        qDebug()<<__FUNCTION__<<"QmlAppEngine created";
-                        QString resmsg = QString("QmlAppEngineOK %1").arg(objUrl.toString());
-                        if (!obj && url == objUrl) {
-                            resmsg = QString("load error exit %1").arg(objUrl.toString());
-                            qDebug()<<__FUNCTION__<<"load error exit"<<objUrl;
-                            QCoreApplication::exit(-1);
-                        }
-                        qtemitcallqmlcxx(resmsg);
+    qDebug()<<__FUNCTION__<<"QmlAppEngine created";
+    QString resmsg = QString("QmlAppEngineOK %1").arg(objUrl.toString());
+    if (!obj && url == objUrl) {
+        resmsg = QString("load error exit %1").arg(objUrl.toString());
+        qDebug()<<__FUNCTION__<<"load error exit"<<objUrl;
+        // todo 也许在UI上显示错误更好
+        QCoreApplication::exit(-1); exit(-1);
+    }
+    qtemitcallqmlcxx(resmsg);
 
     auto engine = qmlapp;
     auto rootobjs = engine->rootObjects();
