@@ -11,3 +11,6 @@ Qmlpp 1.0 Qmlpp.js
 
 singleton MySingleton 1.0 MySingleton.qml
 singleton MySingletonui 1.0 MySingletonui.qml
+
+PullToRefreshHandler 2.0 PullToRefreshHandler.qml
+RefreshIndicator 2.0 RefreshIndicator.qml
