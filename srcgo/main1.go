@@ -170,24 +170,20 @@ func onmtxevtcb(hkt *guiclish.Hooktaskqst, msgo *guiclish.Messagestable, isnew b
 	mdl := qmlcpm.msglstmdl
 	mdl2 := qmlcpm.grplstmdl
 
+	romrec := &romrow{}
+
 	// log.Println(mdl, hkt, msgo, isnew)
 	if hkt != nil {
 		// guiclish.EmitEventFront("loadmsgrt", isnew, hkt.Hki)
 		added = mdl.Add(hkt.Hki)
+		romrec.RoomsTable = *hkt.Hki.ExtractRoomItem()
 	}
 	if msgo != nil {
 		// guiclish.EmitEventFront("loadmsgrt", isnew, msgo)
 		added = mdl.Add(msgo)
-
-		romrec := &romrow{}
-		romrec.Feditype = msgo.Feditype
-		romrec.Fedisite = msgo.Fedisite
-		romrec.Roomid = msgo.Roomid
-		romrec.Roomname = msgo.Roomname
-		romrec.Ctimems = msgo.Ctimems
-		romrec.Mtimems = msgo.Mtimems
-		romrec.Creator = msgo.Sender
-
+		romrec.RoomsTable = *msgo.ExtractRoomItem()
+	}
+	if romrec.Roomid != "" {
 		mdl2.Add(romrec)
 	}
 	if !hasmore {

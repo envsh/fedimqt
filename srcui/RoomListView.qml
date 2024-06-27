@@ -52,24 +52,24 @@ ScrollView {
         anchors.fill: parent
         currentIndex: -1
 
-    //
-    //  Slot called when the flick has started
-    //
-    onFlickStarted: {
-        // refreshFlik = atYBeginning
-        console.log("refreshing111...???")
-    }
+    // //
+    // //  Slot called when the flick has started
+    // //
+    // onFlickStarted: {
+    //     // refreshFlik = atYBeginning
+    //     console.log("refreshing111...???")
+    // }
 
-    //
-    //  Slot called when the flick has finished
-    //
-    onFlickEnded: {
-        // if ( atYBeginning && refreshFlik )
-        {
-            // refresh()
-            console.log("refreshing...???")
-        }
-    }
+    // //
+    // //  Slot called when the flick has finished
+    // //
+    // onFlickEnded: {
+    //     // if ( atYBeginning && refreshFlik )
+    //     {
+    //         // refresh()
+    //         console.log("refreshing...???")
+    //     }
+    // }
 
 
         // context menu

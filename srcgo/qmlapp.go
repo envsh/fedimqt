@@ -92,7 +92,7 @@ func onQmlAppEngineCreated() {
 		}
 	}
 
-	if runtime.GOOS == "android" {
+	if false && runtime.GOOS == "android" {
 		go func() {
 
 			for i := range gopp.RangeA(50) {

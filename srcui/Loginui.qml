@@ -35,7 +35,7 @@ Item {
         // width: parent.width
 
 
-        Item { height: 50}
+        Item { height: 30}
     MyLabel {text: qsTr("Logined Accounts:"); height: 50}
         
     MyLabel {text: qsTr("Accounts:"); height: 50}
@@ -49,11 +49,22 @@ Item {
                 Layout.fillWidth: true
     }
 
+        Item { height: 30}
+        MyButton {
+            Layout.fillWidth: false
+            text: "&Login"
+            onClicked: {
+                // invokebkd('loginaccountline', acclst.currentValue);
+                calljs("loginaccountline");
+            }
+        }
+
         Item { height: 50}
         MyLabel {text:"New Account"}
 
         MyLabel {text:"Username"}
         TextArea { text:  "";
+            objectName: "loginUsername"
             // color: Material.foreground
             Layout.fillWidth: true
             placeholderText: qsTr("Username")
@@ -61,6 +72,7 @@ Item {
 
         MyLabel {text: qsTr("Password")}
         TextArea { text:  ""; 
+            objectName: "loginPassword"
             // color: Material.foreground
             Layout.fillWidth: true
             placeholderText: qsTr("Password")
@@ -68,6 +80,7 @@ Item {
 
         MyLabel {text: qsTr("Access Token")}
         TextArea { text:  ""; 
+            objectName: "loginAccesstoken"
             // color: Material.foreground
             Layout.fillWidth: true
             placeholderText: qsTr("Access Token")
@@ -75,6 +88,7 @@ Item {
 
         MyLabel {text:"Server"}
         ComboBox {
+            objectName: "loginServer"
             Layout.fillWidth: true
             editable : true
             model: ["matrix.org", "bolha.chat", "nope.chat", "chat.mozilla.org",
@@ -83,6 +97,7 @@ Item {
 
         MyLabel {text:"FediType"}
         ComboBox {
+            objectName: "loginFediType"
             Layout.fillWidth: true
             editable : false
             model: ["Matrix", "Misskey", "Mastodon", "Nostr", "Telegram"]
@@ -105,7 +120,7 @@ Item {
             text: "&Login"
             onClicked: {
                 // invokebkd('loginaccountline', acclst.currentValue);
-                calljs("loginaccountline");
+                calljs("loginaccountfield");
             }
         }
     }

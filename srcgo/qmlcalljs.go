@@ -6,6 +6,7 @@ package main
 import "C"
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"sync/atomic"
 	"time"
@@ -180,6 +181,34 @@ func cmdrun(cio *guiclish.Cmdinfo) {
 		log.Println(rv)
 		ok := guiclish.OnFrontuiLoginAccountline(rv)
 		gopp.FalsePrint(ok, "login failed", rv)
+		if ok {
+			minqt.RunonUithread(func() {
+				mainui.switchpageidx(0)
+			})
+		}
+	case "loginaccountfield":
+		robj := qmlcpm.rootobj
+		uname := robj.FindChild("loginUsername").Property("text").Tostr()
+		passwd := robj.FindChild("loginPassword").Property("text").Tostr()
+		acctk := robj.FindChild("loginAccesstoken").Property("text").Tostr()
+		server := robj.FindChild("loginServer").Property("currentValue").Tostr()
+		feditype := robj.FindChild("loginFediType").Property("currentValue").Tostr()
+		log.Println(uname, passwd, acctk, server, feditype)
+		if uname == "" || acctk == "" || server == "" {
+			gopp.Warn("Invalid login info", uname, acctk, server)
+			break
+		}
+
+		accline := fmt.Sprintf("%s,%s,%s,%s", server, uname, passwd, acctk)
+		cfgname := fmt.Sprintf("@%s:%s", uname, server)
+		db := guiclish.Locdb()
+		err := db.Addcfg(cfgname, accline, "accountline")
+		gopp.ErrPrint(err, accline)
+		err = db.Addsetcfg("", accline, "lastaccountline")
+		gopp.ErrPrint(err)
+
+		ok := guiclish.OnFrontuiLoginAccountline(accline)
+		gopp.FalsePrint(ok, "login failed", accline)
 		if ok {
 			minqt.RunonUithread(func() {
 				mainui.switchpageidx(0)

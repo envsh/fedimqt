@@ -126,6 +126,10 @@ ApplicationWindow {
                 onTriggered: calljs("menubar.paste.clicked")}
            Action { text: qsTr("&Paste2"); 
                 onTriggered: neslot1_1('hhh')}
+           Action { text: qsTr("&Theme Dark");
+                onTriggered: neslot1_1('hhh')}
+           Action { text: qsTr("&Theme Light"); 
+                onTriggered: neslot1_1('hhh')}
         }
         Menu {
             title: qsTr("&Help")
