@@ -78,7 +78,7 @@ Item {
             Layout.fillWidth: true
             editable : true
             model: ["matrix.org", "bolha.chat", "nope.chat", "chat.mozilla.org",
-                "trpger.us", "misskey.gg",]
+                "misskey.gg",]
         }
 
         MyLabel {text:"FediType"}

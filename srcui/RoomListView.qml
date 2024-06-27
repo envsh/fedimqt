@@ -52,6 +52,26 @@ ScrollView {
         anchors.fill: parent
         currentIndex: -1
 
+    //
+    //  Slot called when the flick has started
+    //
+    onFlickStarted: {
+        // refreshFlik = atYBeginning
+        console.log("refreshing111...???")
+    }
+
+    //
+    //  Slot called when the flick has finished
+    //
+    onFlickEnded: {
+        // if ( atYBeginning && refreshFlik )
+        {
+            // refresh()
+            console.log("refreshing...???")
+        }
+    }
+
+
         // context menu
         // 如果放在 delegate中，这种用法会生成很多 Menu 实例？？？
         Menu {

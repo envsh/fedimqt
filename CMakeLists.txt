@@ -97,6 +97,9 @@ qt_target_qml_sources(helloworld
     ${qmlfiles}
     srcui/qmldir
     qmlpp/qmldir
+    # com/melije/pulltorefresh/RefreshIndicator.qml
+    # com/melije/pulltorefresh/PullToRefreshHandler.qml
+    # com/melije/pulltorefresh/qmldir
     
     # RESOURCES icons/logo.png
     RESOURCES ${iconfiles}

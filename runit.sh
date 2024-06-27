@@ -19,7 +19,7 @@ export DYLD_LIBRARY_PATH=$PWD/
 # export QT_DEBUG_PLUGINS=1
     # DYLD_LIBRARY_PATH=$PWD/ \
 export QML_IMPORT_PATH=~/.nix-profile/lib/qt-6/qml/
-export QML2_IMPORT_PATH=$PWD/
+export QML2_IMPORT_PATH=$PWD/:$PWD/qmlpp
 
 export QT_QUICK_CONTROLS_STYLE=Material
 export QT_QUICK_CONTROLS_MATERIAL_THEME=Dark

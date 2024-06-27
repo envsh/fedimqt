@@ -11,10 +11,13 @@ import QtQuick.Window
 
 /////
 // import QmlCppBridge 1.0 //
+import ListModelBase // C++/Go implmention
 
 import "../qmlpp"
 
-import ListModelBase // C++/Go implmention
+// https://github.com/mohammadhasanzadeh/pulltorefreshhandler
+// import pulltorefresh 2.0
+// import "../qmlpp/com/melije/pulltorefresh"
 
 // how singleton main.js???
 // import js now, from tspp/main.js
@@ -58,10 +61,11 @@ ScrollView {
     ListView {
         id: listView
         anchors.fill: parent
-        width : parent.width
+        // width : parent.width
         anchors.leftMargin: 5
         currentIndex: -1
         cacheBuffer: 0 // 好像没啥用
+        // smooth: true
 
         // context menu
         // 如果放在 delegate中，这种用法会生成很多 Menu 实例？？？
@@ -276,8 +280,26 @@ ScrollView {
             
         }
     
+    // try pull up/down load more/refresh
+    property int mincty : 0;
+    property int maxcty : 0;
+    property int pullvalold : 100;
+    property var pullbtime : null; // Date
+
         onContentYChanged: {
-            // Tspp.debug(contentY, height, contentHeight)
+            // flickableDirection  2 virtical, 
+            // console.debug(contentY, height, contentHeight, flickableDirection,atYBeginning)
+            if (flickableDirection == 2) {
+                if (atYBeginning) {
+                    if (contentY < mincty) {
+                        mincty = contentY;
+                    }
+                }else{
+                    if (contentY > maxcty) {
+                        maxcty = contentY;
+                    }
+                }
+            }
             if (contentY + height >= contentHeight) {
                 // if (model.canFetchMore()) {
                     // model.fetchMore();
@@ -294,19 +316,123 @@ ScrollView {
             // Tspp.debug("drag end", listView.verticalOvershoot, listView.draggingVertically);
             // todo android 上，这个值很大，大概很容易达到 +-200
             if (listView.verticalOvershoot < -6.0) {
-                console.info("fetch more older triggered", listView.verticalOvershoot);
+                // console.info("fetch more older triggered", listView.verticalOvershoot);
             } else if (listView.verticalOvershoot > 16.0) {
-                console.info("refresh latest triggered", listView.verticalOvershoot);
+                // console.info("refresh latest triggered", listView.verticalOvershoot);
             }
 
         }
         onMovementEnded: {
+            let nowt = new Date();
             let sbv = scroll1.ScrollBar.vertical;
-            // Tspp.debug("drag end", sbv.position, sbv.size);
+            // console.debug("drag end", sbv.position, sbv.size);
+            // console.debug("move end", pullbtime, nowt);
+            if (pullbtime == null) return;
+            let dtms = nowt.valueOf() - pullbtime.valueOf();
+            // console.debug("move end", dtms, mincty, maxcty, contentY);
+
+            if (mincty <= -5 || maxcty >= 5) {
+                pulldownres(1);
+            }
+
+            mincty = maxcty = 0;
+            pullbtime = null;
         }
         onMovementStarted: {
+            let nowt  = new Date();
             let sbv = scroll1.ScrollBar.vertical;
             // Tspp.debug("drag end", sbv.position, sbv.size);
+            // console.debug("move start", pullbtime, nowt);
+            pullbtime = nowt;
+        }
+
+    // 怎么检测 cancel
+    // which 1: mine, 2
+    function pulldownres(which) {
+        let nowt = new Date();
+        let osv = Qt.platform.os;
+        let dtms = nowt.valueOf() - pullbtime.valueOf();
+        // console.log("pull down reslove", osv, which, nowt, prhh.threshold)
+        if (which == 2) {
+            // console.log("quick pull active", dtms, which);
+            if (osv == "android") {
+                // pulldownfinal();
+            }else {
+            }
+        }else if (which == 1) {
+            let tsok = dtms > 586;
+            if (tsok) {
+                // console.log("should be active", dtms, which);
+                if (osv == "osx" ) {
+                    if (atYBeginning ) {
+                    // pulldownfinal();
+                    }
+                }else{
+                }
+            }
+        }
+    }
+
+    function pulldownfinal() {
+        let nowt  = new Date();
+        let dtms = nowt.valueOf() - pullbtime.valueOf();
+        console.log("pull down final...", mincty, dtms);
+        calljs("fetchmorert", "");
+    }
+    // 没有数据的时候接收不到
+    function pullupfinal() {
+        let nowt  = new Date();
+        let dtms = nowt.valueOf() - pullbtime.valueOf();
+        console.log("pull up final...", maxcty, dtms);
+        calljs("fetchmorert", "");
+    }
+
+        // interactive : true
+        // onFlickStarted: {
+        //     // refreshFlik = atYBeginning
+        //     console.log("refreshing111...???")
+        // }
+        // onFlickEnded: {
+        //     // if ( atYBeginning && refreshFlik )
+        //     {
+        //         // refresh()
+        //         console.log("refreshing...???")
+        //     }
+        // }
+
+        // 似乎比自己检测的准确,上面的检测发出几条触发事件,这个只触发一条
+        // todo 在DESKTOP端触发比较难达到,需要额外的处理
+        // onPullDownRelease 大概在 -100 触发
+        // onPullDownRelease 大概在 +100 触发
+        PullToRefreshHandler
+        {
+            id: prhh
+            // default 20
+            // android设置到50,100就很难触发???
+            // 这个属性不会是比例吧???
+            // 在 macos 上拉不动,需要设置小一点
+            threshold: Qt.platform.os == "android"? 30 : 5
+            onPullDown : {
+                // console.log("pull down hh", nowt);
+            }
+            onPullUp : {
+                // console.log("pull up hh", nowt);
+            }
+            onPullDownRelease:
+            {
+                let ovst = listView.verticalOvershoot;
+                // Add your handling code here:
+                // console.log("ohmy onPullDownRelease", listView.mincty);
+                listView.pulldownfinal();
+            }
+
+            onPullUpRelease:
+            {
+                let ovst = listView.verticalOvershoot;
+                // Add your handling code here:
+                // console.log("ohmy onPullUpRelease", listView.maxcty);
+                listView.pullupfinal();
+            }
         }
     }
 

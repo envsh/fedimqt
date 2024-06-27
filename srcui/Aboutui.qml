@@ -38,6 +38,8 @@ Item {
 
         MyLabel {text: "platform"}
         MyLabel {text: JSON.stringify(Qt.platform)}
+        MyLabel {text: "Screen"}
+        MyLabel {text: Screen.width + 'x' + Screen.height}
 
         MyLabel {text: "CompQtVer"}
         MyLabel {id:compqtver; objectName: "compqtver"; text: "1.0.0"}

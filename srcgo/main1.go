@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"runtime"
+	rtdbg "runtime/debug"
 	"time"
 
 	"github.com/ebitengine/purego"
@@ -57,6 +58,9 @@ func gomainexe() {
 
 // as main of sharedlib
 func init() {
+	rtdbg.SetGCPercent(30)
+	runtime.GOMAXPROCS(2)
+
 	cgopp.JNI_OnLoad_Callback = android_javajni_onload
 	gopp.Info("", runtime.GOOS, envcfg.Mynode, envcfg.Exepath)
 	gomaininit()

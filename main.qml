@@ -26,8 +26,8 @@ ApplicationWindow {
     // minimumHeight: parent.height
     // width: 500
     // height: 650
-    width: Qt.platform.os=='android' ? parent.width : 500;
-    height: Qt.platform.os=='android' ? parent.height : 650;
+    width: Qt.platform.os=='android' ? Screen.width : 500;
+    height: Qt.platform.os=='android' ? Screen.height : 650;
     // maximumHeight: 3800
     // height: parent.height // not work
     visible: true

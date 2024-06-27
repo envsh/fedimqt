@@ -7,6 +7,8 @@ import "C"
 import (
 	"fmt"
 	"log"
+	mrand "math/rand"
+	"runtime"
 	"time"
 
 	"github.com/envsh/fedind/guiclish"
@@ -64,7 +66,7 @@ func onQmlAppEngineCreated() {
 
 	//
 	guiclish.OnFrontuiCreated()
-	{
+	if true {
 		// let rv2 = invokebkd("getcfg", "", "lastaccountline");
 		rv := guiclish.OnFrontuiGetcfg("", "lastaccountline")
 		if true { // for test login flow
@@ -88,6 +90,26 @@ func onQmlAppEngineCreated() {
 				mainui.switchpageidx(0)
 			}
 		}
+	}
+
+	if runtime.GOOS == "android" {
+		go func() {
+
+			for i := range gopp.RangeA(50) {
+				item := &guiclish.Hookinfost{}
+
+				item.Channame = fmt.Sprintf("Channame%d", i)
+				item.Channel = fmt.Sprintf("Channel%d", i)
+				item.Content = fmt.Sprintf("Content%d", i)
+				item.Mtimems = time.Now().UnixMilli() - int64(mrand.Int()%10000000)
+				item.Eventid = fmt.Sprintf("$%d", item.Mtimems)
+
+				qmlcpm.msglstmdl.Add(item)
+			}
+
+			minqt.RunonUithread(mainui.upstatusmc)
+			minqt.RunonUithread(mainui.upstatusrc)
+		}()
 	}
 }
 

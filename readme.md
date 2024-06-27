@@ -9,6 +9,8 @@
 
 ### 遇到的一些问题
 
+- qml listview scroll not very smooth on android
+
 - 为什么切换到 qtsdk 6.7 for android, apk 启动变卡了???
     https://codereview.qt-project.org/c/qt/qtbase/+/546260
     06-25 18:29:30.651 16636 16636 W Activity: PerfMonitor: Slow Operation: Activity org.qtproject.example.helloworld/org.qtproject.qt.android.bindings.QtAc
