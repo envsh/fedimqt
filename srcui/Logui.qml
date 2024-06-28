@@ -31,8 +31,17 @@ Item {
     MyText {
         id: ptitle
         height: 30
-        width: parent.width
+        width: parent.width/2
         text: "logui page ..."
+    }
+
+    MyText {
+        id: logcntlb
+        objectName: "logcntlb"
+        anchors.left: ptitle.right
+        height: 30
+        width: parent.width/2
+        text: "000 ..."
     }
     // }
 

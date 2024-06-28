@@ -411,4 +411,7 @@ ApplicationWindow {
         objs[name].icon.color = color;
     }
 
+    function dircallbygo(iv, sv) {
+        console.log("dircallbygo+-", iv, '/', sv);
+    }
 }

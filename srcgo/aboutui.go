@@ -281,6 +281,7 @@ func (me *romrow) OrderKey() int64 {
 var logui = &loguist{}
 
 type loguist struct {
+	idx int64
 }
 
 func init() {
@@ -304,6 +305,7 @@ type logrow struct {
 }
 
 func (me *logrow) Data(name string) any {
+	// gopp.Println(name, me.Index)
 	switch name {
 	case "Index":
 		return me.Index
@@ -323,25 +325,43 @@ func (me *logrow) OrderKey() int64 {
 	return -1 // me.Ctimems
 }
 
-const maxlogcnt = 200
+const maxuilogcnt = 200
+const deluilogcnt = 33
 
 // todo 最多保留200条,如果多于200则删除旧的
 func (me *loguist) Addlog(logstr string) {
 	xobj := qmlcpm.rootobj.FindChild("loglstmdl")
 	goobjx := xobj.Property("goobj")
 	goobj := minqt.ListModelBaseof(goobjx.Toint64())
-	log.Println(goobj)
+	// gopp.Println("loglstmdl obj", goobj)
 
 	nowt := time.Now()
 	item := &logrow{}
 	item.Content = logstr
-	item.Index = goobj.RowCount()
 	item.Ctimems = nowt.UnixMilli()
+	item.Index = goobj.RowCount()
+	item.Index = int(me.idx)
+	me.idx++
 
 	addok := goobj.Add(item)
 	if addok {
 		// scroll
 	}
+
+	oldcnt := goobj.RowCount()
+	if goobj.RowCount() > maxuilogcnt {
+		goobj.Delold(deluilogcnt)
+	}
+	newcnt := goobj.RowCount()
+	if newcnt != oldcnt {
+		// gopp.Println("remove some", oldcnt, "=>", newcnt)
+	}
+
+	dds := gopp.DeepSizeof(goobj, 0)
+	minqt.RunonUithread(func() {
+		o := qmlcpm.rootobj.FindChild("logcntlb")
+		o.SetProperty("text", fmt.Sprintf("LC: %d, DDS: %d ...", newcnt, dds))
+	})
 
 	/*
 		let item = {};
@@ -350,4 +370,8 @@ func (me *loguist) Addlog(logstr string) {
 
 		scroll1.ScrollBar.vertical.position = 1.0 - scroll1.ScrollBar.vertical.size;
 	*/
+}
+
+func (me *loguist) upsetcntlb() {
+
 }

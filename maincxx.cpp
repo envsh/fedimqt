@@ -61,6 +61,7 @@ void onQmlAppEngineCreated(QObject *obj, const QUrl &objUrl) {
 // impl in minqt/srcc/mainglob.cpp
 extern void initQtmsgout();
 
+#include <QtQml/private/qqmlbuiltinfunctions_p.h>
 extern "C"
 int maincxxqml(int argc, char**argv) {
     // 需要在 java 里设置...
@@ -79,6 +80,11 @@ int maincxxqml(int argc, char**argv) {
     // QQmlApplicationEngine engine;
     QQmlApplicationEngine *engine = (QQmlApplicationEngine *)qmlappenginenew(0) ;
     qmlapp = engine;
+
+    // 相同的，应该是单例
+    // auto qtobj = QtObject::create(engine, engine);
+    // auto qtobj2 = QtObject::create(engine, engine);
+    // qDebug()<<__FUNCTION__<<__LINE__<<qtobj<<qtobj2;
 
     // engine.loadFromModule("QtQuick", "Rectangle"); //  No module named "QtQuick" found???
     // const QUrl url(u"qrc:/alarms/main.qml"_s);

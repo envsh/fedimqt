@@ -57,6 +57,7 @@ func onQmlAppEngineCreated() {
 	// time.AfterFunc(gopp.DurandSec(1, 2), func() {
 	robj := qmlape.RootObject()
 	qmlcpm = qmlcompmannew(robj)
+	qmlcpm.qtobj = minqt.QtObjectCreate(qmlape)
 
 	if false {
 		tstadditems()
@@ -158,6 +159,8 @@ func testqmlop2() {
 }
 
 type qmlcompman struct {
+	qtobj minqt.QtObject // in .qml, it Qt global object
+
 	/////
 	rootobj   minqt.QObject
 	aboutobj  minqt.QObject

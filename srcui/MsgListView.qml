@@ -85,6 +85,8 @@ ScrollView {
         //     MyLabel {color: "red"; text:"nocontent"; visible: msglstmdl.count<=0}
         // }
 
+
+
         // model: HelloModel{id: msglstmdl}
     model: ListModelBase {
         // clazz: "msglstmdl" // 用来选择 roleNames 列表
@@ -107,20 +109,59 @@ ScrollView {
             color: bgcolor
 
             // todo 这个会覆盖Text的 linkActived 信号？？？
-                MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.LeftButton | Qt.RightButton
-                    onClicked: (evt) => {
-                        // console.log("ma", evt);
-                        let oldidx = listView.currentIndex;
-                        if (evt.button === Qt.RightButton) {
-                            contextMenu.popup();
-                        }else{
-                        listView.currentIndex = oldidx==index?-1:index;
-                        // Tspp.debug('lstcuridx', oldidx, "=>", index);
-                        }
+            // MouseArea 和 TapHandler 也是冲突的
+                // MouseArea {
+                //     anchors.fill: parent
+                //     acceptedButtons: Qt.LeftButton | Qt.RightButton
+                //     onClicked: (evt) => {
+                //         // console.log("ma", evt);
+                //         let oldidx = listView.currentIndex;
+                //         if (evt.button === Qt.RightButton) {
+                //             contextMenu.popup();
+                //         }else{
+                //         listView.currentIndex = oldidx==index?-1:index;
+                //         // Tspp.debug('lstcuridx', oldidx, "=>", index);
+                //         }
+                //     }
+                // }
+
+        // 无法排除双击的第一击
+        TapHandler {
+            acceptedButtons: Qt.LeftButton // Qt.AllButtons
+            acceptedDevices: PointerDevice.AllDevices
+            onLongPressed: {
+                // need map to global
+                // android not work???
+                let globpt = point.scenePosition;
+                    contextMenu.x = globpt.x;
+                    contextMenu.y = globpt.y;
+                    contextMenu.popup();
+                    // contextMenu.open();
+                    // console.log(point.scenePosition);
+                    // 可是在android上一直在屏幕中间？？？
+                    if (Qt.platform.os=="android") {
+                    }else{ // this works good
                     }
-                }
+                // console.log("TapHandler.onLongPressed", point);
+            }
+            onSingleTapped: (evtpt) => {
+                // console.log("onSingleTapped", evtpt, target);
+                // console.log("onSingleTapped", evtpt.button, target);
+                let oldidx = listView.currentIndex;
+                listView.currentIndex = oldidx==index?-1:index;
+            }
+            onDoubleTapped: (evtpt) => {
+                console.log("LB.onDoubleTapped", evtpt);
+                // show big content
+            }
+        }
+        TapHandler { // desktop
+            acceptedButtons: Qt.RightButton // Qt.AllButtons
+            onSingleTapped: (evtpt) => {
+                // console.log("RB.onSingleTapped", evtpt.button, target);
+                contextMenu.popup();
+            }
+        }
 
             // Rectangle {
                 Layout.fillWidth: true
@@ -244,6 +285,7 @@ ScrollView {
                     MsgText {
                         // todo if text too long, folder it???
                         id: txtcc
+                        opacity: 0.95
                         // leftPadding: 50
                         textFormat: txtccfmt
                         text: '　　　' + (Content!=''?Content:'Content here')

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	mrand "math/rand"
 	"os"
 	"runtime"
 	rtdbg "runtime/debug"
@@ -137,6 +138,7 @@ func bgproc() {
 		log.Println("loopcnt", i, 33)
 		// callqml(fmt.Sprintf("thisgo,callqml %d", i))
 		guiclish.EmitEventFront("notice", fmt.Sprintf("thisgo,callqml %d", i))
+
 	}
 }
 func uptimebgproc() {
@@ -155,8 +157,13 @@ func uptimebgproc() {
 		// }
 		// log.Println(time.Since(btime))
 
-		memlen := DeepSizeof(qmlcpm.msglstmdl, 0)
-		log.Println("memlen", memlen)
+		if false {
+			memlen := DeepSizeof(qmlcpm.msglstmdl, 0)
+			log.Println("memlen", memlen)
+
+			mo := minqt.QMetaObjectof0()
+			mo.InvokeQmlmf(qmlcpm.rootobj, "dircallbygo", mrand.Int(), gopp.RandomStringAlphaMixed(9))
+		}
 	}
 }
 

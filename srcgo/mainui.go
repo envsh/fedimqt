@@ -75,8 +75,9 @@ func (me *mainuist) onloadmsg() {
 func (me *mainuist) upstatusmc() {
 	cnt := qmlcpm.msglstmdl.RowCount()
 	qmlcpm.stbmsgcntlb.SetProperty("text", fmt.Sprintf("MC: %d", cnt))
-	dds := gopp.DeepSizeBygob(qmlcpm.msglstmdl)
-	qmlcpm.stbmsgcntlb.SetProperty("tiptext", fmt.Sprintf("MC: %d, DS: %d", cnt, dds))
+	// dds := gopp.DeepSizeBygob(qmlcpm.msglstmdl)
+	dds := gopp.DeepSizeof(qmlcpm.msglstmdl, 0)
+	qmlcpm.stbmsgcntlb.SetProperty("tiptext", fmt.Sprintf("MC: %d, DDS: %d", cnt, dds))
 }
 
 func (me *mainuist) upstatusrc() {
