@@ -154,6 +154,9 @@ func uptimebgproc() {
 		// 	minqt.Dlsym0("QObjectProperty1")
 		// }
 		// log.Println(time.Since(btime))
+
+		memlen := DeepSizeof(qmlcpm.msglstmdl, 0)
+		log.Println("memlen", memlen)
 	}
 }
 

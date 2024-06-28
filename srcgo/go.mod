@@ -25,6 +25,7 @@ replace github.com/envsh/fedind/envcfg => ../../fedindgo/envcfg
 replace github.com/envsh/fedind/statics => ../../fedindgo/statics
 
 require github.com/kitech/minqt v0.0.0
+
 replace github.com/kitech/minqt => ../../minqtgo
 
 require (
@@ -55,7 +56,7 @@ require (
 	github.com/gobwas/httphead v0.1.0 // indirect
 	github.com/gobwas/pool v0.2.1 // indirect
 	github.com/gobwas/ws v1.2.0 // indirect
-	github.com/golang/protobuf v1.4.2 // indirect
+	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/gorilla/websocket v1.5.1 // indirect
@@ -101,6 +102,8 @@ require (
 	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
+	github.com/viant/xreflect v0.0.0-20230303201326-f50afb0feb0d // indirect
+	github.com/viant/xunsafe v0.9.2 // indirect
 	github.com/yitsushi/go-misskey v1.1.6 // indirect
 	github.com/yuin/goldmark v1.7.1 // indirect
 	go.mau.fi/util v0.4.2 // indirect
@@ -112,7 +115,7 @@ require (
 	golang.org/x/sys v0.19.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/tools v0.20.0 // indirect
-	google.golang.org/protobuf v1.23.0 // indirect
+	google.golang.org/protobuf v1.28.0 // indirect
 	gorm.io/driver/postgres v1.5.7 // indirect
 	gorm.io/gorm v1.25.9 // indirect
 	maunium.net/go/mautrix v0.18.1 // indirect
