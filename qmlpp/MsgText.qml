@@ -15,7 +15,7 @@ Text {
                         // width: 350
                         textFormat: Text.MarkdownText
                         // textFormat: Text.RichText
-                        font.pixelSize: 14
+                        font.pixelSize: Qt.platform.os=="android"? 16 : 14
                         // font.pixelSize: normalSize+3
 
                         // text: "If this property is set to true, the layout will force all cells to have an uniform Height. The layout aims to respect";

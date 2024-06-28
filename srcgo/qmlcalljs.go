@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strings"
 	"sync/atomic"
 	"time"
 
@@ -28,7 +29,7 @@ func qmlcalljsfuncimpl(jstr string, retaddr *charptr, retlen *usize) {
 	log.Println(len(jstr), jstr)
 
 	if false {
-		res, ok := asyncInvokeProcessor(jstr)
+		res, ok := asyncInvokeProcessor(jstr, false)
 		if false && ok {
 			*retaddr = (charptr)(cgopp.CStringaf(res))
 			*retlen = usize(len(res))
@@ -37,8 +38,19 @@ func qmlcalljsfuncimpl(jstr string, retaddr *charptr, retlen *usize) {
 		}
 	}
 
-	qcnr.enqueue(jstr)
+	longtimecmds := []string{"fetchmorert"}
+	for _, ltcmd := range longtimecmds {
+		stub := fmt.Sprintf("\"Cmd\":\"%s\",", ltcmd)
+		if strings.Contains(jstr, stub) {
+			log.Println("async cmd", ltcmd)
+			qcnr.enqueue(jstr)
+			goto endret
+		}
+	}
+	// non async
+	asyncInvokeProcessor(jstr, false)
 
+endret:
 	*retlen = 0
 	*retaddr = nil
 }
@@ -86,21 +98,23 @@ func qmlcalljsproc(qc chan string) {
 			if !ok {
 				goto endfor
 			}
-			asyncInvokeProcessor(jstr)
+			asyncInvokeProcessor(jstr, true)
 		}
 	}
 endfor:
 }
 
-func asyncInvokeProcessor(reqdata string) (string, bool) {
+// async==true, 在nonui线程执行
+// async==false, 在ui线程执行
+func asyncInvokeProcessor(reqdata string, async bool) (string, bool) {
 	// log.Println("reqdata txt", reqdata, nowtimerfc3389())
 
-	cio, err := Invokecmdparse(reqdata)
+	cio, err := Invokecmdparse(reqdata, async)
 	gopp.ErrPrint(err, reqdata)
 	if err != nil {
 		return gopp.JsonMarshalMust(&guiclish.Cmdinfo{Errmsg: err.Error()}), true
 	}
-	cmdrun(cio)
+	cmdrun(cio, async)
 
 	cio.Retc = len(cio.Retv)
 	resp, err := json.Marshal(cio)
@@ -115,7 +129,7 @@ func asyncInvokeProcessor(reqdata string) (string, bool) {
 	// log.Println("respobj", v)
 }
 
-func Invokecmdparse(jstr string) (*guiclish.Cmdinfo, error) {
+func Invokecmdparse(jstr string, async bool) (*guiclish.Cmdinfo, error) {
 	var data = jstr
 
 	// data := C.GoStringN(prm.ptr, C.int(prm.len))
@@ -133,7 +147,7 @@ func Invokecmdparse(jstr string) (*guiclish.Cmdinfo, error) {
 	// log.Println(cio)
 	return cio, err
 }
-func cmdrun(cio *guiclish.Cmdinfo) {
+func cmdrun(cio *guiclish.Cmdinfo, async bool) {
 	// log.Println(cio.Cmd)
 	var nowt = time.Now()
 	_ = nowt

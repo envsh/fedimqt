@@ -66,6 +66,10 @@ ScrollView {
         currentIndex: -1
         cacheBuffer: 0 // 好像没啥用
         // smooth: true
+        // 好像不怎么管用???
+        maximumFlickVelocity: 3800 // for android, default 400???
+        // verticalVelocity: 800 // readonly
+        clip: true // fix painting outside of parent scroll
 
         // context menu
         // 如果放在 delegate中，这种用法会生成很多 Menu 实例？？？
@@ -121,26 +125,35 @@ ScrollView {
             // Rectangle {
                 Layout.fillWidth: true
                 // color: "gray"
-                height: 30 + txtcc2.height + 30
+                height: 30 + txtcc2.height + 30 + 10 // +10 at item bottom
                 // height: 90
 
+                MyImage { id: usrico
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.topMargin: 8
+                    anchors.rightMargin: 5
+                    source:"../icons/icon_avatar.png"; 
+                    width:42; height:42; }
+
                 RowLayout{
+                    id: msgrow1
+                    height: 20
                     // anchors.fill: parent
                     anchors.right : parent.right
-                    anchors.left : parent.left
-                    id: msgrow1
-                    height: 32
+                    anchors.left : usrico.right
+                    anchors.leftMargin: 5
                 // Button {
                 //     id: inbtn
                 //     text:"tbn1"
                 //     flat: true
                 //     // anchors.right: parent.right
                 // }
-                MyImage {source:"../icons/icon_avatar.png"; 
-                    width:22; height:22; }
+
                 Item {
                     width: 120
                     opacity: 0.8
+                    // anchors.left: usrico.right
                     
                 MyText {
                     width: parent.width
@@ -207,12 +220,17 @@ ScrollView {
                 }
                 }
 
+                // Content area
                     // Rectangle {
                     Item {
-                        Layout.fillWidth: true
+                        // Layout.fillWidth: true
                         anchors.top : msgrow1.bottom
+                        // anchors.left : usrico.right
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.topMargin : 12
+
                         // width:350
-                        width: parent.width-6
+                        width: parent.width-16
                         height: txtcc.contentHeight
                         // color: "#505050"
                         // color: window.color
@@ -222,22 +240,25 @@ ScrollView {
                         // border.color: "#999"
                         id: txtcc2
                         
-
+                    // todo 首行缩进
                     MsgText {
                         // todo if text too long, folder it???
                         id: txtcc
+                        // leftPadding: 50
                         textFormat: txtccfmt
-                        text: Content!=''?Content:'Content here'
+                        text: '　　　' + (Content!=''?Content:'Content here')
                     }
                     MyImage{source:"../icons/MessageListSending@2x.png"; width:15
                         anchors.right: txtcc.right;
                         anchors.bottom: txtcc.bottom;}
                     }
 
+                // msg footer area
                 RowLayout {
                     anchors.top : txtcc2.bottom
-                    width: parent.width
-                    height: 30
+                    anchors.horizontalCenter : parent.horizontalCenter
+                    width: parent.width-16
+                    height: 20
                     Item {
                         width:120
                         opacity: 0.5
@@ -439,10 +460,10 @@ ScrollView {
 
 }
     // msgsendbar
-    Rectangle {
-        color: Material.background
+    // Rectangle {
+    //     color: Material.background
         // color: "blue"
-    // Item {
+    Item {
         id: msgsndbar
         width: parent.width
         height: 60

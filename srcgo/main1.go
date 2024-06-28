@@ -46,6 +46,7 @@ func main() {
 
 //extern gomainexe()
 func gomainexe() {
+	runtime.LockOSThread()
 	symx := cgopp.Dlsym0("maincxxqml0")
 	var maincxxqml0 func() int
 	purego.RegisterFunc(&maincxxqml0, uintptr(symx))
