@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"runtime"
 	"time"
 
 	"github.com/envsh/fedind/guiclish"
@@ -26,8 +27,14 @@ func (me *mainuist) uptimeset() {
 	// btime := time.Now()
 	// Updates can only be scheduled from GUI thread or from QQuickItem::updatePaintNode()
 
+	mmst := runtime.MemStats{}
+	runtime.ReadMemStats(&mmst)
+
+	mmval := fmt.Sprintf("%s, Alloc: %d, Inuse: %d, %s", txt, mmst.Alloc, mmst.HeapInuse, tm1)
+
 	qmlcpm.stbuptimelb.SetProperty("text", txt)
-	qmlcpm.stbuptimelb.SetProperty("tiptext", txt+" "+tm1)
+	// qmlcpm.stbuptimelb.SetProperty("tiptext", txt+" "+tm1)
+	qmlcpm.stbuptimelb.SetProperty("tiptext", mmval)
 
 	// qmlcpm.stbuptimelb.Property("tiptext")
 	// qmlcpm.stbuptimelb.Property("text")

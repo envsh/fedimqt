@@ -171,6 +171,7 @@ ScrollView {
                 Layout.fillWidth: true
                 // color: "gray"
                 height: 30 + txtcc2.height + 30 + 10 // +10 at item bottom
+                // height: 30 + 30 + 30 + 10
                 // height: 90
 
                 MyImage { id: usrico
@@ -241,7 +242,8 @@ ScrollView {
                     // width: 120
                     width: parent.width
                     // Layout.fillWidth: false
-                }}
+                }
+                }
                 // }
 
                 // Button {
@@ -342,7 +344,7 @@ ScrollView {
                     // tiptext: 'dtime:'+Dtime
                     width: 120
                     horizontalAlignment: Text.Right
-                }}       
+                }}     
             }
             
         }

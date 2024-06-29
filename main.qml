@@ -245,7 +245,10 @@ ApplicationWindow {
             sourceSize.width: 22
             sourceSize.height: 24
         }
-        MyLabel{id:uptimest; objectName:"mainui.stb.uptimelb"; text: 'UT:'+999; tiptext: 'Uptime:'+999}
+        MyLabel{id:uptimest; objectName:"mainui.stb.uptimelb";
+            text: 'UT:'+999;
+            tiptext: 'Uptime:'+999
+        }
         }
     }
 

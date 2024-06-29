@@ -14,6 +14,7 @@ Text {
                         width: parent.width
                         // width: 350
                         textFormat: Text.MarkdownText
+                        // textFormat: Text.PlainText
                         // textFormat: Text.RichText
                         font.pixelSize: Qt.platform.os=="android"? 16 : 14
                         // font.pixelSize: normalSize+3

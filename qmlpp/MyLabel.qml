@@ -23,11 +23,11 @@ Label{
     textFormat : Text.PlainText
 
     property string tiptext//: qsTr("Save the active project")
-    // ToolTip{ 
-    //     visible: hh.hovered && tiptext.length>0
-    //     // visible: down
-    //     text: tiptext
-    // }
+    ToolTip{ 
+        visible: hh.hovered && tiptext.length>0
+        // visible: down
+        text: tiptext
+    }
 
     HoverHandler {
         id: hh
