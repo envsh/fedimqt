@@ -19,13 +19,13 @@ Image{
     sourceSize.height: height
     fillMode: Image.Stretch
     
-    property string tiptext//: qsTr("Save the active project")
-    ToolTip{
-        // image has no hovered
-        visible: false && tiptext.length>0
-        // visible: down
-        text: tiptext
-    }
+    // property string tiptext//: qsTr("Save the active project")
+    // ToolTip{
+    //     // image has no hovered
+    //     visible: false && tiptext.length>0
+    //     // visible: down
+    //     text: tiptext
+    // }
 
     /////
     // onClicked: {

@@ -122,12 +122,12 @@ int maincxxqml(int argc, char**argv) {
 }
 
 const char* argv[] = {
-    "./qtimntexe", 0,
+    "./qtimntexe", "-qmljsdebugger=port:3768", 0,
 };
 
 extern "C"
 int maincxxqml0() {
-    int argc = 1;
+    int argc = 2;
     return maincxxqml(argc, (char**)argv);
 }
 

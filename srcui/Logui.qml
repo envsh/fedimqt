@@ -85,7 +85,7 @@ ScrollView {
             MyLabel {
                 text: Index + " : " + Content
                 width: topwin.width
-                tiptext: Index + " : " + Ctimemsui + " "  + Content
+                // tiptext: Index + " : " + Ctimemsui + " "  + Content
             }
         }
 

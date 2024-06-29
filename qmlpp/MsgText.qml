@@ -27,12 +27,12 @@ Text {
     // focusPolicy: Qt.StrongFocus
     property string tiptext//: qsTr("Save the active project")
     property bool hoveronlink: false
-    ToolTip{ 
-        // Text 没有 Hovered 属性吧
-        visible: tiptext.length>0
-        // visible: down
-        text: tiptext
-    }
+    // ToolTip{ 
+    //     // Text 没有 Hovered 属性吧
+    //     visible: tiptext.length>0
+    //     // visible: down
+    //     text: tiptext
+    // }
 
     ///
     // todo check scrolling not show

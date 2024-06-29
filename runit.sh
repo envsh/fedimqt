@@ -27,6 +27,9 @@ export QT_QUICK_CONTROLS_MATERIAL_THEME=Dark
 set -x
 # ./helloworld.app/Contents/MacOS/helloworld
 ./hellogo
+# export QML_IMPORT_TRACE=1
+# qmlprofiler  --verbose -o qmltr.log -p 3768 ./hellogo
+# qmlprofiler --verbose  -p 3768 -attach 127.0.0.1
 
 # the QML_IMPORT_PATH line works
 # or error like this: module "QtQuick.Controls" plugin "qtquickcontrols2plugin" not found

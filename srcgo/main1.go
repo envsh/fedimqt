@@ -157,12 +157,16 @@ func uptimebgproc() {
 		// }
 		// log.Println(time.Since(btime))
 
-		if false {
-			memlen := DeepSizeof(qmlcpm.msglstmdl, 0)
-			log.Println("memlen", memlen)
+		if true {
+			// 这个数据肯定是不大的，内存大全在qml那里，
+			// qml profile 怎么到处都是allocate 64KB???
+			// memlen := DeepSizeof(qmlcpm.msglstmdl, 0)
+			// log.Println("memlen", memlen)
 
 			mo := minqt.QMetaObjectof0()
 			mo.InvokeQmlmf(qmlcpm.rootobj, "dircallbygo", mrand.Int(), gopp.RandomStringAlphaMixed(9))
+
+			minqt.Qmljsgc2(qmlcpm.rootobj)
 		}
 	}
 }

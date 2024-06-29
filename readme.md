@@ -9,6 +9,9 @@
 
 ### 遇到的一些问题
 
+- 启动105M, 加载数据直接涨到160M，但是加载的数据一共只有1M，大概1000条。
+    内存怎么用掉的，按说采用virtualdom方式，只需要10条ui item就够了。
+
 - qml listview scroll not very smooth on android
 
 - 为什么切换到 qtsdk 6.7 for android, apk 启动变卡了???

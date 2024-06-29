@@ -69,7 +69,7 @@ ScrollView {
         // 好像不怎么管用???
         maximumFlickVelocity: 3800 // for android, default 400???
         // verticalVelocity: 800 // readonly
-        clip: true // fix painting outside of parent scroll
+        // clip: true // fix painting outside of parent scroll
 
         // context menu
         // 如果放在 delegate中，这种用法会生成很多 Menu 实例？？？
@@ -96,7 +96,7 @@ ScrollView {
 
     // 这个必须用Rectangle,不然没法在选中时设置高亮背景
     // 内部子组件不使用 Rectangle,似乎滚动时的CPU减小了,40-50% 降低到 30-40%
-        delegate: Rectangle {
+        delegate: Item {
             id: grid
             // anchors.fill: parent
             // width: 350
@@ -105,8 +105,12 @@ ScrollView {
             // border.width: 1
             // border.color: "#5a5a5a"
             // color: Material.background
-            property string bgcolor: index == listView.currentIndex ? "#4a4a4a" : Material.background
-            color: bgcolor
+            // property string bgcolor: index == listView.currentIndex ? "#4a4a4a" : Material.background
+            // color: bgcolor
+
+            // Component.onDestruction : {
+            //     console.count("msgdgtitem dtor");
+            // }
 
             // todo 这个会覆盖Text的 linkActived 信号？？？
             // MouseArea 和 TapHandler 也是冲突的
@@ -200,7 +204,7 @@ ScrollView {
                     width: parent.width
                     id: inbtn
                     text: Sender
-                    tiptext: 'sender:'+Sender
+                    // tiptext: 'sender:'+Sender
                     // text: "hhhh"
                     // color: Material.foreground
                     // elide: Text.ElideMiddle
@@ -222,7 +226,7 @@ ScrollView {
                 MyText {
                     id: lbroomname
                     text: Roomname==''?'Roomname':Roomname
-                    tiptext: 'roomname:'+Roomname
+                    // tiptext: 'roomname:'+Roomname
                     width: 120
                     
                 }} 
@@ -233,7 +237,7 @@ ScrollView {
                     id: lbroomid
                     // opacity: 0.65
                     text: Roomid==''?'Roomid':Roomid
-                    tiptext: 'roomid:'+Roomid
+                    // tiptext: 'roomid:'+Roomid
                     // width: 120
                     width: parent.width
                     // Layout.fillWidth: false
@@ -253,7 +257,7 @@ ScrollView {
                 MyLabel {
                     id: inbtn3
                     text: Mtimemsui==''?'Mtimems':Mtimemsui
-                    tiptext: Mtimemsuitip
+                    // tiptext: Mtimemsuitip
                     // flat: true
                     width: parent.width
                     horizontalAlignment: Text.Right
@@ -309,7 +313,7 @@ ScrollView {
 
                     MyText {
                         text: "fedisite link"
-                        tiptext: "full fedisite link"
+                        // tiptext: "full fedisite link"
                     }  }
                 Item {
                     width:90
@@ -320,7 +324,7 @@ ScrollView {
                 MyText {
                     id: labevtid
                     text: Eventid==''?"Eventid here":Eventid;
-                    tiptext: Eventid
+                    // tiptext: Eventid
                     // width: 120 
                     // color: "red"
                     anchors.right : parent.right
@@ -335,7 +339,7 @@ ScrollView {
                 MyText {
                     id: labdtime
                     text: Dtime==''?"Dtime":Dtime
-                    tiptext: 'dtime:'+Dtime
+                    // tiptext: 'dtime:'+Dtime
                     width: 120
                     horizontalAlignment: Text.Right
                 }}       
@@ -502,10 +506,10 @@ ScrollView {
 
 }
     // msgsendbar
-    // Rectangle {
-    //     color: Material.background
+    Rectangle {
+        color: Material.background
         // color: "blue"
-    Item {
+    // Item {
         id: msgsndbar
         width: parent.width
         height: 60
@@ -517,7 +521,7 @@ ScrollView {
             anchors.right : parent.right
 
             MyButton{ text:"SIMG"; implicitWidth: 32;
-                tiptext: qsTr("Select and send Photo/File(s)")
+                // tiptext: qsTr("Select and send Photo/File(s)")
                 display: AbstractButton.IconOnly
                 icon.source: "../icons/add.png"}
 
@@ -558,13 +562,13 @@ ScrollView {
             MyButton{ text:"Emoji"; onClicked: dummy();
                 implicitWidth: 32;
                 display: AbstractButton.IconOnly
-                tiptext: qsTr("Select Emoji(s)")
+                // tiptext: qsTr("Select Emoji(s)")
                 icon.source: "../icons/smile_gray64.png"}
             MyButton{ text:"Sendit!!!"; 
                 // onClicked: sendmsg();
                 onClicked: calljs("msglst.sendmsg");
                 implicitWidth: 52;
-                tiptext: qsTr("Send Message!!!")
+                // tiptext: qsTr("Send Message!!!")
                 display: AbstractButton.IconOnly
                 icon.source: "../icons/cursor_gray64.png"}
             // MyImage {source:"../icons/cursor_gray64.png"; height:26; width:26}

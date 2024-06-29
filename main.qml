@@ -374,7 +374,7 @@ ApplicationWindow {
     }
 
     Component.onCompleted: {
-
+        // console.profile();
         // let rv = qcffi.invoke("thisqml");
         // Tspp.debug(rv);
         // listView.model.dummy()
@@ -412,6 +412,11 @@ ApplicationWindow {
     }
 
     function dircallbygo(iv, sv) {
-        console.log("dircallbygo+-", iv, '/', sv);
+        // console.log("dircallbygo+-", iv, '/', sv);
+        // console.count("dircallbygo called");
+
+        // jsgc();
     }
+
+    function jsgc() { gc(); }
 }

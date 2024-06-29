@@ -19,13 +19,14 @@ Text {
     focus: true
     // focusPolicy: Qt.StrongFocus // qt6.7
 
-    property string tiptext//: qsTr("Save the active project")
-    ToolTip{ 
-        // Text 没有 Hovered 属性吧
-        visible: false && tiptext.length>0
-        // visible: down
-        text: tiptext
-    }
+    // property string tiptext//: qsTr("Save the active project")
+    // 应该使用共享式的，qml profile 怎么好像每个Tooltip 分配64KB？？？
+    // ToolTip{ 
+    //     // Text 没有 Hovered 属性吧
+    //     visible: false && tiptext.length>0
+    //     // visible: down
+    //     text: tiptext
+    // }
 
     // script
     //  为什么没有反应
