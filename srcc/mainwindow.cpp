@@ -50,6 +50,7 @@ MainWindow2::MainWindow2(QWidget*parent) : QMainWindow(parent) {
 
 // \see https://stackoverflow.com/questions/43234163/how-to-insert-qml-view-in-a-qwidget
 
+// 还能保持GPU加速吗？
 void MainWindow2::setQmlAppWindow(QQmlApplicationEngine* qmlae) {
     auto m_engine = qmlae;
     QWindow *qmlWindow = qobject_cast<QWindow*>(m_engine->rootObjects().at(0));

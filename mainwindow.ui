@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>614</width>
-    <height>490</height>
+    <height>650</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -61,22 +61,47 @@
     <property name="title">
      <string>&amp;Wndo</string>
     </property>
+    <addaction name="action_Next_Page"/>
+    <addaction name="action_Prev_Page"/>
+    <addaction name="action_Logui"/>
+    <addaction name="action_Aboutui"/>
+    <addaction name="action_Room_List"/>
+    <addaction name="action_Loginui"/>
+    <addaction name="action_Message_List"/>
+    <addaction name="action_Settingui"/>
+    <addaction name="action_Searchui"/>
    </widget>
    <widget class="QMenu" name="menu_Dev">
     <property name="title">
      <string>&amp;Dev</string>
     </property>
+    <addaction name="action_Load_Message"/>
+    <addaction name="action_Load_More_Older"/>
+    <addaction name="action_Load_More_Older_RT"/>
+    <addaction name="separator"/>
+    <addaction name="action_AutoText"/>
+    <addaction name="action_MarkdownText"/>
+    <addaction name="action_RichText"/>
+    <addaction name="action_PlanText"/>
    </widget>
    <widget class="QMenu" name="menu_Misc">
     <property name="title">
      <string>&amp;Misc</string>
     </property>
+    <addaction name="action_Scroll_Bottom"/>
+    <addaction name="action_Scroll_Top"/>
+    <addaction name="action_Test_ListView"/>
+    <addaction name="action_Paste"/>
+    <addaction name="action_Paste2"/>
+    <addaction name="action_Theme_Dark"/>
+    <addaction name="action_Theme_Light"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
      <string>&amp;Help</string>
     </property>
     <addaction name="action_About"/>
+    <addaction name="action_Settings"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
@@ -94,6 +119,142 @@
   <action name="action_About">
    <property name="text">
     <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="action_Next_Page">
+   <property name="icon">
+    <iconset>
+     <normaloff>../../bprog/tox-homeserver/tofia/app/src/main/res/drawable/barbuttonicon_forward_gray64.png</normaloff>../../bprog/tox-homeserver/tofia/app/src/main/res/drawable/barbuttonicon_forward_gray64.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Next Page</string>
+   </property>
+  </action>
+  <action name="action_Prev_Page">
+   <property name="icon">
+    <iconset>
+     <normaloff>../../bprog/tox-homeserver/tofia/app/src/main/res/drawable/barbuttonicon_back_2x.png</normaloff>../../bprog/tox-homeserver/tofia/app/src/main/res/drawable/barbuttonicon_back_2x.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Prev Page</string>
+   </property>
+  </action>
+  <action name="action_Logui">
+   <property name="text">
+    <string>&amp;Logui</string>
+   </property>
+  </action>
+  <action name="action_Aboutui">
+   <property name="text">
+    <string>&amp;Aboutui</string>
+   </property>
+  </action>
+  <action name="action_Room_List">
+   <property name="text">
+    <string>&amp;Room List</string>
+   </property>
+  </action>
+  <action name="action_Loginui">
+   <property name="text">
+    <string>&amp;Loginui</string>
+   </property>
+  </action>
+  <action name="action_Message_List">
+   <property name="text">
+    <string>&amp;Message List</string>
+   </property>
+  </action>
+  <action name="action_Settingui">
+   <property name="text">
+    <string>&amp;Settingui</string>
+   </property>
+  </action>
+  <action name="action_Searchui">
+   <property name="text">
+    <string>&amp;Searchui</string>
+   </property>
+  </action>
+  <action name="action_Load_Message">
+   <property name="text">
+    <string>&amp;Load Message</string>
+   </property>
+  </action>
+  <action name="action_Load_More_Older">
+   <property name="text">
+    <string>&amp;Load More Older</string>
+   </property>
+  </action>
+  <action name="action_Load_More_Older_RT">
+   <property name="text">
+    <string>&amp;Load More Older RT</string>
+   </property>
+  </action>
+  <action name="action_AutoText">
+   <property name="text">
+    <string>&amp;AutoText</string>
+   </property>
+  </action>
+  <action name="action_MarkdownText">
+   <property name="text">
+    <string>&amp;MarkdownText</string>
+   </property>
+  </action>
+  <action name="action_RichText">
+   <property name="text">
+    <string>&amp;RichText</string>
+   </property>
+  </action>
+  <action name="action_PlanText">
+   <property name="text">
+    <string>&amp;PlanText</string>
+   </property>
+  </action>
+  <action name="action_Scroll_Bottom">
+   <property name="icon">
+    <iconset>
+     <normaloff>../../bprog/tox-homeserver/tofia/app/src/main/res/drawable/barbuttonicon_down_2x.png</normaloff>../../bprog/tox-homeserver/tofia/app/src/main/res/drawable/barbuttonicon_down_2x.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Scroll Bottom</string>
+   </property>
+  </action>
+  <action name="action_Scroll_Top">
+   <property name="icon">
+    <iconset>
+     <normaloff>../../bprog/tox-homeserver/tofia/app/src/main/res/drawable/barbuttonicon_up_2x.png</normaloff>../../bprog/tox-homeserver/tofia/app/src/main/res/drawable/barbuttonicon_up_2x.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Scroll Top</string>
+   </property>
+  </action>
+  <action name="action_Test_ListView">
+   <property name="text">
+    <string>&amp;Test ListView</string>
+   </property>
+  </action>
+  <action name="action_Paste">
+   <property name="text">
+    <string>&amp;Paste</string>
+   </property>
+  </action>
+  <action name="action_Paste2">
+   <property name="text">
+    <string>&amp;Paste2</string>
+   </property>
+  </action>
+  <action name="action_Theme_Dark">
+   <property name="text">
+    <string>&amp;Theme Dark</string>
+   </property>
+  </action>
+  <action name="action_Theme_Light">
+   <property name="text">
+    <string>&amp;Theme Light</string>
+   </property>
+  </action>
+  <action name="action_Settings">
+   <property name="text">
+    <string>&amp;Settings</string>
    </property>
   </action>
  </widget>

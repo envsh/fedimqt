@@ -128,10 +128,10 @@ int maincxxqml(int argc, char**argv) {
 
     qmlappenginenew(2);
 
+    // 加一层widget在安卓上滚动效率没有区别，CPU使用60-70%
     auto mw = new MainWindow2();
     mw->setQmlAppWindow(engine);
     mw->show();
-    // mw->uiw.menubar->show();
 
     return app.exec();
 }
