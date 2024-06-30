@@ -22,12 +22,15 @@ type aboutui struct {
 }
 
 func (me *aboutui) SetPairs() {
-	minqt.RunonUithread(me.implSetPairs)
+	time.AfterFunc(gopp.DurandSec(1, 3), func() {
+		minqt.RunonUithread(me.implSetPairs)
+	})
 }
 func (me *aboutui) implSetPairs() {
 	{
 		qtver := minqt.QCompVersion()
 		obj := qmlcpm.rootobj.FindChild("compqtver")
+
 		obj.SetProperty("text", qtver)
 	}
 	{

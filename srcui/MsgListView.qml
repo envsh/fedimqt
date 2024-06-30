@@ -95,6 +95,10 @@ ScrollView {
                 onTriggered: { calljs("msglstctxedt", listView.currentIndex);
                 }
             }
+            MenuItem { text: "&Edit Long" ;
+                onTriggered: { calljs("msglstctxedtlong", listView.currentIndex);
+                }
+            }
             MenuItem { text: "&View Source";
                 onTriggered: {
                     // calljs("msglstctxvwsrc", listView.currentIndex);
@@ -110,8 +114,29 @@ ScrollView {
                     popuplargecc.visible = true;
                 }
             }
+            MenuItem { text: "&Permalink"
+                onTriggered: {
+                    let item = listView.currentItem;
+                    // console.log(item);
+                    if (item == null) {
+                        console.log("no item selected", listView.currentIndex);
+                        return;
+                    }
+                    let ccitem = item.children[3].children[1].children[0];
+                    let chitem = item.children[1].children[2].children[0];
+                    // console.log(ccitem);
+                    // console.log(chitem);
+                    let msgid = ccitem.text;
+                    let roomid = chitem.text;
+                    let msglink = "https://matrix.to/#/"+roomid+"/"+msgid+"?via=balha.chat&via=matrix.org&via=t2bot.io";
+                    // console.log(msglink);
+                    clipbdswap.text = msglink;
+                    clipbdswap.selectAll();
+                    clipbdswap.copy();
+                }
+            }
             MenuItem { text: "&Delete" }
-            // MenuItem { text: "&Paste" }
+            MenuItem { text: "&Report Abuse" }
         }
         TextEdit{
             id: clipbdswap
