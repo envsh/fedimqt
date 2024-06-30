@@ -228,6 +228,11 @@ func cmdrun(cio *guiclish.Cmdinfo, async bool) {
 				mainui.switchpageidx(0)
 			})
 		}
+
+		/////
+	// case "msglstctxcpy":
+	// case "msglstctxedt":
+	// case "msglstctxvwsrc":
 	default:
 		gopp.Warn(cio.Cmd, cio.Argv)
 	}

@@ -75,9 +75,11 @@ ScrollView {
         // 如果放在 delegate中，这种用法会生成很多 Menu 实例？？？
         Menu {
             id: contextMenu
-            MenuItem { text: "Cut" }
-            MenuItem { text: "Copy" }
-            MenuItem { text: "Paste" }
+            MenuItem { text: "&Copy" ; onTriggered: calljs("msglstctxcpy", listView.currentIndex) }
+            MenuItem { text: "&Edit" ; onTriggered: calljs("msglstctxedt", listView.currentIndex) }
+            MenuItem { text: "&View Source"; onTriggered: calljs("msglstctxvwsrc", listView.currentIndex) }
+            MenuItem { text: "&Cut" }
+            MenuItem { text: "&Paste" }
         }
         // Rectangle {
         //     width: 300
@@ -139,7 +141,9 @@ ScrollView {
                 let globpt = point.scenePosition;
                     contextMenu.x = globpt.x;
                     contextMenu.y = globpt.y;
-                    contextMenu.popup();
+                    if (Qt.platform.os == "android") {
+                        contextMenu.popup();
+                    }
                     // contextMenu.open();
                     // console.log(point.scenePosition);
                     // 可是在android上一直在屏幕中间？？？
@@ -163,7 +167,9 @@ ScrollView {
             acceptedButtons: Qt.RightButton // Qt.AllButtons
             onSingleTapped: (evtpt) => {
                 // console.log("RB.onSingleTapped", evtpt.button, target);
-                contextMenu.popup();
+                if (Qt.platform.os != "android") {
+                    contextMenu.popup();
+                }
             }
         }
 
