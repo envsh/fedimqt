@@ -102,16 +102,7 @@ ScrollView {
             MenuItem { text: "&View Source";
                 onTriggered: {
                     // calljs("msglstctxvwsrc", listView.currentIndex);
-                    let item = listView.currentItem;
-                    // console.log(item);
-                    if (item == null) {
-                        console.log("no item selected", listView.currentIndex);
-                        return;
-                    }
-                    let ccitem = item.children[2].children[0];
-                    // console.log(ccitem);
-                    popuplargecc.text = ccitem.text;
-                    popuplargecc.visible = true;
+                    popuplargecontent();
                 }
             }
             MenuItem { text: "&Permalink"
@@ -223,8 +214,12 @@ ScrollView {
                 }
             }
             onDoubleTapped: (evtpt) => {
-                console.log("LB.onDoubleTapped", evtpt);
+                // console.log("LB.onDoubleTapped", evtpt);
                 // show big content
+                let oldidx = listView.currentIndex;
+                // listView.currentIndex = oldidx==index?-1:index;
+                listView.currentIndex = index;
+                popuplargecontent();
             }
         }
         TapHandler { // desktop
@@ -602,18 +597,21 @@ ScrollView {
     //     height: (popuplargecc.contentHeight+40) > (scroll1.height/2) ? (scroll1.height/2) : (popuplargecc.contentHeight+40)
     //     anchors.verticalCenter : scroll1.verticalCenter
 
+    // todo 最大高度
         TextArea {
             visible: false
             // anchors.fill : parent
             anchors.verticalCenter : scroll1.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
             // anchors.topMargin: 13
-            width: parent.width*4/5
+            width: parent.width*5/6
+            // maximumHeight: 300
+            implicitHeight: contentHeight > 300 ? 300 : (contentHeight+20)
             id: popuplargecc
-            font.pixelSize: 24
+            font.pixelSize: 26
             readOnly: true
             wrapMode: Text.WrapAnywhere
-            textFormat: Text.AutoText
+            textFormat: txtccfmt
             // clip: true
             // text: "lsdfsdff"
             color: Material.background
@@ -627,6 +625,7 @@ ScrollView {
                 // anchors.fill: parent
                 // border.color: control.enabled ? "#21be2b" : "transparent"
                 color: Material.foreground
+                radius: 9
             }
 
             onEditingFinished: {
@@ -743,34 +742,17 @@ ScrollView {
     }
     //////
 
-    function fetchmore() {
-        let fmcond = Sss.fetchmore_condstr();
-            Tspp.debug('...', Sss.fmnext_batch, fmcond);
-            let req = Tspp.tojson({Cmd: "loadmsg", Argv:[fmcond]});
-            // if (true) return;
-            let resp = qcffi.invoke(req);
-            // assert(resp == Sss.bkdretpromis, 'error invoke', req);
-            // Tspp.debug('resplen', resp.length);
-            // let jso = JSON.parse(resp);
-            // Tspp.debug("rowcnt", jso.Retc, jso.Retv.length);
-            // for (let i=0; i < jso.Retc; i++) {
-            //     let rv = jso.Retv[i];
-            //     // let item = {name:"", number: ""};
-            //     let item = rv;
-            //     item.name = rv.Sender;
-            //     item.number = rv.Roomid;
-            //     listView.model.insert(0, item);
-            //     for (let j=0;j < 30; j++) {
-            //         // listView.model.insert(0, item);
-            //     }
-            //     // listView.model.append({name:"frommainqml", number: "frommainqml 909 545"})
-            //     // Tspp.debug('typeof', typeof rv.Sender)
-            // }
-            // Tspp.debug('itemcnt', listView.model.count);
-    }
-
-    function fetchmorert(roomid) {
-        invokebkd("loadmorert", roomid);
+    function popuplargecontent() {
+        let item = listView.currentItem;
+                    // console.log(item);
+                    if (item == null) {
+                        console.log("no item selected", listView.currentIndex);
+                        return;
+                    }
+                    let ccitem = item.children[2].children[0];
+                    // console.log(ccitem);
+                    popuplargecc.text = ccitem.text;
+                    popuplargecc.visible = true;
     }
 
     function scrollvto(top : bool) {
@@ -789,5 +771,4 @@ ScrollView {
     property int txtccfmt: Text.MarkdownText
     // function setccfmt(f) { txtccfmt  = f }
 
-    // async function dummy() {} // not work syntax error
 }
