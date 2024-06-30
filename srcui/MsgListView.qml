@@ -75,11 +75,47 @@ ScrollView {
         // 如果放在 delegate中，这种用法会生成很多 Menu 实例？？？
         Menu {
             id: contextMenu
-            MenuItem { text: "&Copy" ; onTriggered: calljs("msglstctxcpy", listView.currentIndex) }
-            MenuItem { text: "&Edit" ; onTriggered: calljs("msglstctxedt", listView.currentIndex) }
-            MenuItem { text: "&View Source"; onTriggered: calljs("msglstctxvwsrc", listView.currentIndex) }
-            MenuItem { text: "&Cut" }
-            MenuItem { text: "&Paste" }
+            MenuItem { text: "&Copy" ; 
+            onTriggered: {
+                // calljs("msglstctxcpy", listView.currentIndex);
+                // let r = msglstmdl.get(listView.currentIndex);
+                let item = listView.currentItem;
+                // console.log(item);
+                if (item == null) {
+                    console.log("no item selected", listView.currentIndex);
+                    return;
+                }
+                let ccitem = item.children[2].children[0];
+                // console.log(ccitem);
+                clipbdswap.text = ccitem.text;
+                clipbdswap.selectAll();
+                clipbdswap.copy();
+            }}
+            MenuItem { text: "&Edit" ;
+                onTriggered: { calljs("msglstctxedt", listView.currentIndex);
+                }
+            }
+            MenuItem { text: "&View Source";
+                onTriggered: {
+                    // calljs("msglstctxvwsrc", listView.currentIndex);
+                    let item = listView.currentItem;
+                    // console.log(item);
+                    if (item == null) {
+                        console.log("no item selected", listView.currentIndex);
+                        return;
+                    }
+                    let ccitem = item.children[2].children[0];
+                    // console.log(ccitem);
+                    popuplargecc.text = ccitem.text;
+                    popuplargecc.visible = true;
+                }
+            }
+            MenuItem { text: "&Delete" }
+            // MenuItem { text: "&Paste" }
+        }
+        TextEdit{
+            id: clipbdswap
+            visible: false
         }
         // Rectangle {
         //     width: 300
@@ -157,6 +193,9 @@ ScrollView {
                 // console.log("onSingleTapped", evtpt.button, target);
                 let oldidx = listView.currentIndex;
                 listView.currentIndex = oldidx==index?-1:index;
+                if (popuplargecc.visible == true) {
+                    popuplargecc.visible = false;
+                }
             }
             onDoubleTapped: (evtpt) => {
                 console.log("LB.onDoubleTapped", evtpt);
@@ -528,6 +567,51 @@ ScrollView {
 
 
 }
+
+    // popup large content
+    // Rectangle {
+    //     color: Material.background
+    //     id: popuplargecc2
+    //     visible: false
+    //     width: parent.width
+    //     height: (popuplargecc.contentHeight+40) > (scroll1.height/2) ? (scroll1.height/2) : (popuplargecc.contentHeight+40)
+    //     anchors.verticalCenter : scroll1.verticalCenter
+
+        TextArea {
+            visible: false
+            // anchors.fill : parent
+            anchors.verticalCenter : scroll1.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            // anchors.topMargin: 13
+            width: parent.width*4/5
+            id: popuplargecc
+            font.pixelSize: 24
+            readOnly: true
+            wrapMode: Text.WrapAnywhere
+            textFormat: Text.AutoText
+            // clip: true
+            // text: "lsdfsdff"
+            color: Material.background
+            topPadding: 13
+
+            background: Rectangle {
+                // implicitWidth: 200
+                // implicitHeight: 40
+                // implicitHeight: parent.contentHeight
+                height: parent.height+20
+                // anchors.fill: parent
+                // border.color: control.enabled ? "#21be2b" : "transparent"
+                color: Material.foreground
+            }
+
+            onEditingFinished: {
+                // console.log("editfin'd???");
+                // popuplargecc.visible = false;
+                visible = false;
+            }
+        }
+    // }
+
     // msgsendbar
     Rectangle {
         color: Material.background
@@ -538,6 +622,12 @@ ScrollView {
         height: 60
 
         anchors.top : scroll1.bottom
+
+        Text {
+            visible: false
+            id: msgedititemid
+            objectName: "msgedititemid"
+        }
 
         RowLayout {
             anchors.left : parent.left
@@ -568,10 +658,10 @@ ScrollView {
                 //     // border.color: "transparent"
                 // }
 
-                onEditingFinished: ()=>{ Tspp.debug("iptedfin") }
+                onEditingFinished: ()=>{ console.debug("iptedfin") }
                 // Keys.onEnterPressed: ()=>{ Tspp.debug("iptetpr") }
                 Keys.onReturnPressed: (ke)=>{
-                    Tspp.debug("iptetpr2", ke, ke.modifiers, Qt.Key_Control, Qt.Key_);
+                    console.debug("iptetpr2", ke, ke.modifiers, Qt.Key_Control, Qt.Key_);
                     if (ke.modifiers == Qt.ControlModifier) {
                         // Ctrl+Enter=Send
                         

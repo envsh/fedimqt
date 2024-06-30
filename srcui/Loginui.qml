@@ -27,18 +27,13 @@ Item {
         anchors.margins: 9
 
     GridLayout {
-        columns: 2
-        Layout.fillWidth: true
-        // anchors.top : acclst.bottom
-        // anchors.left: parent.left
-        // anchors.right: parent.right
-        // width: parent.width
+        columns: 3
+        Layout.fillWidth: true 
 
-
-        Item { height: 30}
-    MyLabel {text: qsTr("Logined Accounts:"); height: 50}
+    //     Item { height: 30}
+    // MyLabel {text: qsTr("Logined Accounts:"); height: 50}
         
-    MyLabel {text: qsTr("Accounts:"); height: 50}
+    MyLabel {text: qsTr("Logined:"); height: 40}
     ComboBox {
                 id: acclst
                 objectName: "acclst" 
@@ -49,7 +44,7 @@ Item {
                 Layout.fillWidth: true
     }
 
-        Item { height: 30}
+        // Item { height: 30}
         MyButton {
             Layout.fillWidth: false
             text: "&Login"
@@ -58,8 +53,17 @@ Item {
                 calljs("loginaccountline");
             }
         }
+    }
 
-        Item { height: 50}
+    GridLayout {
+        columns: 2
+        Layout.fillWidth: true
+        // anchors.top : acclst.bottom
+        // anchors.left: parent.left
+        // anchors.right: parent.right
+        // width: parent.width
+
+        Item { height: 30}
         MyLabel {text:"New Account"}
 
         MyLabel {text:"Username"}

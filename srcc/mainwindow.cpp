@@ -25,6 +25,7 @@ MainWindow2::MainWindow2(QWidget*parent) : QMainWindow(parent) {
     uiw->setupUi(this);
     uiw->menubar->setNativeMenuBar(false); // sofuck macos
 
+    // android6.0上怎么设置菜单字体无效？？？
     // 还有一种方式，使用 css 样式
     // \see https://forum.qt.io/topic/76987/completely-custom-menu-in-qtwidgets/10
     auto oldft = uiw->menu_File->font();
@@ -47,6 +48,13 @@ MainWindow2::MainWindow2(QWidget*parent) : QMainWindow(parent) {
     setupMenuSlots();
 
     auto qw = new QQuickWidget();
+    // \see https://stackoverflow.com/questions/44975226/qquickwidget-with-transparent-background
+qw->setWindowFlags(Qt::SplashScreen);
+qw->setAttribute(Qt::WA_AlwaysStackOnTop);
+qw->setAttribute(Qt::WA_TranslucentBackground);
+qw->setClearColor(Qt::transparent);
+qw->setResizeMode(QQuickWidget::SizeRootObjectToView);
+
     mw2d->tabw0 = qw;
     uiw->tabWidget->insertTab(0, qw, "qml00");
     uiw->tabWidget->setCurrentIndex(0);
