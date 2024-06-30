@@ -4,9 +4,11 @@
 #include <QtWidgets>
 #include <QtQml>
 #include <QtQuick>
+#include <QQuickWidget>
 
 #include "vlistview.h"
 // #include "srcc/modelbase.h"
+#include "srcc/mainwindow.h"
 
 extern "C"
 int maincxxwgt(int argc, char**argv) {
@@ -70,7 +72,13 @@ int maincxxqml(int argc, char**argv) {
 
     // oldqtmsgoutfn = qInstallMessageHandler(qtMessageOutput);
     // QmlCppBridge::regist();
-    QGuiApplication app (argc, argv, 0);
+    // QGuiApplication app (argc, argv, 0);
+    QApplication app (argc, argv, 0);
+
+    // auto mw = new vlistview(0);
+    // mw->show();
+    // // mw->filldata();
+
 
     typedef void* (*fnty)(int);
     auto symx = dlsym(RTLD_DEFAULT, "qmlappenginenew");
@@ -108,6 +116,7 @@ int maincxxqml(int argc, char**argv) {
     // QQmlEngine::importPathList();
     auto qmldirs = engine->importPathList();
     qDebug()<<__FUNCTION__<<"():"<<"qmldirs:"<<qmldirs;
+    // qDebug()<<(sizeof(QQuickItem));
 
     engine->load(url);
 
@@ -118,6 +127,12 @@ int maincxxqml(int argc, char**argv) {
     qtemitcallqmlcxx(QString("hello this c++, ")+QString(QT_VERSION_STR));
 
     qmlappenginenew(2);
+
+    auto mw = new MainWindow2();
+    mw->setQmlAppWindow(engine);
+    mw->show();
+    // mw->uiw.menubar->show();
+
     return app.exec();
 }
 

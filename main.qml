@@ -166,6 +166,7 @@ ApplicationWindow {
     //     }
     // }
 
+
     /// center content
     StackView {
         id: stackwin

@@ -96,7 +96,7 @@ ScrollView {
 
     // 这个必须用Rectangle,不然没法在选中时设置高亮背景
     // 内部子组件不使用 Rectangle,似乎滚动时的CPU减小了,40-50% 降低到 30-40%
-        delegate: Item {
+        delegate: Rectangle {
             id: grid
             // anchors.fill: parent
             // width: 350
@@ -105,8 +105,8 @@ ScrollView {
             // border.width: 1
             // border.color: "#5a5a5a"
             // color: Material.background
-            // property string bgcolor: index == listView.currentIndex ? "#4a4a4a" : Material.background
-            // color: bgcolor
+            property string bgcolor: index == listView.currentIndex ? "#4a4a4a" : Material.background
+            color: bgcolor
 
             // Component.onDestruction : {
             //     console.count("msgdgtitem dtor");
@@ -181,6 +181,15 @@ ScrollView {
                     anchors.rightMargin: 5
                     source:"../icons/icon_avatar.png"; 
                     width:42; height:42; }
+
+            // Label {
+            //     id: msgrow1
+            //     // anchors.top : txtcc2.bottom
+            //     anchors.left: usrico.right
+            //     width: parent.width
+            //     text: Msgtopline
+            //     color: Material.foreground
+            // }
 
                 RowLayout{
                     id: msgrow1
@@ -302,6 +311,12 @@ ScrollView {
                     }
 
                 // msg footer area
+            // Label {
+            //     anchors.top : txtcc2.bottom
+            //     width: parent.width
+            //     text: Msgbtmline
+            //     color: Material.foreground
+            // }
                 RowLayout {
                     anchors.top : txtcc2.bottom
                     anchors.horizontalCenter : parent.horizontalCenter

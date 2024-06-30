@@ -12,8 +12,20 @@ import QtQuick.Layouts
 // Button
 // QtObject { }
 
-Item {
-    width: parent.width
-    height: parent.height
+// ApplicationWindow {
+// Window {
+Rectangle {
+    // width: parent == null ? 300 : parent.width
+    // height: parent == null ? 300 : parent.height
+    width: 300
+    height: 300
+
+    Material.theme : Material.dark
+    color: Material.background
+
+    Text {
+        text: "hehhe"
+        color: Material.foreground
+    }
 
 }

@@ -83,7 +83,8 @@ func (me *mainuist) upstatusmc() {
 	cnt := qmlcpm.msglstmdl.RowCount()
 	qmlcpm.stbmsgcntlb.SetProperty("text", fmt.Sprintf("MC: %d", cnt))
 	// dds := gopp.DeepSizeBygob(qmlcpm.msglstmdl)
-	dds := gopp.DeepSizeof(qmlcpm.msglstmdl, 0)
+	// dds := gopp.DeepSizeof(qmlcpm.msglstmdl, 0)
+	dds := 0
 	qmlcpm.stbmsgcntlb.SetProperty("tiptext", fmt.Sprintf("MC: %d, DDS: %d", cnt, dds))
 }
 

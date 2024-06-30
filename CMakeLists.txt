@@ -18,6 +18,7 @@ find_package(Qt6 REQUIRED COMPONENTS QmlIntegration)
 find_package(Qt6 REQUIRED COMPONENTS Quick)
 find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
 find_package(Qt6 REQUIRED COMPONENTS QuickTemplates2)
+find_package(Qt6 REQUIRED COMPONENTS QuickWidgets)
 
 qt_standard_project_setup()
 # set(QT_DEBUG_FIND_PACKAGE ON)
@@ -27,15 +28,17 @@ set(projdir ${PROJECT_SOURCE_DIR})
 message("Building target: ${CMAKE_SYSTEM_NAME}")
 set(tgos ${CMAKE_SYSTEM_NAME})
 
-qt_wrap_ui(UISRCS vlistview.ui)
+qt_wrap_ui(UISRCS vlistview.ui mainwindow.ui)
 
 set(MAINSRC
     ${UISRCS}
     # ./uis/vlistview.ui
 
     srcc/mainglob.cpp
+    # srcc/messageitemnt.cpp
     srcc/qtuninline.cpp
     srcc/modelbase.cpp
+    srcc/mainwindow.cpp
     QmlCppBridge.cpp
     myitemdg.cpp
     myview.cpp
@@ -114,6 +117,7 @@ endif()
 target_link_libraries(helloworld PRIVATE
     Qt6::Widgets Qt6::Qml Qt6::QmlIntegration Qt6::Quick
     Qt6::QuickControls2 Qt6::QuickTemplates2
+    Qt6::QuickWidgets
     # 以下添加 private header
     Qt6::QuickPrivate Qt6::QuickControls2Private Qt6::QuickTemplates2Private
     ${GOLIB}
