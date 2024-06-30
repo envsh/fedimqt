@@ -38,111 +38,111 @@ ApplicationWindow {
     // Material.foreground : "red"
 
     /////
-    // todo how direct trigger c++/go function???
-    // todo 顶层菜单来回下拉多次,内存能够涨60M???
-    // 虽然还能降低内存,但不知道能不能完全降回来原来的水平???
-    menuBar: MenuBar {
-        Menu {
-            title: qsTr("&File")
-            Action { text: qsTr("&New...") }
-            Action { text: qsTr("&Open...") }
-            Action { text: qsTr("&Save") }
-            Action { text: qsTr("Save &As...") }
-            MenuSeparator { }
-            Action { text: qsTr("&Quit") }
-        }
-        Menu {
-            title: qsTr("&Edit")
-            Action { text: qsTr("Cu&t") }
-            Action { text: qsTr("&Copy") }
-            Action { text: qsTr("&Paste") }
-        }
-        Menu {
-            title: qsTr("&Wndo")
-            Action { text: qsTr("&Next Page") ; 
-                onTriggered: calljs("switchpage", false)
-                icon.source: "icons/barbuttonicon_forward_gray64.png"}
-            Action { text: qsTr("&Prev Page") ;
-                onTriggered: calljs("switchpage", true)
-                icon.source: "icons/barbuttonicon_back_gray64.png"}
-            Action { text: qsTr("Logui"); 
-                onTriggered: calljs("switchpageidx", 3)
-                }
-            Action { text: qsTr("&Aboutui");
-                onTriggered: calljs("switchpageidx", 4)
-                }
-            Action { text: qsTr("&Room List");
-                onTriggered: calljs("switchpageidx", 1)
-                }
-            Action { text: qsTr("&Loginui"); 
-                onTriggered: calljs("switchpageidx", 2)
-                }
-            Action { text: qsTr("&Message List"); 
-                onTriggered: calljs("switchpageidx", 0)
-                }
-        }
-        Menu {
-            title: qsTr("&Dev")
-            Action { text: qsTr("&Load Message") ;
-                onTriggered: calljs("loadmsg");
-                // onTriggered: onloadmsg()
-            }
-            Action { text: qsTr("&Load More Older"); 
-                onTriggered: calljs("fetchmore", "")
-                // onTriggered: msglstwin.fetchmore()
-                }
-            Action { text: qsTr("&Load More Older Rt");
-                onTriggered: calljs("fetchmorert", "")
-                // onTriggered: msglstwin.fetchmorert("")
-                }
-            Action { text: qsTr("&AutoText"); 
-                onTriggered: calljs("msglst.setccfmt", Text.AutoText);
-                // onTriggered: msglstwin.setccfmt(Text.AutoText) 
-                }
-            Action { text: qsTr("&MarkdownText");
-                onTriggered: calljs("msglst.setccfmt", Text.MarkdownText);
-                // onTriggered: msglstwin.setccfmt(Text.MarkdownText);
-                }
-            Action { text: qsTr("&RichText"); 
-                onTriggered: calljs("msglst.setccfmt", Text.RichText);
-                // onTriggered: msglstwin.setccfmt(Text.RichText) 
-                }
-            Action { text: qsTr("&PlainText"); 
-                onTriggered: calljs("msglst.setccfmt", Text.PlainText);
-                // onTriggered: msglstwin.setccfmt(Text.PlainText) 
-                }
-        }
-        Menu {
-            title: qsTr("&Misc")
-            Action { text: qsTr("Scroll Bottom"); 
-                onTriggered: calljs("msglst.scrollvto", false);
-                icon.source: "icons/barbuttonicon_down_2x.png"}
-            Action { text: qsTr("Scroll Top");
-                onTriggered: calljs("msglst.scrollvto", true);
-                icon.source: "icons/barbuttonicon_up_2x.png" }
-            Action { text: qsTr("&Test ListView");
-                onTriggered: tstlstwin.visible=!tstlstwin.visible}
-            Action { text: qsTr("&Paste"); 
-                onTriggered: calljs("menubar.paste.clicked")}
-           Action { text: qsTr("&Paste2"); 
-                onTriggered: neslot1_1('hhh')}
-           Action { text: qsTr("&Theme Dark");
-                onTriggered: neslot1_1('hhh')}
-           Action { text: qsTr("&Theme Light"); 
-                onTriggered: neslot1_1('hhh')}
-        }
-        Menu {
-            title: qsTr("&Help")
-            // .svg not work???
-            Action { text: qsTr("&About");
-                onTriggered: calljs("switchpageidx", 4)
-                // icon.source: "icons/help.svg"
-            }
-            Action { text: qsTr("&Settings");
-                onTriggered: calljs("switchpageidx", 4)
-                icon.source: "icons/barbuttonicon_set.png"}
-        }
-    }
+    // // todo how direct trigger c++/go function???
+    // // todo 顶层菜单来回下拉多次,内存能够涨60M???
+    // // 虽然还能降低内存,但不知道能不能完全降回来原来的水平???
+    // menuBar: MenuBar {
+    //     Menu {
+    //         title: qsTr("&File")
+    //         Action { text: qsTr("&New...") }
+    //         Action { text: qsTr("&Open...") }
+    //         Action { text: qsTr("&Save") }
+    //         Action { text: qsTr("Save &As...") }
+    //         MenuSeparator { }
+    //         Action { text: qsTr("&Quit") }
+    //     }
+    //     Menu {
+    //         title: qsTr("&Edit")
+    //         Action { text: qsTr("Cu&t") }
+    //         Action { text: qsTr("&Copy") }
+    //         Action { text: qsTr("&Paste") }
+    //     }
+    //     Menu {
+    //         title: qsTr("&Wndo")
+    //         Action { text: qsTr("&Next Page") ; 
+    //             onTriggered: calljs("switchpage", false)
+    //             icon.source: "icons/barbuttonicon_forward_gray64.png"}
+    //         Action { text: qsTr("&Prev Page") ;
+    //             onTriggered: calljs("switchpage", true)
+    //             icon.source: "icons/barbuttonicon_back_gray64.png"}
+    //         Action { text: qsTr("Logui"); 
+    //             onTriggered: calljs("switchpageidx", 3)
+    //             }
+    //         Action { text: qsTr("&Aboutui");
+    //             onTriggered: calljs("switchpageidx", 4)
+    //             }
+    //         Action { text: qsTr("&Room List");
+    //             onTriggered: calljs("switchpageidx", 1)
+    //             }
+    //         Action { text: qsTr("&Loginui"); 
+    //             onTriggered: calljs("switchpageidx", 2)
+    //             }
+    //         Action { text: qsTr("&Message List"); 
+    //             onTriggered: calljs("switchpageidx", 0)
+    //             }
+    //     }
+    //     Menu {
+    //         title: qsTr("&Dev")
+    //         Action { text: qsTr("&Load Message") ;
+    //             onTriggered: calljs("loadmsg");
+    //             // onTriggered: onloadmsg()
+    //         }
+    //         Action { text: qsTr("&Load More Older"); 
+    //             onTriggered: calljs("fetchmore", "")
+    //             // onTriggered: msglstwin.fetchmore()
+    //             }
+    //         Action { text: qsTr("&Load More Older Rt");
+    //             onTriggered: calljs("fetchmorert", "")
+    //             // onTriggered: msglstwin.fetchmorert("")
+    //             }
+    //         Action { text: qsTr("&AutoText"); 
+    //             onTriggered: calljs("msglst.setccfmt", Text.AutoText);
+    //             // onTriggered: msglstwin.setccfmt(Text.AutoText) 
+    //             }
+    //         Action { text: qsTr("&MarkdownText");
+    //             onTriggered: calljs("msglst.setccfmt", Text.MarkdownText);
+    //             // onTriggered: msglstwin.setccfmt(Text.MarkdownText);
+    //             }
+    //         Action { text: qsTr("&RichText"); 
+    //             onTriggered: calljs("msglst.setccfmt", Text.RichText);
+    //             // onTriggered: msglstwin.setccfmt(Text.RichText) 
+    //             }
+    //         Action { text: qsTr("&PlainText"); 
+    //             onTriggered: calljs("msglst.setccfmt", Text.PlainText);
+    //             // onTriggered: msglstwin.setccfmt(Text.PlainText) 
+    //             }
+    //     }
+    //     Menu {
+    //         title: qsTr("&Misc")
+    //         Action { text: qsTr("Scroll Bottom"); 
+    //             onTriggered: calljs("msglst.scrollvto", false);
+    //             icon.source: "icons/barbuttonicon_down_2x.png"}
+    //         Action { text: qsTr("Scroll Top");
+    //             onTriggered: calljs("msglst.scrollvto", true);
+    //             icon.source: "icons/barbuttonicon_up_2x.png" }
+    //         Action { text: qsTr("&Test ListView");
+    //             onTriggered: tstlstwin.visible=!tstlstwin.visible}
+    //         Action { text: qsTr("&Paste"); 
+    //             onTriggered: calljs("menubar.paste.clicked")}
+    //        Action { text: qsTr("&Paste2"); 
+    //             onTriggered: neslot1_1('hhh')}
+    //        Action { text: qsTr("&Theme Dark");
+    //             onTriggered: neslot1_1('hhh')}
+    //        Action { text: qsTr("&Theme Light"); 
+    //             onTriggered: neslot1_1('hhh')}
+    //     }
+    //     Menu {
+    //         title: qsTr("&Help")
+    //         // .svg not work???
+    //         Action { text: qsTr("&About");
+    //             onTriggered: calljs("switchpageidx", 4)
+    //             // icon.source: "icons/help.svg"
+    //         }
+    //         Action { text: qsTr("&Settings");
+    //             onTriggered: calljs("switchpageidx", 4)
+    //             icon.source: "icons/barbuttonicon_set.png"}
+    //     }
+    // }
 
     ///////
     // header: ToolBar {

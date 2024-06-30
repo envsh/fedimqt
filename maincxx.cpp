@@ -74,6 +74,9 @@ int maincxxqml(int argc, char**argv) {
     // QmlCppBridge::regist();
     // QGuiApplication app (argc, argv, 0);
     QApplication app (argc, argv, 0);
+    #ifdef Q_OS_ANDROID
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling); // depcrated???
+    #endif
 
     // auto mw = new vlistview(0);
     // mw->show();

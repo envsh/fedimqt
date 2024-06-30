@@ -12,6 +12,7 @@ class MainWindow2 : public QMainWindow {
 public:
     Ui_MainWindow2 *uiw;
     MainWindow2(QWidget*parent = nullptr);
+    void setupMenuSlots();
 
     void setQmlAppWindow(QQmlApplicationEngine* qmlae);
 };
